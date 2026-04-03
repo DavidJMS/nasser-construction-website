@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { Menu, X } from 'lucide-react'
 
 const navLinks = [
   { label: 'HOME', href: '#home' },
@@ -15,98 +17,104 @@ export default function Navbar() {
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20)
-    window.addEventListener('scroll', onScroll)
+    window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
   return (
     <nav
       id="navbar"
-      className={`fixed top-0 left-0 right-0 z-50 bg-white transition-shadow duration-300 ${
-        scrolled ? 'shadow-md' : ''
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+        scrolled 
+          ? 'glass shadow-sm py-2 border-b border-white/10' 
+          : 'bg-transparent py-6 border-b border-transparent'
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
+        <div className="flex items-center justify-between h-12">
           {/* Logo */}
-          <a href="#home" className="flex items-center gap-1 shrink-0">
-            <img src="/images/logo.png" alt="Logo" className="h-9" />
+          <a href="#home" className="flex items-center gap-1 shrink-0 group">
+            <img 
+              src="/images/logo.png" 
+              alt="Logo" 
+              className="h-8 sm:h-9 transition-transform duration-300 group-hover:scale-105" 
+            />
           </a>
 
           {/* Desktop Nav — centered links */}
-          <div className="hidden lg:flex items-center gap-6">
+          <div className="hidden lg:flex items-center gap-8">
             {navLinks.map((link) => (
-              <a
-                key={link.label}
-                href={link.href}
-                className="text-[13px] font-bold text-gray-800 hover:text-navy-700 tracking-wide transition-colors"
-              >
-                {link.label}
-              </a>
+                <a
+                  key={link.label}
+                  href={link.href}
+                  className="text-[12px] font-bold text-gray-800 hover:text-navy-900 tracking-wider transition-all duration-300 relative group"
+                >
+                  {link.label}
+                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gray-400 transition-all duration-300 group-hover:w-full"></span>
+                </a>
             ))}
           </div>
 
           {/* Contact button */}
-          <a
-            href="#contact"
-            className="hidden lg:inline-block px-5 py-2 bg-navy-900 hover:bg-navy-800 text-white text-[13px] font-bold tracking-wide rounded transition-colors"
-          >
-            CONTACT
-          </a>
+          <div className="hidden lg:flex items-center">
+            <a
+              href="#contact"
+              className="px-6 py-2 bg-navy-900 hover:bg-navy-800 text-white text-[12px] font-bold tracking-widest rounded-full transition-all duration-300 shadow-md hover:shadow-navy-900/20 active:scale-95 cursor-pointer"
+            >
+              CONTACT US
+            </a>
+          </div>
 
           {/* Mobile hamburger */}
           <button
             id="mobile-menu-toggle"
             onClick={() => setMobileOpen(!mobileOpen)}
-            className="lg:hidden p-2 text-gray-700"
+            className="lg:hidden p-2 text-gray-700 hover:bg-gray-100 rounded-full transition-colors"
+            aria-label="Toggle menu"
           >
-            <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              {mobileOpen ? (
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              ) : (
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 6h16M4 12h16M4 18h16"
-                />
-              )}
-            </svg>
+            {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
         </div>
       </div>
 
       {/* Mobile Nav */}
-      <div
-        className={`lg:hidden overflow-hidden transition-all duration-300 bg-white ${
-          mobileOpen ? 'max-h-96 border-t border-gray-100' : 'max-h-0'
-        }`}
-      >
-        <div className="px-6 py-4 space-y-3">
-          {navLinks.map((link) => (
-            <a
-              key={link.label}
-              href={link.href}
-              onClick={() => setMobileOpen(false)}
-              className="block text-sm font-bold text-gray-800 hover:text-navy-700 transition-colors"
-            >
-              {link.label}
-            </a>
-          ))}
-          <a
-            href="#contact"
-            onClick={() => setMobileOpen(false)}
-            className="block mt-3 text-center px-5 py-2 bg-navy-900 text-white text-sm font-bold rounded"
+      <AnimatePresence>
+        {mobileOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.3, ease: 'easeInOut' }}
+            className="lg:hidden overflow-hidden bg-white/95 backdrop-blur-lg border-t border-gray-100"
           >
-            CONTACT
-          </a>
-        </div>
-      </div>
+            <div className="px-6 py-8 space-y-4">
+              {navLinks.map((link, idx) => (
+                  <motion.a
+                    initial={{ x: -20, opacity: 0 }}
+                    animate={{ x: 0, opacity: 1 }}
+                    transition={{ delay: idx * 0.05 }}
+                    key={link.label}
+                    href={link.href}
+                    onClick={() => setMobileOpen(false)}
+                    className="block text-sm font-bold text-gray-800 hover:text-navy-900 transition-colors"
+                  >
+                    {link.label}
+                  </motion.a>
+              ))}
+                <motion.a
+                  initial={{ y: 20, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ delay: 0.3 }}
+                  href="#contact"
+                  onClick={() => setMobileOpen(false)}
+                  className="block mt-6 text-center px-5 py-3 bg-navy-900 text-white text-sm font-bold rounded-full shadow-lg cursor-pointer"
+                >
+                  CONTACT US
+                </motion.a>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </nav>
   )
 }

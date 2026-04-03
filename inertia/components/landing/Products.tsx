@@ -1,4 +1,6 @@
 import { FC, ReactNode } from 'react'
+import { motion } from 'framer-motion'
+import { ChevronLeft, ChevronRight, ArrowUpRight, Layout, LayoutGrid } from 'lucide-react'
 
 interface Product {
   image: string
@@ -22,66 +24,72 @@ const ProjectSection: FC<{ title: string; icon: ReactNode; projects: Product[] }
   icon,
   projects,
 }) => (
-  <div className="mb-20">
-    <div className="flex items-center justify-between mb-8 border-b border-gray-100 pb-6">
-      <div className="flex items-center gap-3">
-        <div className="text-navy-900">{icon}</div>
-        <h3 className="text-2xl font-medium text-gray-900">{title}</h3>
-      </div>
+  <div className="mb-24">
+    <motion.div 
+      initial={{ opacity: 0, x: -20 }}
+      whileInView={{ opacity: 1, x: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.6 }}
+      className="flex items-center justify-between mb-10 border-b border-gray-100 pb-8"
+    >
       <div className="flex items-center gap-4">
-        <button className="text-gray-400 hover:text-navy-900 transition-colors">
-          <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={1.5}
-              d="M15 19l-7-7 7-7"
-            />
-          </svg>
+        <div className="p-3 bg-gray-100 text-gray-600 rounded-2xl">
+          {icon}
+        </div>
+        <h3 className="text-3xl font-bold text-gray-900 tracking-tight">{title}</h3>
+      </div>
+      <div className="flex items-center gap-3">
+        <button className="w-10 h-10 flex items-center justify-center border border-gray-100 rounded-full text-gray-400 hover:text-gray-800 hover:border-gray-200 hover:bg-gray-50 transition-all cursor-pointer">
+          <ChevronLeft className="w-5 h-5" />
         </button>
-        <button className="text-gray-400 hover:text-navy-900 transition-colors">
-          <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5l7 7-7 7" />
-          </svg>
+        <button className="w-10 h-10 flex items-center justify-center border border-gray-100 rounded-full text-gray-400 hover:text-gray-800 hover:border-gray-200 hover:bg-gray-50 transition-all cursor-pointer">
+          <ChevronRight className="w-5 h-5" />
         </button>
       </div>
-    </div>
+    </motion.div>
 
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
       {projects.map((project, i) => (
-        <div
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: i * 0.1 }}
           key={i}
-          className="group relative aspect-square bg-gray-100 rounded-lg overflow-hidden cursor-pointer"
+          className="group relative aspect-4/5 bg-gray-100 rounded-3xl overflow-hidden cursor-pointer shadow-sm hover:shadow-2xl transition-all duration-500"
         >
           <img
             src={project.image}
             alt={project.title}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000"
           />
+          
+          {/* Overlays */}
+          <div className="absolute inset-0 bg-linear-to-t from-navy-900/80 via-navy-900/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-500" />
+          
           {/* Arrow Icon Top-Right */}
-          <div className="absolute top-4 right-4">
-            <svg
-              className="w-5 h-5 text-gray-900 opacity-60 group-hover:opacity-100 transition-opacity"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <line x1="7" y1="17" x2="17" y2="7"></line>
-              <polyline points="7 7 17 7 17 17"></polyline>
-            </svg>
-          </div>
-          {/* Bottom Badge */}
-          <div className="absolute bottom-6 left-6">
-            <div className="bg-white/95 backdrop-blur-sm px-5 py-3 rounded-md shadow-sm">
-              <span className="text-[14px] font-bold text-gray-900 whitespace-nowrap">
-                {project.title}
-              </span>
+          <div className="absolute top-6 right-6 translate-x-4 -translate-y-4 opacity-0 group-hover:translate-x-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
+            <div className="w-12 h-12 bg-gray-800 text-white rounded-2xl flex items-center justify-center shadow-xl">
+              <ArrowUpRight className="w-6 h-6" />
             </div>
           </div>
-        </div>
+          
+          {/* Bottom Content */}
+          <div className="absolute bottom-8 left-8 right-8">
+            <motion.div 
+              className="bg-white/10 backdrop-blur-md border border-white/20 p-6 rounded-2xl shadow-2xl"
+              whileHover={{ backgroundColor: "rgba(255, 255, 255, 0.15)" }}
+            >
+              <h4 className="text-lg font-bold text-white leading-tight">
+                {project.title}
+              </h4>
+              <div className="mt-3 flex items-center gap-2 text-gray-300 text-xs font-bold uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                View Project Details
+                <ArrowUpRight className="w-3 h-3" />
+              </div>
+            </motion.div>
+          </div>
+        </motion.div>
       ))}
     </div>
   </div>
@@ -89,37 +97,38 @@ const ProjectSection: FC<{ title: string; icon: ReactNode; projects: Product[] }
 
 export default function Products() {
   return (
-    <section id="projects" className="py-24 bg-white">
+    <section id="projects" className="py-24 bg-white overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-20">
-          <h2 className="text-4xl font-medium text-navy-900 mb-6">Our Projects</h2>
-          <p className="text-[17px] text-gray-700 leading-relaxed">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="text-center max-w-3xl mx-auto mb-20"
+        >
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gray-100 text-gray-600 text-[11px] font-bold tracking-widest uppercase mb-4">
+             Project Showcase
+          </div>
+          <h2 className="text-4xl font-bold text-navy-900 mb-6 tracking-tight">Our Recent Projects</h2>
+          <p className="text-lg text-gray-600 leading-relaxed">
             Custom solutions executed with expertise.
-            <br />
+            <br className="hidden sm:block" />
             Explore our project gallery and see the quality of our finished products.
           </p>
-        </div>
+        </motion.div>
 
         {/* Doors Section */}
         <ProjectSection
-          title="Doors"
-          icon={
-            <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
-              <rect x="4" y="3" width="16" height="18" rx="1" />
-            </svg>
-          }
+          title="Premium Doors"
+          icon={<LayoutGrid className="w-6 h-6" />}
           projects={doorProjects}
         />
 
         {/* Windows Section */}
         <ProjectSection
-          title="Windows"
-          icon={
-            <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M4 4h7v7H4V4zm9 0h7v7h-7V4zm0 9h7v7h-7v-7zm-9 0h7v7H4v-7z" />
-            </svg>
-          }
+          title="Modern Windows"
+          icon={<Layout className="w-6 h-6" />}
           projects={windowProjects}
         />
       </div>

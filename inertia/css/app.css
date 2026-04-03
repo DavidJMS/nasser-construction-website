@@ -54,6 +54,7 @@
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    @apply selection:bg-primary-200 selection:text-primary-900;
   }
 }
 
@@ -64,5 +65,26 @@
   
   .text-shadow-sm {
     text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  }
+
+  .glass {
+    @apply bg-white/70 backdrop-blur-md border border-white/20;
+  }
+
+  .glass-dark {
+    @apply bg-navy-950/60 backdrop-blur-md border border-white/10;
+  }
+
+  .bg-gradient-premium {
+    background: linear-gradient(135deg, #374151 0%, #111827 100%);
+  }
+
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
   }
 }
