@@ -11,7 +11,7 @@ export default class HomeController {
     const projects = await Project.query().orderBy('order', 'asc')
     const testimonials = await Testimonial.query().orderBy('order', 'asc')
 
-    return inertia.render('home', {
+    return inertia.render('home/index', {
       hero,
       services,
       projects,
