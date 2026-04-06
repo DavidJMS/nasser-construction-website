@@ -7,9 +7,128 @@
 import { BaseModel, column } from '@adonisjs/lucid/orm'
 import { DateTime } from 'luxon'
 
+export class HeroSchema extends BaseModel {
+  static $columns = ['badge', 'createdAt', 'description', 'id', 'image1', 'image2', 'image3', 'primaryButtonLink', 'primaryButtonText', 'secondaryButtonLink', 'secondaryButtonText', 'statsText', 'title', 'updatedAt'] as const
+  $columns = HeroSchema.$columns
+  @column()
+  declare badge: string | null
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime | null
+  @column()
+  declare description: string | null
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare image1: string | null
+  @column()
+  declare image2: string | null
+  @column()
+  declare image3: string | null
+  @column()
+  declare primaryButtonLink: string | null
+  @column()
+  declare primaryButtonText: string | null
+  @column()
+  declare secondaryButtonLink: string | null
+  @column()
+  declare secondaryButtonText: string | null
+  @column()
+  declare statsText: string | null
+  @column()
+  declare title: string | null
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+}
+
+export class ProjectSchema extends BaseModel {
+  static $columns = ['category', 'createdAt', 'description', 'id', 'imageUrl', 'link', 'order', 'title', 'updatedAt'] as const
+  $columns = ProjectSchema.$columns
+  @column()
+  declare category: string | null
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime | null
+  @column()
+  declare description: string | null
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare imageUrl: string | null
+  @column()
+  declare link: string | null
+  @column()
+  declare order: number | null
+  @column()
+  declare title: string
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+}
+
+export class ServiceSchema extends BaseModel {
+  static $columns = ['createdAt', 'description', 'icon', 'id', 'imageUrl', 'order', 'title', 'updatedAt'] as const
+  $columns = ServiceSchema.$columns
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime | null
+  @column()
+  declare description: string
+  @column()
+  declare icon: string | null
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare imageUrl: string | null
+  @column()
+  declare order: number | null
+  @column()
+  declare title: string
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+}
+
+export class SiteSettingSchema extends BaseModel {
+  static $columns = ['createdAt', 'group', 'id', 'key', 'updatedAt', 'value'] as const
+  $columns = SiteSettingSchema.$columns
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime | null
+  @column()
+  declare group: string | null
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare key: string
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+  @column()
+  declare value: string | null
+}
+
+export class TestimonialSchema extends BaseModel {
+  static $columns = ['author', 'avatarUrl', 'content', 'createdAt', 'id', 'order', 'rating', 'role', 'updatedAt'] as const
+  $columns = TestimonialSchema.$columns
+  @column()
+  declare author: string
+  @column()
+  declare avatarUrl: string | null
+  @column()
+  declare content: string
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime | null
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare order: number | null
+  @column()
+  declare rating: number | null
+  @column()
+  declare role: string | null
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+}
+
 export class UserSchema extends BaseModel {
-  static $columns = ['createdAt', 'email', 'fullName', 'id', 'password', 'updatedAt'] as const
+  static $columns = ['avatarUrl', 'createdAt', 'email', 'fullName', 'id', 'password', 'updatedAt'] as const
   $columns = UserSchema.$columns
+  @column()
+  declare avatarUrl: string | null
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
   @column()
