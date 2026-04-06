@@ -1,0 +1,22 @@
+# Commit Message Rules
+
+Always generate commit messages using the **Conventional Commits** format:
+
+`<type>: <short description in english>`
+
+Common types:
+- `feat`: New feature or significant change
+- `fix`: Bug fix
+- `chore`: Maintenance, config changes, refactoring, renames
+- `build`: Dependency updates, build system changes
+- `style`: Changes to CSS, UI aesthetics, formatting (no logic change)
+- `docs`: Documentation updates
+- `refactor`: Code change that neither fixes a bug nor adds a feature
+- `test`: Adding missing tests or correcting existing tests
+
+Examples:
+- `feat: add user authentication seeder`
+- `style: improve login page responsiveness`
+- `chore: update adonisjs dependencies`
+- `build: add docker support`
+- `feat: implement category creation modal`
