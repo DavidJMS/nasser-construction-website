@@ -6,13 +6,15 @@
     "jsx": "react-jsx",
     "paths": {
       "~/*": ["./*"],
-      "@generated/*": ["../.adonisjs/client/*"]
+      "@generated/*": ["../.adonisjs/client/*"],
+      "~registry": ["../.adonisjs/client/registry/index.ts"]
     }
   },
   "include": [
     "./**/*.ts",
     "./**/*.tsx",
     "../.adonisjs/client/**/*.ts",
+    "../.adonisjs/client/**/*.d.ts",
     "../.adonisjs/server/**/*.ts"
   ]
 }

@@ -8,7 +8,7 @@ export default defineConfig({
   plugins: [
     tailwindcss(),
     react(),
-    inertia({ ssr: { enabled: false, entrypoint: 'inertia/ssr.tsx' } }),
+    inertia({ ssr: { enabled: true, entrypoint: 'inertia/app/ssr.tsx' } }),
     adonisjs({ entrypoints: ['inertia/app.tsx'], reload: ['resources/views/**/*.edge'] }),
   ],
 
@@ -20,6 +20,7 @@ export default defineConfig({
     alias: {
       '~/': `${import.meta.dirname}/inertia/`,
       '@generated': `${import.meta.dirname}/.adonisjs/client/`,
+      '~registry': `${import.meta.dirname}/.adonisjs/client/registry/index.ts`,
     },
   },
 

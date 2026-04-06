@@ -13,7 +13,7 @@ const inertiaConfig = defineConfig({
     /**
      * Entry file used by the SSR server build.
      */
-    entrypoint: 'inertia/ssr.tsx',
+    entrypoint: 'inertia/app/ssr.tsx',
   },
 })
 
