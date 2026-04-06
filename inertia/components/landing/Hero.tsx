@@ -1,7 +1,38 @@
 import { motion } from 'framer-motion'
 import { ArrowRight, CheckCircle2 } from 'lucide-react'
 
-export default function Hero() {
+export interface HeroData {
+  badge?: string | null
+  title?: string | null
+  description?: string | null
+  primaryButtonText?: string | null
+  primaryButtonLink?: string | null
+  secondaryButtonText?: string | null
+  secondaryButtonLink?: string | null
+  statsText?: string | null
+  image1?: string | null
+  image2?: string | null
+  image3?: string | null
+}
+
+interface HeroProps {
+  data?: HeroData
+}
+
+export default function Hero({ data }: HeroProps) {
+  // Use provided data or fall back to original hardcoded content
+  const badge = data?.badge || 'Premium Security Solutions'
+  const title = data?.title || 'Custom-made doors and windows with professional installation'
+  const description = data?.description || 'We install security doors and reinforced windows with premium finishes. Invisible security for your peace of mind.'
+  const primaryButtonText = data?.primaryButtonText || 'Get a Quote'
+  const primaryButtonLink = data?.primaryButtonLink || '#contact'
+  const secondaryButtonText = data?.secondaryButtonText || 'View Projects'
+  const secondaryButtonLink = data?.secondaryButtonLink || '#products'
+  const statsText = data?.statsText || '500+ Happy Clients'
+  const image1 = data?.image1 || '/images/about-house.png'
+  const image2 = data?.image2 || '/images/hero-bg.png'
+  const image3 = data?.image3 || '/images/window-product.png'
+
   return (
     <section id="home" className="relative bg-white pt-24 pb-16 lg:pt-32 lg:pb-24 overflow-hidden">
       {/* Decorative Background Elements */}
@@ -29,37 +60,34 @@ export default function Hero() {
               className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gray-100 text-gray-600 text-[11px] font-bold tracking-widest uppercase mb-6"
             >
               <CheckCircle2 className="w-3.5 h-3.5" />
-              Premium Security Solutions
+              {badge}
             </motion.div>
 
             <h1 className="text-4xl sm:text-5xl lg:text-[64px] font-bold text-gray-900 leading-[1.05] mb-8 tracking-tight">
-              Custom-made doors <br className="hidden lg:block" />
-              and windows with <br className="hidden lg:block" />
-              <span className="text-navy-900">professional installation</span>
+              {title}
             </h1>
 
             <p className="text-lg md:text-xl text-gray-600 leading-relaxed max-w-2xl mb-10">
-              We install security doors and reinforced windows with premium finishes. Invisible
-              security for your peace of mind.
+              {description}
             </p>
 
             <div className="flex flex-wrap gap-4">
               <motion.a
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                href="#contact"
+                href={primaryButtonLink}
                 className="px-8 py-4 bg-navy-900 hover:bg-navy-800 text-white text-xs font-bold tracking-[0.15em] uppercase rounded-full shadow-xl shadow-navy-900/10 transition-all flex items-center gap-2 group cursor-pointer"
               >
-                Get a Quote
+                {primaryButtonText}
                 <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
               </motion.a>
               <motion.a
                 whileHover={{ scale: 1.02, backgroundColor: 'rgba(0,0,0,0.02)' }}
                 whileTap={{ scale: 0.98 }}
-                href="#products"
+                href={secondaryButtonLink}
                 className="px-8 py-4 text-gray-900 text-xs font-bold tracking-[0.15em] uppercase rounded-full border border-gray-200 hover:border-gray-400 transition-all cursor-pointer"
               >
-                View Projects
+                {secondaryButtonText}
               </motion.a>
             </div>
 
@@ -75,7 +103,7 @@ export default function Hero() {
                 ))}
               </div>
               <div>
-                <p className="text-sm font-bold text-gray-900">500+ Happy Clients</p>
+                <p className="text-sm font-bold text-gray-900">{statsText}</p>
                 <div className="flex text-gold-500">
                   {[1, 2, 3, 4, 5].map((i) => (
                     <svg key={i} className="w-3 h-3 fill-current" viewBox="0 0 20 20">
@@ -101,7 +129,7 @@ export default function Hero() {
               className="absolute left-0 top-10 w-[85%] aspect-[4/5] rounded-[2rem] overflow-hidden shadow-2xl z-20 group cursor-pointer"
             >
               <img
-                src="/images/about-house.png"
+                src={image1}
                 alt="Luxury Modern Villa"
                 className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
               />
@@ -117,7 +145,7 @@ export default function Hero() {
               className="absolute -right-4 bottom-12 w-[60%] aspect-square rounded-[2rem] overflow-hidden shadow-2xl border-[8px] border-white z-30 group cursor-pointer"
             >
               <img
-                src="/images/hero-bg.png"
+                src={image2}
                 alt="Premium Door Detail"
                 className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
               />
@@ -133,7 +161,7 @@ export default function Hero() {
               className="absolute top-0 right-0 w-[45%] aspect-video rounded-3xl overflow-hidden shadow-xl border-4 border-white/80 z-10 group hidden lg:block backdrop-blur-sm cursor-pointer"
             >
               <img
-                src="/images/window-product.png"
+                src={image3}
                 alt="Window View"
                 className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
               />

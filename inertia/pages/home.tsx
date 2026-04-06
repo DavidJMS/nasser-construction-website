@@ -1,3 +1,4 @@
+import { HeroData } from '~/components/landing/Hero'
 import { useState, useEffect } from 'react'
 import { AnimatePresence } from 'framer-motion'
 import {
@@ -13,7 +14,14 @@ import {
   Preloader,
 } from '~/components/landing'
 
-export default function Home() {
+interface Props {
+  hero: any
+  services: any[]
+  projects: any[]
+  testimonials: any[]
+}
+
+export default function Home({ hero, services, projects, testimonials }: Props) {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -26,17 +34,15 @@ export default function Home() {
 
   return (
     <>
-      <AnimatePresence mode="wait">
-        {loading && <Preloader key="preloader" />}
-      </AnimatePresence>
+      <AnimatePresence mode="wait">{loading && <Preloader key="preloader" />}</AnimatePresence>
 
       <Navbar />
-      <Hero />
+      <Hero data={hero} />
       <AboutUs />
-      <Services />
+      <Services data={services} />
       <WhyChooseUs />
-      <Products />
-      <Testimonials />
+      <Products data={projects} />
+      <Testimonials data={testimonials} />
       <CTASection />
       <Footer />
     </>

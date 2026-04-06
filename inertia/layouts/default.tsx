@@ -1,26 +1,16 @@
 import { Data } from '@generated/data'
-import { toast, Toaster } from 'sonner'
-import { usePage } from '@inertiajs/react'
+import { sileo } from 'sileo'
 import { ReactElement, useEffect } from 'react'
 
 export default function Layout({ children }: { children: ReactElement<Data.SharedProps> }) {
   useEffect(() => {
-    toast.dismiss()
-  }, [usePage().url])
-
-  useEffect(() => {
     if (children.props.flash.error) {
-      toast.error(children.props.flash.error)
+      sileo.error({ title: children.props.flash.error })
     }
     if (children.props.flash.success) {
-      toast.success(children.props.flash.success)
+      sileo.success({ title: children.props.flash.success })
     }
   })
 
-  return (
-    <>
-      {children}
-      <Toaster position="top-center" richColors />
-    </>
-  )
+  return <>{children}</>
 }

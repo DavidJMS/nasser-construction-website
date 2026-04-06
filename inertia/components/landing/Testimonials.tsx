@@ -40,7 +40,7 @@ const reviews = [
   },
 ]
 
-export default function Testimonials() {
+export default function Testimonials({ data }: { data: any[] }) {
   return (
     <section id="testimonials" className="py-24 bg-white overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

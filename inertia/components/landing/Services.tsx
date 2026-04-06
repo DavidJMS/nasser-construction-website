@@ -25,12 +25,12 @@ const services = [
   },
 ]
 
-export default function Services() {
+export default function Services({ data }: { data: any[] }) {
   return (
     <section id="services" className="py-24 bg-gray-50/50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -57,19 +57,19 @@ export default function Services() {
             >
               {/* Hover background accent */}
               <div className="absolute top-0 right-0 w-32 h-32 bg-gray-100 rounded-full blur-3xl -mr-16 -mt-16 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              
+
               <div className="w-12 h-12 bg-navy-900 text-white rounded-2xl flex items-center justify-center mb-8 shrink-0 transition-transform duration-500 group-hover:scale-110 group-hover:bg-gray-800 shadow-lg shadow-navy-900/10">
                 {service.icon}
               </div>
-              
+
               <h3 className="text-xl font-bold text-navy-900 mb-4 leading-tight group-hover:text-gray-800 transition-colors">
                 {service.title}
               </h3>
-              
+
               <p className="text-sm text-gray-500 leading-relaxed mb-8 grow">
                 {service.description}
               </p>
-              
+
               <a
                 href="#contact"
                 className="inline-flex items-center gap-2 text-xs font-bold tracking-widest text-navy-700 hover:text-navy-950 transition-colors group/link uppercase"
