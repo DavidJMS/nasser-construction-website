@@ -6,7 +6,7 @@ FROM node:lts-bookworm-slim AS base
 FROM base AS deps
 WORKDIR /app
 COPY package*.json ./
-RUN npm ci
+RUN npm i
 
 # ----------------------------
 # Stage 2: Build the application
@@ -24,7 +24,7 @@ WORKDIR /app
 ENV NODE_ENV=production
 
 COPY --from=build /app/build ./
-RUN npm ci --omit=dev
+RUN npm i --omit=dev
 
 EXPOSE 3333
 CMD ["node", "bin/server.js"]
