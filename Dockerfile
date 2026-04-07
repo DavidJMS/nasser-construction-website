@@ -26,5 +26,8 @@ ENV NODE_ENV=production
 COPY --from=build /app/build ./
 RUN npm i --omit=dev
 
+RUN node ace migration:run
+RUN node ace db:seed
+
 EXPOSE 3333
 CMD ["node", "bin/server.js"]
