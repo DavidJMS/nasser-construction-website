@@ -1,15 +1,9 @@
 import { Button, Space, Typography } from 'antd'
 import { SaveOutlined } from '@ant-design/icons'
-import { FormInstance } from 'antd/es/form'
 
 const { Title, Text } = Typography
 
-interface HeroHeaderProps {
-  form: FormInstance
-  isPending: boolean
-}
-
-export function HeroHeader({ form, isPending }: HeroHeaderProps) {
+export function AboutUsHeader({ form, isPending }: { form: any; isPending: boolean }) {
   return (
     <div
       style={{
@@ -21,18 +15,18 @@ export function HeroHeader({ form, isPending }: HeroHeaderProps) {
     >
       <div>
         <Title level={3} style={{ margin: 0 }}>
-          Sección Hero
+          Configuración About Us
         </Title>
-        <Text type="secondary">Administra el contenido de la sección Hero</Text>
+        <Text type="secondary">Personaliza la sección de historia y características</Text>
       </div>
       <Space size="middle">
         <Button
           type="primary"
-          onClick={() => form.submit()}
-          loading={isPending}
           icon={<SaveOutlined />}
+          loading={isPending}
+          onClick={() => form.submit()}
         >
-          Publicar Cambios
+          Guardar Cambios
         </Button>
       </Space>
     </div>

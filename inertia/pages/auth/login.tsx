@@ -1,4 +1,4 @@
-import { Form, Input, Button, Card, Typography } from 'antd'
+import { Form, Input, Button, Card, Typography, Image, Flex } from 'antd'
 import { Head } from '@inertiajs/react'
 import { UserOutlined, LockOutlined, LoginOutlined } from '@ant-design/icons'
 import { useMutation } from '@tanstack/react-query'
@@ -21,7 +21,6 @@ export default function Login() {
   )
 
   const onFinish = (values: any) => {
-    console.log(values)
     login({
       body: values,
     })
@@ -44,7 +43,6 @@ export default function Login() {
           zIndex: 9999,
         }}
       >
-        {/* Decorative background circle */}
         <div
           style={{
             position: 'absolute',
@@ -68,32 +66,12 @@ export default function Login() {
           }}
           styles={{ body: { padding: '40px 32px' } }}
         >
-          <div style={{ textAlign: 'center', marginBottom: 40 }}>
-            {/* Logo placeholder - replace with actual logo */}
-            <div
-              style={{
-                width: 64,
-                height: 64,
-                background: '#1759d4ff',
-                borderRadius: 16,
-                margin: '0 auto 24px',
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                fontSize: 32,
-                color: '#fff',
-                boxShadow: '0 0 20px rgba(42, 76, 189, 0.4)',
-              }}
-            >
-              N
-            </div>
-            <Title level={2} style={{ margin: 0, color: '#fff' }}>
-              Portal Nasser
-            </Title>
-            <Text type="secondary" style={{ fontSize: 16 }}>
+          <Flex vertical gap={20} align="center" style={{ marginBottom: 40 }}>
+            <Image height={40} width={120} src="/images/logo.png" alt="Logo" />
+            <Text type="secondary" style={{ fontSize: 16, color: '#fff' }}>
               Bienvenido al panel administrativo
             </Text>
-          </div>
+          </Flex>
 
           <Form layout="vertical" size="large" onFinish={onFinish} autoComplete="off">
             <Form.Item
@@ -105,7 +83,6 @@ export default function Login() {
                   type: 'email',
                 },
               ]}
-              label={<span style={{ color: 'rgba(255, 255, 255, 0.85)' }}>Correo Electrónico</span>}
             >
               <Input
                 prefix={<UserOutlined style={{ color: 'rgba(255,255,255,0.45)' }} />}
@@ -113,6 +90,7 @@ export default function Login() {
                 style={{
                   background: 'rgba(15, 23, 42, 0.5)',
                   border: '1px solid rgba(255,255,255,0.1)',
+                  color: '#fff',
                 }}
               />
             </Form.Item>
@@ -125,7 +103,6 @@ export default function Login() {
                   message: 'Por favor ingrese su contraseña',
                 },
               ]}
-              label={<span style={{ color: 'rgba(255, 255, 255, 0.85)' }}>Contraseña</span>}
             >
               <Input.Password
                 prefix={<LockOutlined style={{ color: 'rgba(255,255,255,0.45)' }} />}
@@ -133,6 +110,7 @@ export default function Login() {
                 style={{
                   background: 'rgba(15, 23, 42, 0.5)',
                   border: '1px solid rgba(255,255,255,0.1)',
+                  color: '#fff',
                 }}
               />
             </Form.Item>
@@ -144,21 +122,14 @@ export default function Login() {
                 block
                 loading={isPending}
                 icon={<LoginOutlined />}
-                style={{
-                  height: 48,
-                  fontSize: 16,
-                  fontWeight: 600,
-                  background: 'linear-gradient(90deg, #4150b2ff 0%, #2a81d2ff 100%)',
-                  border: 'none',
-                }}
               >
                 Iniciar Sesión
               </Button>
             </Form.Item>
 
             <div style={{ textAlign: 'center' }}>
-              <Text type="secondary" style={{ fontSize: 13 }}>
-                © 2026 Nasser Doors & Windows. Todos los derechos reservados.
+              <Text type="secondary" style={{ fontSize: 13, color: '#fff' }}>
+                © 2026 Todos los derechos reservados.
               </Text>
             </div>
           </Form>

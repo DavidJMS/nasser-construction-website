@@ -1,18 +1,15 @@
-import { ReactNode, useEffect, useState } from 'react'
-import { Layout, Menu, theme, Avatar, Dropdown, Button, Space, Typography } from 'antd'
+import { ReactNode, useState } from 'react'
+import { Layout, Menu, theme, Avatar, Dropdown, Button, Space, Typography, Image, Flex } from 'antd'
 import {
   DashboardOutlined,
   ProjectOutlined,
-  CustomerServiceOutlined,
-  CommentOutlined,
-  SettingOutlined,
   LogoutOutlined,
   UserOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
+  TeamOutlined,
 } from '@ant-design/icons'
 import { Link, router, usePage } from '@inertiajs/react'
-import { sileo } from 'sileo'
 
 const { Header, Sider, Content } = Layout
 const { Title, Text } = Typography
@@ -21,10 +18,6 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
   const { user } = usePage<any>().props as any
   const [collapsed, setCollapsed] = useState(false)
   const { url } = usePage()
-
-  useEffect(() => {
-    sileo.success({ title: 'Bienvenido al portal Nasser' })
-  }, [usePage().url])
 
   const {
     token: { colorBgContainer, borderRadiusLG },
@@ -46,25 +39,30 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
       label: <Link href="/admin/hero">Sección Hero</Link>,
     },
     {
-      key: '/admin/services',
-      icon: <CustomerServiceOutlined />,
-      label: <Link href="/admin/services">Servicios</Link>,
+      key: '/admin/about_us',
+      icon: <TeamOutlined />,
+      label: <Link href="/admin/about_us">Sobre nosotros</Link>,
     },
-    {
-      key: '/admin/projects',
-      icon: <ProjectOutlined />,
-      label: <Link href="/admin/projects">Proyectos</Link>,
-    },
-    {
-      key: '/admin/testimonials',
-      icon: <CommentOutlined />,
-      label: <Link href="/admin/testimonials">Testimonios</Link>,
-    },
-    {
-      key: '/admin/settings',
-      icon: <SettingOutlined />,
-      label: <Link href="/admin/settings">Configuración</Link>,
-    },
+    // {
+    //   key: '/admin/services',
+    //   icon: <CustomerServiceOutlined />,
+    //   label: <Link href="/admin/services">Servicios</Link>,
+    // },
+    // {
+    //   key: '/admin/projects',
+    //   icon: <ProjectOutlined />,
+    //   label: <Link href="/admin/projects">Proyectos</Link>,
+    // },
+    // {
+    //   key: '/admin/testimonials',
+    //   icon: <CommentOutlined />,
+    //   label: <Link href="/admin/testimonials">Testimonios</Link>,
+    // },
+    // {
+    //   key: '/admin/settings',
+    //   icon: <SettingOutlined />,
+    //   label: <Link href="/admin/settings">Configuración</Link>,
+    // },
   ]
 
   const userMenuItems = [
@@ -87,15 +85,24 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
       <Sider trigger={null} collapsible collapsed={collapsed} theme="dark" width={260}>
         <div
           style={{
-            height: 64,
+            height: 100,
             display: 'flex',
             alignItems: 'center',
             padding: '0 24px',
             overflow: 'hidden',
           }}
         >
-          <Title level={4} style={{ color: '#fff', margin: 0, whiteSpace: 'nowrap' }}>
-            {collapsed ? 'NC' : 'Nasser Admin'}
+          <Title
+            level={4}
+            style={{ color: '#fff', margin: 0, whiteSpace: 'nowrap', width: '100%' }}
+          >
+            {collapsed ? (
+              'NC'
+            ) : (
+              <Flex align="center" justify="center" style={{ width: '100%', marginBlock: 5 }}>
+                <Image src="/images/logo.png" alt="Logo" width={120} height={42} />
+              </Flex>
+            )}
           </Title>
         </div>
         <Menu
@@ -103,7 +110,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
           mode="inline"
           selectedKeys={[url]}
           items={menuItems}
-          style={{ borderRight: 0 }}
+          style={{ borderRight: 0, paddingInline: 16 }}
         />
       </Sider>
       <Layout>

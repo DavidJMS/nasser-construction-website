@@ -16,7 +16,7 @@ import { Toaster } from 'sileo'
 const appName = import.meta.env.VITE_APP_NAME || 'AdonisJS'
 
 createInertiaApp({
-  progress: { color: '#5468FF' },
+  progress: { color: '#07427E' },
 
   title: (title) => `${title} - ${appName}`,
 

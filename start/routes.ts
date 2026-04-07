@@ -32,6 +32,12 @@ router
     router.patch('admin/hero', [controllers.admin.Heros, 'update']).as('admin_hero.update')
     router.get('admin/hero/data', [controllers.admin.Heros, 'show']).as('admin_hero.show')
 
+    // About Us
+    router.get('admin/about_us', [controllers.admin.AboutUs, 'create']).as('admin_about_us.create')
+    router
+      .patch('admin/about_us', [controllers.admin.AboutUs, 'update'])
+      .as('admin_about_us.update')
+
     router.resource('admin/services', controllers.admin.Services)
     router.resource('admin/projects', controllers.admin.Projects)
     router.resource('admin/testimonials', controllers.admin.Testimonials)

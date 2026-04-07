@@ -1,21 +1,17 @@
 import { Form, Card } from 'antd'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useState } from 'react'
-import { HeroProps } from './types'
-import { heroAdminStyles } from './styles/heroStyles'
-import { useHeroForm } from './hooks/useHeroForm'
-import { HeroHeader } from './components/HeroHeader'
-import { HeroNavigation } from './components/HeroNavigation'
-import { HeroContentTab } from './components/HeroContentTab'
-import { HeroButtonsTab } from './components/HeroButtonsTab'
-import { HeroMediaTab } from './components/HeroMediaTab'
+import { AboutUsProps } from './types'
+import { useAboutUsForm } from './hooks/use_about_us_form'
+import { AboutUsHeader } from './components/AboutUsHeader'
+import { AboutUsNavigation } from './components/AboutUsNavigation'
+import { AboutUsContentTab } from './components/AboutUsContentTab'
+import { AboutUsFeaturesTab } from './components/AboutUsFeaturesTab'
+import { AboutUsMediaTab } from './components/AboutUsMediaTab'
 
-export default function HeroAdminIndex({ hero }: HeroProps) {
+export default function AboutUsAdminIndex({ aboutUs }: AboutUsProps) {
   const [activeTab, setActiveTab] = useState('content')
-  const { form, initialValues, onFinish, isPending } = useHeroForm(hero)
-
-  // Watch file lists to hide upload button when full
-  const images = Form.useWatch('images', form)
+  const { form, initialValues, onFinish, isPending } = useAboutUsForm(aboutUs)
 
   const fadeIn = {
     initial: { opacity: 0, y: 10 },
@@ -29,9 +25,7 @@ export default function HeroAdminIndex({ hero }: HeroProps) {
       className="admin-editor-container"
       style={{ minHeight: 'calc(100vh - 120px)', padding: '0 24px 40px' }}
     >
-      <style>{heroAdminStyles}</style>
-
-      <HeroHeader form={form} isPending={isPending} />
+      <AboutUsHeader form={form} isPending={isPending} />
 
       <Form
         form={form}
@@ -41,7 +35,7 @@ export default function HeroAdminIndex({ hero }: HeroProps) {
         size="large"
       >
         <div style={{ display: 'grid', gridTemplateColumns: '280px 1fr', gap: 32 }}>
-          <HeroNavigation activeTab={activeTab} setActiveTab={setActiveTab} />
+          <AboutUsNavigation activeTab={activeTab} setActiveTab={setActiveTab} />
 
           {/* Main Editor Card */}
           <Card
@@ -58,9 +52,9 @@ export default function HeroAdminIndex({ hero }: HeroProps) {
           >
             <AnimatePresence mode="wait" initial={false}>
               <motion.div key={activeTab} {...fadeIn}>
-                {activeTab === 'content' && <HeroContentTab />}
-                {activeTab === 'buttons' && <HeroButtonsTab />}
-                {activeTab === 'media' && <HeroMediaTab images={images} />}
+                {activeTab === 'content' && <AboutUsContentTab />}
+                {activeTab === 'features' && <AboutUsFeaturesTab />}
+                {activeTab === 'media' && <AboutUsMediaTab />}
               </motion.div>
             </AnimatePresence>
           </Card>
