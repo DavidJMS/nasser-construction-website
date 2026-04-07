@@ -1,15 +1,18 @@
-import app from '@adonisjs/core/services/app'
+import env from '#start/env'
 import { defineConfig } from '@adonisjs/lucid'
 
 const dbConfig = defineConfig({
-  connection: 'libsql',
+  connection: 'postgres',
   connections: {
-    libsql: {
-      client: 'libsql',
+    postgres: {
+      client: 'pg',
       connection: {
-        filename: `file:${app.tmpPath('libsql.db')}`,
+        host: env.get('DB_HOST'),
+        port: env.get('DB_PORT'),
+        user: env.get('DB_USER'),
+        password: env.get('DB_PASSWORD'),
+        database: env.get('DB_DATABASE'),
       },
-      useNullAsDefault: true,
       migrations: {
         naturalSort: true,
         paths: ['database/migrations'],
