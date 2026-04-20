@@ -1,30 +1,80 @@
 import { motion } from 'framer-motion'
 import { Award, ShieldCheck, Users, Hammer, ArrowRight } from 'lucide-react'
 
-const features = [
-  {
-    icon: <Award className="w-8 h-8" />,
-    title: 'Experience',
-    description: '+20 Years of experience in the industry',
-  },
-  {
-    icon: <ShieldCheck className="w-8 h-8" />,
-    title: 'Quality',
-    description: 'Products of the highest quality',
-  },
-  {
-    icon: <Hammer className="w-8 h-8" />,
-    title: 'Certified Installation',
-    description: 'Team of highly trained installers',
-  },
-  {
-    icon: <Users className="w-8 h-8" />,
-    title: 'Customer care',
-    description: 'We provide exceptional service',
-  },
-]
+interface AboutUsData {
+  categoryTag?: string | null
+  titleMain?: string | null
+  titleHighlight?: string | null
+  titleSuffix?: string | null
+  description?: string | null
+  buttonText?: string | null
+  buttonLink?: string | null
+  image1?: string | null
+  image2?: string | null
+}
 
-export default function AboutUs() {
+interface AboutUsProps {
+  data?: AboutUsData
+}
+
+const getIcon = (name: string) => {
+  switch (name.toLowerCase()) {
+    case 'award':
+    case 'experience':
+      return <Award className="w-8 h-8" />
+    case 'shieldcheck':
+    case 'quality':
+      return <ShieldCheck className="w-8 h-8" />
+    case 'hammer':
+    case 'installation':
+      return <Hammer className="w-8 h-8" />
+    case 'users':
+    case 'customer':
+      return <Users className="w-8 h-8" />
+    default:
+      return <Award className="w-8 h-8" />
+  }
+}
+
+export default function AboutUs({ data }: AboutUsProps) {
+  const categoryTag = data?.categoryTag || 'Our Story'
+  const titleMain = data?.titleMain || 'Excellence in'
+  const titleHighlight = data?.titleHighlight || 'Door & Window'
+  const titleSuffix = data?.titleSuffix || 'Installation'
+  const description =
+    data?.description ||
+    'Nasser Construction: Efficiency and capability in Orlando, a subcontractor specializing in door and window installation for the professional sector.'
+  const buttonText = data?.buttonText || 'DISCOVER MORE'
+  const buttonLink = data?.buttonLink || '#contact'
+  const image1 = data?.image1 || '/images/about-house.png'
+  const image2 = data?.image2 || '/images/window-install.png'
+  const features = [
+    {
+      id: 1,
+      title: 'Experience',
+      description: '+20 Years of experience in the industry',
+      icon: 'award',
+    },
+    {
+      id: 2,
+      title: 'Quality',
+      description: 'Products of the highest quality',
+      icon: 'shieldcheck',
+    },
+    {
+      id: 3,
+      title: 'Certified Installation',
+      description: 'Team of highly trained installers',
+      icon: 'hammer',
+    },
+    {
+      id: 4,
+      title: 'Customer care',
+      description: 'We provide exceptional service',
+      icon: 'users',
+    },
+  ]
+
   return (
     <section id="about" className="py-24 bg-white overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -39,7 +89,7 @@ export default function AboutUs() {
           >
             <div className="w-[90%] rounded-2xl overflow-hidden shadow-2xl relative z-10 group">
               <img
-                src="/images/about-house.png"
+                src={image1}
                 alt="Construction detail"
                 className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-105"
               />
@@ -53,7 +103,7 @@ export default function AboutUs() {
               className="absolute -bottom-10 -right-4 w-[55%] rounded-2xl overflow-hidden border-8 border-white shadow-2xl z-20 group"
             >
               <img
-                src="/images/window-install.png"
+                src={image2}
                 alt="Window detail"
                 className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-110"
               />
@@ -74,27 +124,23 @@ export default function AboutUs() {
           >
             <div className="flex items-center gap-2 mb-6 uppercase tracking-[0.2em] text-gray-500 font-bold text-xs">
               <span className="w-8 h-px bg-gray-400" />
-              Our Story
+              {categoryTag}
             </div>
 
             <h3 className="text-4xl font-bold text-gray-900 mb-8 leading-tight">
-              Excellence in <span className="text-gray-600">Door & Window</span> Installation
+              {titleMain} <span className="text-gray-600">{titleHighlight}</span> {titleSuffix}
             </h3>
 
             <div className="mb-10 text-lg leading-relaxed text-gray-600 max-w-xl">
-              <span className="font-bold text-gray-900">Nasser Construction:</span> Efficiency and
-              capability in Orlando, a subcontractor specializing in door and window installation
-              for the professional sector. Capable of managing large projects and complex
-              renovations, we combine consistent workmanship with high-quality standards to build
-              efficiently alongside you.
+              {description}
             </div>
 
             <motion.a
               whileHover={{ x: 5 }}
-              href="#contact"
+              href={buttonLink}
               className="inline-flex gap-3 items-center text-navy-900 font-bold uppercase text-[12px] tracking-[0.2em] group"
             >
-              DISCOVER MORE
+              {buttonText}
               <div className="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center transition-all group-hover:bg-navy-900 group-hover:text-white group-hover:border-navy-900">
                 <ArrowRight className="w-4 h-4" />
               </div>
@@ -114,7 +160,7 @@ export default function AboutUs() {
               className="flex flex-col items-center text-center p-8 bg-gray-50/50 rounded-3xl border border-transparent hover:border-gray-200 hover:bg-white hover:shadow-xl hover:shadow-gray-900/5 transition-all duration-300 group cursor-pointer"
             >
               <div className="w-16 h-16 rounded-2xl bg-white shadow-sm text-navy-900 mb-6 flex items-center justify-center transition-all group-hover:bg-navy-900 group-hover:text-white group-hover:scale-110 group-hover:-rotate-3">
-                {feature.icon}
+                {getIcon(feature.icon)}
               </div>
               <h4 className="text-xl font-bold text-gray-900 mb-3 leading-tight">
                 {feature.title}

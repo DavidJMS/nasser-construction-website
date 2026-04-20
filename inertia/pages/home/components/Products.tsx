@@ -92,6 +92,27 @@ const ProjectSection: FC<{ title: string; icon: ReactNode; projects: Product[] }
 )
 
 export default function Products({ data }: { data: any[] }) {
+  const normalizedProjects = Array.isArray(data)
+    ? data
+        .map((project: any) => ({
+          image: project?.imageUrl || project?.image || project?.image_url || '/images/door-panel.png',
+          title: project?.title || '',
+          category: project?.category || '',
+        }))
+        .filter((project) => project.title)
+    : []
+
+  const doorProjectsFromData = normalizedProjects.filter(
+    (project) => /door/i.test(project.category) || /door/i.test(project.title)
+  )
+
+  const windowProjectsFromData = normalizedProjects.filter(
+    (project) => /window/i.test(project.category) || /window/i.test(project.title)
+  )
+
+  const doorProjectsFinal = doorProjectsFromData.length ? doorProjectsFromData : doorProjects
+  const windowProjectsFinal = windowProjectsFromData.length ? windowProjectsFromData : windowProjects
+
   return (
     <section id="projects" className="py-24 bg-white overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -120,14 +141,14 @@ export default function Products({ data }: { data: any[] }) {
         <ProjectSection
           title="Premium Doors"
           icon={<LayoutGrid className="w-6 h-6" />}
-          projects={doorProjects}
+          projects={doorProjectsFinal}
         />
 
         {/* Windows Section */}
         <ProjectSection
           title="Modern Windows"
           icon={<Layout className="w-6 h-6" />}
-          projects={windowProjects}
+          projects={windowProjectsFinal}
         />
       </div>
     </section>

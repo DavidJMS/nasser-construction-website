@@ -3,4 +3,6 @@ export interface HomeProps {
   services: any[]
   projects: any[]
   testimonials: any[]
+  aboutUs: any
+  settings: Record<string, any>
 }

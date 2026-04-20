@@ -6,13 +6,13 @@ import { api } from '~/utils/client'
 import { router } from '@inertiajs/react'
 import { sileo } from 'sileo'
 
-const { Title, Text } = Typography
+const { Text } = Typography
 
 export default function Login() {
   const { mutate: login, isPending } = useMutation(
     api.session.store.mutationOptions({
       onSuccess: () => {
-        router.visit('/admin')
+        router.visit('/')
       },
       onError: (error: any) => {
         sileo.error({ title: error.response?.data?.message })
@@ -129,7 +129,7 @@ export default function Login() {
 
             <div style={{ textAlign: 'center' }}>
               <Text type="secondary" style={{ fontSize: 13, color: '#fff' }}>
-                © 2026 Todos los derechos reservados.
+                © 2026 Nasser Construction. Todos los derechos reservados.
               </Text>
             </div>
           </Form>

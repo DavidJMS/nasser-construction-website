@@ -33,6 +33,6 @@ export default class SessionController {
 
   async destroy({ auth, response }: HttpContext) {
     await auth.use().logout()
-    return response.redirect('/admin')
+    return response.redirect('/')
   }
 }
