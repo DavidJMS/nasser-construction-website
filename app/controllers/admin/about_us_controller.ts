@@ -5,46 +5,6 @@ import type { HttpContext } from '@adonisjs/core/http'
 import app from '@adonisjs/core/services/app'
 
 export default class AboutUsController {
-  /**
-   * Render the admin about us edit page
-   */
-  async create({ inertia }: HttpContext) {
-    const aboutUs = await AboutUs.query()
-      .preload('features', (q) => q.orderBy('order', 'asc'))
-      .first()
-
-    if (!aboutUs) {
-      // Create initial record if not exists
-      const newAboutUs = await AboutUs.create({
-        categoryTag: 'Our Story',
-        titleMain: 'Excellence in ',
-        titleHighlight: 'Door & Window',
-        titleSuffix: ' Installation',
-      })
-
-      // Create initial features
-      await AboutUsFeature.createMany([
-        { title: 'Experience', description: '+20 Years of experience', icon: 'Award', order: 1 },
-        {
-          title: 'Quality',
-          description: 'Highest quality products',
-          icon: 'ShieldCheck',
-          order: 2,
-        },
-        { title: 'Installation', description: 'Certified installers', icon: 'Hammer', order: 3 },
-        { title: 'Care', description: 'Exceptional service', icon: 'Users', order: 4 },
-      ])
-
-      await newAboutUs.load('features')
-      return inertia.render('admin/about_us/index', { aboutUs: newAboutUs })
-    }
-
-    return inertia.render('admin/about_us/index', { aboutUs })
-  }
-
-  /**
-   * Update the about us section data
-   */
   async update({ request, response }: HttpContext) {
     const payload = await request.validateUsing(updateAboutUs)
     const aboutUs = await AboutUs.first()
@@ -94,7 +54,7 @@ export default class AboutUsController {
 
     return response.ok({
       message: 'Sección About Us actualizada correctamente',
-      data: await aboutUs.refresh().then((u) => u.load('features')),
+      data: await aboutUs.refresh(),
     })
   }
 }

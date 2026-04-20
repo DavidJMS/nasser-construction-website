@@ -4,23 +4,6 @@ import { updateHero } from '#validators/update_hero'
 import app from '@adonisjs/core/services/app'
 
 export default class HerosController {
-  /**
-   * Render the admin hero edit page
-   */
-  async create({ inertia }: HttpContext) {
-    const hero = await Hero.firstOrCreate(
-      {},
-      {
-        title: 'Custom-made doors and windows with professional installation',
-        badge: 'Premium Security Solutions',
-      }
-    )
-    return inertia.render('admin/hero/index', { hero })
-  }
-
-  /**
-   * Update the hero section data
-   */
   async update({ request, response }: HttpContext) {
     const payload = await request.validateUsing(updateHero)
     const hero = await Hero.first()

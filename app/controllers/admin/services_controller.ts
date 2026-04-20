@@ -2,11 +2,6 @@ import Service from '#models/service'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class ServicesController {
-  async index({ inertia }: HttpContext) {
-    const services = await Service.query().orderBy('order', 'asc')
-    return inertia.render('admin/services/index', { services })
-  }
-
   async store({ request, response, session }: HttpContext) {
     const data = request.all()
     await Service.create(data)

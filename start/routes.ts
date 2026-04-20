@@ -24,27 +24,23 @@ router
   .group(() => {
     router.post('logout', [controllers.Session, 'destroy'])
 
-    // Admin
-    router.get('admin', [controllers.admin.Dashboard, 'index'])
-
     // Hero
-    router.get('admin/hero', [controllers.admin.Heros, 'create']).as('admin_hero.create')
     router.patch('admin/hero', [controllers.admin.Heros, 'update']).as('admin_hero.update')
-    router.get('admin/hero/data', [controllers.admin.Heros, 'show']).as('admin_hero.show')
 
     // About Us
-    router.get('admin/about_us', [controllers.admin.AboutUs, 'create']).as('admin_about_us.create')
     router
       .patch('admin/about_us', [controllers.admin.AboutUs, 'update'])
       .as('admin_about_us.update')
 
-    router.resource('admin/services', controllers.admin.Services)
-    router.resource('admin/projects', controllers.admin.Projects)
-    router.resource('admin/testimonials', controllers.admin.Testimonials)
+    router.resource('admin/services', controllers.admin.Services).only(['store', 'update', 'destroy'])
+    router.resource('admin/projects', controllers.admin.Projects).only(['store', 'update', 'destroy'])
+    router
+      .resource('admin/testimonials', controllers.admin.Testimonials)
+      .only(['store', 'update', 'destroy'])
 
-    router.get('admin/settings', [controllers.admin.Settings, 'index'])
     router
       .post('admin/settings/update-all', [controllers.admin.Settings, 'update'])
       .as('admin.settings.update')
+    router.post('admin/settings/upload', [controllers.admin.Settings, 'upload']).as('admin.settings.upload')
   })
   .use(middleware.auth())
