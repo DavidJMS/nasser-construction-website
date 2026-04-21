@@ -12,6 +12,7 @@ import { controllers } from '#generated/controllers'
 import router from '@adonisjs/core/services/router'
 
 router.get('/', [controllers.Home, 'index'])
+router.get('/about', [controllers.Home, 'about'])
 
 router
   .group(() => {
@@ -25,22 +26,21 @@ router
     router.post('logout', [controllers.Session, 'destroy'])
 
     // Hero
-    router.patch('admin/hero', [controllers.admin.Heros, 'update']).as('admin_hero.update')
+    router.patch('hero', [controllers.Heros, 'update'])
+    router.get('hero', [controllers.Heros, 'show'])
 
     // About Us
-    router
-      .patch('admin/about_us', [controllers.admin.AboutUs, 'update'])
-      .as('admin_about_us.update')
+    router.patch('about_us', [controllers.AboutUs, 'update'])
+    router.get('about_us', [controllers.AboutUs, 'show'])
 
-    router.resource('admin/services', controllers.admin.Services).only(['store', 'update', 'destroy'])
-    router.resource('admin/projects', controllers.admin.Projects).only(['store', 'update', 'destroy'])
-    router
-      .resource('admin/testimonials', controllers.admin.Testimonials)
-      .only(['store', 'update', 'destroy'])
+    router.resource('services', controllers.Services)
+    router.resource('projects', controllers.Projects)
+    router.resource('testimonials', controllers.Testimonials)
 
-    router
-      .post('admin/settings/update-all', [controllers.admin.Settings, 'update'])
-      .as('admin.settings.update')
-    router.post('admin/settings/upload', [controllers.admin.Settings, 'upload']).as('admin.settings.upload')
+    router.post('settings/update-all', [controllers.Settings, 'update'])
+
+    router.get('settings', [controllers.Settings, 'index'])
+
+    router.post('settings/upload', [controllers.Settings, 'upload'])
   })
   .use(middleware.auth())

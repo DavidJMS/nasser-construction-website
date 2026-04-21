@@ -14,5 +14,6 @@ export const updateProject = vine.compile(
     gallery: vine
       .array(vine.file({ size: '5mb', extnames: ['jpg', 'png', 'jpeg', 'webp'] }))
       .optional(),
+    keep_gallery_ids: vine.array(vine.number()).optional(),
   })
 )
