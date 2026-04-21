@@ -19,6 +19,8 @@ export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false)
   const { user } = usePage<any>().props
   const { isEditing, setIsEditing } = useEditor()
+  const anchorBase = typeof window !== 'undefined' && window.location.pathname !== '/' ? '/' : ''
+  const resolvedLinks = navLinks.map((link) => ({ ...link, href: `${anchorBase}${link.href}` }))
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20)
@@ -33,7 +35,7 @@ export default function Navbar() {
   return (
     <nav
       id="navbar"
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+      className={`fixed top-0 left-0 right-0 z-30 transition-all duration-500 ${
         scrolled || isEditing
           ? 'glass shadow-sm py-2 border-b border-white/10'
           : 'bg-transparent py-6 border-b border-transparent'
@@ -42,7 +44,7 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-12">
           {/* Logo */}
-          <a href="#home" className="flex items-center gap-1 shrink-0 group">
+          <a href={`${anchorBase}#home`} className="flex items-center gap-1 shrink-0 group">
             <img
               src="/images/logo.png"
               alt="Logo"
@@ -52,7 +54,7 @@ export default function Navbar() {
 
           {/* Desktop Nav — centered links */}
           <div className="hidden lg:flex items-center gap-8">
-            {navLinks.map((link) => (
+            {resolvedLinks.map((link) => (
               <a
                 key={link.label}
                 href={link.href}
@@ -100,7 +102,7 @@ export default function Navbar() {
             {/* Contact button */}
             <div className="hidden lg:flex items-center">
               <a
-                href="#contact"
+                href={`${anchorBase}#contact`}
                 className="px-6 py-2 bg-navy-900 hover:bg-navy-800 text-white text-[12px] font-bold tracking-widest rounded-full transition-all duration-300 shadow-md hover:shadow-navy-900/20 active:scale-95 cursor-pointer"
               >
                 CONTACT US
@@ -131,7 +133,7 @@ export default function Navbar() {
             className="lg:hidden overflow-hidden bg-white/95 backdrop-blur-lg border-t border-gray-100"
           >
             <div className="px-6 py-8 space-y-4">
-              {navLinks.map((link, idx) => (
+              {resolvedLinks.map((link, idx) => (
                 <motion.a
                   initial={{ x: -20, opacity: 0 }}
                   animate={{ x: 0, opacity: 1 }}
@@ -148,7 +150,7 @@ export default function Navbar() {
                 initial={{ y: 20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: 0.3 }}
-                href="#contact"
+                href={`${anchorBase}#contact`}
                 onClick={() => setMobileOpen(false)}
                 className="block mt-6 text-center px-5 py-3 bg-navy-900 text-white text-sm font-bold rounded-full shadow-lg cursor-pointer"
               >

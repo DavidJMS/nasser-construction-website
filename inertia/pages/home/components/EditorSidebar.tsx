@@ -1,17 +1,17 @@
 import { X, Settings, Layout, Save } from 'lucide-react'
 import { useEditor } from '../hooks/useEditor'
-import { HeroForm } from './editor/HeroForm'
-import { AboutUsForm } from './editor/AboutUsForm'
-import { ServicesForm } from './editor/ServicesForm'
-import { ProjectsForm } from './editor/ProjectsForm'
-import { TestimonialsForm } from './editor/TestimonialsForm'
-import { CTAForm } from './editor/CTAForm'
-import { FooterForm } from './editor/FooterForm'
+import { HeroForm } from '../../editor/HeroForm.tsx'
+import { AboutUsForm } from '../../editor/AboutUsForm.tsx'
+import { ServicesForm } from '../../editor/ServicesForm.tsx'
+import { ProjectsForm } from '../../editor/ProjectsForm.tsx'
+import { TestimonialsForm } from '../../editor/TestimonialsForm.tsx'
+import { CTAForm } from '../../editor/CTAForm.tsx'
+import { FooterForm } from '../../editor/FooterForm.tsx'
 import { Button, Tooltip, ConfigProvider, Drawer } from 'antd'
-import { HeroData } from './Hero'
+import type Hero from '#models/hero'
 
 interface EditorSidebarProps {
-  heroData?: HeroData
+  heroData?: Hero
   aboutUsData?: any
   services?: any
   projects?: any
@@ -137,122 +137,6 @@ export function EditorSidebar({
         {/* Main Content Area */}
         <div className="flex-1 overflow-y-auto scrollbar-hide bg-white">{renderContent()}</div>
       </Drawer>
-
-      {/* Helper styles for hiding sidebar items that don't fit well */}
-      <style>{`
-        .admin-editor-container {
-          padding: 24px !important;
-          min-height: auto !important;
-        }
-        .admin-editor-container h3 {
-          font-size: 16px !important;
-        }
-        .admin-editor-container .ant-card {
-          border-radius: 12px !important;
-          box-shadow: none !important;
-          border: 1px solid #f0f0f0 !important;
-        }
-        .admin-editor-container > div:first-child {
-          padding: 0 0 16px 0 !important;
-        }
-        /* Hide complex navigation if sidebar is too small */
-        @media (max-width: 400px) {
-          .admin-editor-container > div:last-child {
-            grid-template-columns: 1fr !important;
-          }
-        }
-
-        .editor-collapse .ant-collapse-header {
-          padding: 16px 24px !important;
-          background: #fcfcfc;
-          border-bottom: 1px solid #f0f0f0 !important;
-        }
-        .editor-collapse .ant-collapse-content-box {
-          padding: 24px !important;
-        }
-        .editor-table .ant-table-thead > tr > th {
-          background: #f8fafc !important;
-          font-size: 10px !important;
-          text-transform: uppercase !important;
-          letter-spacing: 0.05em !important;
-          color: #64748b !important;
-        }
-        .editor-upload .ant-upload-select {
-          width: 80px !important;
-          height: 80px !important;
-          border-radius: 12px !important;
-          border: 2px dashed #e2e8f0 !important;
-          background: #f8fafc !important;
-        }
-        .editor-upload-small .ant-upload-select,
-        .editor-upload-small .ant-upload-list-item-container,
-        .editor-upload-small .ant-upload-list-item {
-          width: 100% !important;
-          height: 300px !important;
-          border-radius: 12px !important;
-          margin: 0 0 16px 0 !important;
-          padding: 0 !important;
-          overflow: hidden !important;
-        }
-        .editor-upload-small .ant-upload-select {
-          border: 2px dashed #e2e8f0 !important;
-          background: #f8fafc !important;
-        }
-        .editor-upload-small .ant-upload-list-item-info,
-        .editor-upload-small .ant-upload-list-item-thumbnail,
-        .editor-upload-small .ant-upload-list-item-thumbnail img {
-          width: 100% !important;
-          height: 100% !important;
-          position: relative !important;
-          display: block !important;
-          object-fit: cover !important;
-          padding: 0 !important;
-          inset: 0 !important;
-        }
-        .editor-upload-small .ant-upload-list-item::before {
-          width: 100% !important;
-          height: 100% !important;
-          left: 0 !important;
-          top: 0 !important;
-        }
-        .editor-upload-small .ant-upload-list-item-actions {
-          width: 100% !important;
-          height: 100% !important;
-          left: 0 !important;
-          top: 0 !important;
-          display: flex !important;
-          align-items: center !important;
-          justify-content: center !important;
-          gap: 12px !important;
-          padding: 0 !important;
-          background: rgba(0, 0, 0, 0.4) !important;
-          opacity: 0;
-          transition: opacity 0.3s;
-        }
-        .editor-upload-small .ant-upload-list-item:hover .ant-upload-list-item-actions {
-          opacity: 1 !important;
-        }
-
-        .editor-tabs .ant-tabs-nav {
-          margin-bottom: 0 !important;
-        }
-        .editor-tabs .ant-tabs-tab {
-          padding: 12px 0 !important;
-          margin: 0 !important;
-        }
-        .editor-tabs .ant-tabs-tab-btn {
-          color: #64748b !important;
-          transition: all 0.3s !important;
-        }
-        .editor-tabs .ant-tabs-tab-active .ant-tabs-tab-btn {
-          color: #07427e !important;
-        }
-        .editor-tabs .ant-tabs-ink-bar {
-          background: #07427e !important;
-          height: 3px !important;
-          border-radius: 3px 3px 0 0 !important;
-        }
-      `}</style>
     </ConfigProvider>
   )
 }

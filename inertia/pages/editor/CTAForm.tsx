@@ -1,70 +1,72 @@
 import { Form, Input, Space, Tabs, Upload, Typography } from 'antd'
 import { EditOutlined, PictureOutlined } from '@ant-design/icons'
-import { useEffect, useMemo, useState } from 'react'
-import { router } from '@inertiajs/react'
-import { useEditor } from '../../hooks/useEditor'
+import { useEffect } from 'react'
+import { useEditor } from '~/pages/home/hooks/useEditor'
 import { Image as ImageIcon, Link as LinkIcon, Sparkles } from 'lucide-react'
+import { useMutation, useQuery } from '@tanstack/react-query'
+import { api, queryClient } from '~/utils/client'
+import { sileo } from 'sileo'
+import { toUploadFileList } from '~/utils/upload'
 
 interface CTAFormProps {
   settings?: Record<string, any>
 }
 
-export function CTAForm({ settings }: CTAFormProps) {
+export function CTAForm({ settings: ssrSettings }: CTAFormProps) {
   const { registerSaveAction } = useEditor()
   const [form] = Form.useForm()
-  const [isPending, setIsPending] = useState(false)
+
+  const { data: settingsData } = useQuery(api.settings.index.queryOptions())
+  const settings = settingsData?.data ?? ssrSettings
+
+  const { mutate, isPending } = useMutation(
+    api.settings.update.mutationOptions({
+      onSuccess: (result: any) => {
+        sileo.success({ title: result?.message || 'CTA actualizado' })
+        queryClient.invalidateQueries(api.settings.index.queryOptions())
+      },
+      onError: (err: any) => sileo.error({ title: err?.message || 'Error al actualizar CTA' }),
+    })
+  )
 
   const { Text } = Typography
-
-  const initialValues = useMemo(
-    () => ({
-      cta_badge: settings?.cta_badge ?? 'Expert Installations',
-      cta_title: settings?.cta_title ?? 'Installation experts at your service.',
-      cta_description:
-        settings?.cta_description ??
-        'Get a quote tailored to your needs and secure the investment of a lifetime.',
-      cta_button_text: settings?.cta_button_text ?? 'Get a Quote',
-      cta_button_link: settings?.cta_button_link ?? '#contact',
-      cta_image: settings?.cta_image ?? '/images/cta-doors-fan.png',
-      cta_image_upload: settings?.cta_image
-        ? [{ uid: '-1', name: 'CTA', status: 'done', url: settings?.cta_image }]
-        : [],
-    }),
-    [settings]
-  )
 
   useEffect(() => {
     registerSaveAction(() => form.submit(), isPending)
     return () => registerSaveAction(null, false)
   }, [form, isPending, registerSaveAction])
 
-  const onFinish = (values: any) => {
-    setIsPending(true)
-    const formData = new FormData()
-
-    formData.append('settings[cta_badge]', values.cta_badge || '')
-    formData.append('settings[cta_title]', values.cta_title || '')
-    formData.append('settings[cta_description]', values.cta_description || '')
-    formData.append('settings[cta_button_text]', values.cta_button_text || '')
-    formData.append('settings[cta_button_link]', values.cta_button_link || '')
-
-    // Keep old image string if no new file is uploaded
-    if (typeof values.cta_image === 'string') {
-      formData.append('settings[cta_image]', values.cta_image)
-    }
-
-    const fileList = values.cta_image_upload
-    if (fileList && fileList.length > 0 && fileList[0].originFileObj) {
-      formData.append('cta_image', fileList[0].originFileObj)
-    }
-
-    router.post('/admin/settings/update-all', formData, {
-      forceFormData: true,
-      onSuccess: () => {
-        router.reload({ only: ['settings'] })
-      },
-      onFinish: () => setIsPending(false),
+  useEffect(() => {
+    if (!settings) return
+    form.setFieldsValue({
+      cta_badge: settings?.cta_badge,
+      cta_title: settings?.cta_title,
+      cta_description: settings?.cta_description,
+      cta_button_text: settings?.cta_button_text,
+      cta_button_link: settings?.cta_button_link,
+      cta_image: settings?.cta_image,
+      cta_image_upload: toUploadFileList(settings?.cta_image),
     })
+  }, [settings, form])
+
+  const onFinish = (values: any) => {
+    const body: any = {
+      settings: {
+        cta_badge: values.cta_badge || '',
+        cta_title: values.cta_title || '',
+        cta_description: values.cta_description || '',
+        cta_button_text: values.cta_button_text || '',
+        cta_button_link: values.cta_button_link || '',
+      },
+    }
+
+    if (values.cta_image_upload?.[0]?.originFileObj) {
+      body.cta_image = values.cta_image_upload[0].originFileObj
+    } else if (values.cta_image) {
+      body.settings.cta_image = values.cta_image
+    }
+
+    mutate({ body })
   }
 
   const fileList = Form.useWatch('cta_image_upload', form) || []
@@ -147,13 +149,7 @@ export function CTAForm({ settings }: CTAFormProps) {
 
   return (
     <div className="p-0">
-      <Form
-        form={form}
-        layout="vertical"
-        onFinish={onFinish}
-        initialValues={initialValues}
-        size="middle"
-      >
+      <Form form={form} layout="vertical" onFinish={onFinish} size="middle">
         <Tabs defaultActiveKey="content" type="card" size="small" centered items={items} />
       </Form>
     </div>

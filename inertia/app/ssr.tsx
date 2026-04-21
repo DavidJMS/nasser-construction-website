@@ -15,7 +15,7 @@ export default function render(page: any) {
       return ReactDOMServer.renderToString(
         <StyleProvider cache={cache} hashPriority="high">
           <QueryClientProvider client={queryClient}>
-            <Toaster position="top-right" />
+            <Toaster position="top-center" />
             {element}
           </QueryClientProvider>
         </StyleProvider>
@@ -36,7 +36,7 @@ export default function render(page: any) {
       return (
         <QueryClientProvider client={queryClient}>
           <StyleProvider cache={cache} hashPriority="high">
-            <Toaster position="top-right" />
+            <Toaster position="top-center" />
             <App {...props} />
           </StyleProvider>
         </QueryClientProvider>

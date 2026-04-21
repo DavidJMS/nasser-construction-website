@@ -34,7 +34,7 @@ createInertiaApp({
     createRoot(el).render(
       <StyleProvider hashPriority="high">
         <QueryClientProvider client={queryClient}>
-          <Toaster position="top-right" />
+          <Toaster position="top-center" />
           <App {...props} />
         </QueryClientProvider>
       </StyleProvider>

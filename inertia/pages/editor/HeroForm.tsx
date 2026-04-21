@@ -1,33 +1,70 @@
 import { PictureOutlined, EditOutlined } from '@ant-design/icons'
-import { useHeroForm } from '../../hooks/useHeroForm'
-import { HeroData } from '../Hero'
-import { useEditor } from '../../hooks/useEditor'
-import { useEffect } from 'react'
 import { Form, Input, Space, Tabs, Typography, Upload } from 'antd'
 import { Image, Link, MousePointer2, Sparkles } from 'lucide-react'
+import { useMutation } from '@tanstack/react-query'
+import { toUploadFileList } from '~/utils/upload'
+import { sileo } from 'sileo'
+import { useEditor } from '~/pages/home/hooks/useEditor'
+import { useEffect } from 'react'
+import type Hero from '#models/hero'
+import { api, queryClient } from '~/utils/client'
 
 const { Text } = Typography
 
-interface HeroFormProps {
-  hero: HeroData
-}
-
-const normFile = (e: any) => {
-  if (Array.isArray(e)) return e
-  return e?.fileList
-}
-
-export function HeroForm({ hero }: HeroFormProps) {
-  const { form, initialValues, onFinish, isPending } = useHeroForm(hero as any)
-  const { registerSaveAction } = useEditor()
+export function HeroForm({ hero }: { hero?: Hero | null }) {
+  const [form] = Form.useForm()
+  const { setIsEditing, registerSaveAction } = useEditor()
   const image1 = Form.useWatch('image1', form)
   const image2 = Form.useWatch('image2', form)
   const image3 = Form.useWatch('image3', form)
 
+  const { mutate, isPending } = useMutation(
+    api.heros.update.mutationOptions({
+      onSuccess: (result: any) => {
+        sileo.success({ title: result?.message || 'Hero updated successfully' })
+        queryClient.invalidateQueries(api.heros.show.queryOptions())
+        const updatedHero = result?.data
+        if (updatedHero) {
+          form.setFieldsValue({
+            ...updatedHero,
+            image1: toUploadFileList(updatedHero.image1),
+            image2: toUploadFileList(updatedHero.image2),
+            image3: toUploadFileList(updatedHero.image3),
+          })
+        }
+      },
+      onError: (error: any) => {
+        sileo.error({ title: error?.message || 'Error al actualizar Hero' })
+      },
+    })
+  )
+
   useEffect(() => {
     registerSaveAction(() => form.submit(), isPending)
     return () => registerSaveAction(null, false)
-  }, [isPending, form, registerSaveAction])
+  }, [])
+
+  useEffect(() => {
+    if (!hero) return
+    setIsEditing(true)
+    form.setFieldsValue({
+      ...hero,
+      image1: toUploadFileList((hero as any)?.image1),
+      image2: toUploadFileList((hero as any)?.image2),
+      image3: toUploadFileList((hero as any)?.image3),
+    })
+  }, [hero, form, setIsEditing])
+
+  const onFinish = (values: any) => {
+    mutate({
+      body: {
+        ...values,
+        image1: values.image1?.[0]?.originFileObj,
+        image2: values.image2?.[0]?.originFileObj,
+        image3: values.image3?.[0]?.originFileObj,
+      },
+    })
+  }
 
   const items = [
     {
@@ -101,7 +138,7 @@ export function HeroForm({ hero }: HeroFormProps) {
             <Form.Item
               name="image1"
               valuePropName="fileList"
-              getValueFromEvent={normFile}
+              getValueFromEvent={(e: any) => (Array.isArray(e) ? e : e?.fileList)}
               className="mb-0"
             >
               <Upload
@@ -126,7 +163,7 @@ export function HeroForm({ hero }: HeroFormProps) {
             <Form.Item
               name="image2"
               valuePropName="fileList"
-              getValueFromEvent={normFile}
+              getValueFromEvent={(e: any) => (Array.isArray(e) ? e : e?.fileList)}
               className="mb-0"
             >
               <Upload
@@ -151,7 +188,7 @@ export function HeroForm({ hero }: HeroFormProps) {
             <Form.Item
               name="image3"
               valuePropName="fileList"
-              getValueFromEvent={normFile}
+              getValueFromEvent={(e: any) => (Array.isArray(e) ? e : e?.fileList)}
               className="mb-0"
             >
               <Upload
@@ -178,13 +215,7 @@ export function HeroForm({ hero }: HeroFormProps) {
 
   return (
     <div className="p-0">
-      <Form
-        form={form}
-        layout="vertical"
-        onFinish={onFinish}
-        initialValues={initialValues}
-        size="middle"
-      >
+      <Form form={form} layout="vertical" onFinish={onFinish} size="middle">
         <div>
           <Tabs defaultActiveKey="content" type="card" size="small" centered items={items} />
         </div>

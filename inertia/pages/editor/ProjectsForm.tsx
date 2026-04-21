@@ -25,7 +25,9 @@ import {
   Link as LinkIcon,
   Image as ImageIcon,
 } from 'lucide-react'
-import { router } from '@inertiajs/react'
+import { useMutation, useQuery } from '@tanstack/react-query'
+import { api, queryClient } from '~/utils/client'
+import { sileo } from 'sileo'
 import { useState } from 'react'
 
 const { Text } = Typography
@@ -50,10 +52,45 @@ interface ProjectsFormProps {
   projects: Project[]
 }
 
-export function ProjectsForm({ projects }: ProjectsFormProps) {
+export function ProjectsForm({ projects: ssrProjects }: ProjectsFormProps) {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [editingProject, setEditingProject] = useState<Project | null>(null)
   const [form] = Form.useForm()
+
+  const { data: projectsData } = useQuery(api.projects.index.queryOptions())
+  const projects = projectsData?.data ?? ssrProjects
+
+  const storeMutation = useMutation(
+    api.projects.store.mutationOptions({
+      onSuccess: () => {
+        sileo.success({ title: 'Proyecto creado' })
+        queryClient.invalidateQueries(api.projects.index.queryOptions())
+        setIsModalOpen(false)
+      },
+      onError: (err: any) => sileo.error({ title: err?.message || 'Error al crear proyecto' }),
+    })
+  )
+
+  const updateMutation = useMutation(
+    api.projects.update.mutationOptions({
+      onSuccess: () => {
+        sileo.success({ title: 'Proyecto actualizado' })
+        queryClient.invalidateQueries(api.projects.index.queryOptions())
+        setIsModalOpen(false)
+      },
+      onError: (err: any) => sileo.error({ title: err?.message || 'Error al actualizar proyecto' }),
+    })
+  )
+
+  const deleteMutation = useMutation(
+    api.projects.destroy.mutationOptions({
+      onSuccess: () => {
+        sileo.success({ title: 'Proyecto eliminado' })
+        queryClient.invalidateQueries(api.projects.index.queryOptions())
+      },
+      onError: (err: any) => sileo.error({ title: err?.message || 'Error al eliminar proyecto' }),
+    })
+  )
 
   const showModal = (project?: Project) => {
     if (project) {
@@ -62,7 +99,9 @@ export function ProjectsForm({ projects }: ProjectsFormProps) {
       const values = {
         ...project,
         imageUrl: project.imageUrl ? [{ url: project.imageUrl, name: 'Cover' }] : [],
-        gallery: project.images?.map((img) => ({ url: img.url, name: `Image ${img.id}` })) || [],
+        gallery:
+          project.images?.map((img) => ({ url: img.url, name: `Image ${img.id}`, id: img.id })) ||
+          [],
       }
       form.setFieldsValue(values)
     } else {
@@ -74,47 +113,36 @@ export function ProjectsForm({ projects }: ProjectsFormProps) {
 
   const handleOk = () => {
     form.validateFields().then((values) => {
-      // Create FormData to handle multi-file upload
-      const formData = new FormData()
-
-      // Basic fields
-      formData.append('title', values.title)
-      formData.append('category', values.category)
-      formData.append('description', values.description || '')
-      formData.append('link', values.link || '')
-      formData.append('order', String(values.order || 0))
-
-      // Single file upload (Cover)
-      if (values.imageUrl?.[0]?.originFileObj) {
-        formData.append('imageUrl', values.imageUrl[0].originFileObj)
+      const body: any = {
+        title: values.title,
+        category: values.category,
+        description: values.description || '',
+        link: values.link || '',
+        order: Number(values.order || 0),
+        imageUrl: values.imageUrl?.[0]?.originFileObj,
       }
 
-      // Multi file upload (Gallery)
+      // Handle Gallery
       if (values.gallery) {
-        values.gallery.forEach((file: any) => {
-          if (file.originFileObj) {
-            formData.append('gallery[]', file.originFileObj)
-          }
-        })
+        body.gallery = values.gallery
+          .filter((f: any) => f.originFileObj)
+          .map((f: any) => f.originFileObj)
+        body.keep_gallery_ids = values.gallery.filter((f: any) => f.id).map((f: any) => f.id)
       }
 
       if (editingProject) {
-        formData.append('_method', 'PATCH')
-        router.post(`/admin/projects/${editingProject.id}`, formData, {
-          onSuccess: () => setIsModalOpen(false),
-          forceFormData: true,
+        updateMutation.mutate({
+          params: { id: editingProject.id },
+          body,
         })
       } else {
-        router.post('/admin/projects', formData, {
-          onSuccess: () => setIsModalOpen(false),
-          forceFormData: true,
-        })
+        storeMutation.mutate({ body })
       }
     })
   }
 
   const handleDelete = (id: number) => {
-    router.delete(`/admin/projects/${id}`)
+    deleteMutation.mutate({ params: { id } })
   }
 
   const modalItems = [

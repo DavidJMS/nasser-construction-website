@@ -16,9 +16,25 @@ import {
   Footer,
   Preloader,
 } from './components'
+import { useQuery } from '@tanstack/react-query'
+import { api } from '~/utils/client'
 
-export default function Home({ hero, services, projects, testimonials, aboutUs, settings }: HomeProps) {
+export default function Home({
+  hero,
+  services,
+  projects,
+  testimonials,
+  aboutUs,
+  settings,
+}: HomeProps) {
   const { loading } = useHomeLoading()
+
+  const { data: heroData } = useQuery(api.heros.show.queryOptions())
+  const { data: aboutUsData } = useQuery(api.aboutUs.show.queryOptions())
+  const { data: projectsData } = useQuery(api.projects.index.queryOptions())
+  const { data: servicesData } = useQuery(api.services.index.queryOptions())
+  const { data: testimonialsData } = useQuery(api.testimonials.index.queryOptions())
+  const { data: settingsData } = useQuery(api.settings.index.queryOptions())
 
   return (
     <EditorProvider>
@@ -26,43 +42,43 @@ export default function Home({ hero, services, projects, testimonials, aboutUs, 
 
       <div className="relative">
         <EditorSidebar
-          heroData={hero}
-          aboutUsData={aboutUs}
-          services={services}
-          projects={projects}
-          testimonials={testimonials}
-          settings={settings}
+          heroData={heroData?.data ?? hero}
+          aboutUsData={aboutUsData?.data ?? aboutUs}
+          services={servicesData?.data ?? services}
+          projects={projectsData?.data ?? projects}
+          testimonials={testimonialsData?.data ?? testimonials}
+          settings={settingsData?.data ?? settings}
         />
 
         <Navbar />
 
         <EditableSection section="hero" title="Sección Hero">
-          <Hero data={hero} />
+          <Hero data={heroData?.data ?? hero} />
         </EditableSection>
 
         <EditableSection section="about_us" title="Sobre Nosotros">
-          <AboutUs data={aboutUs} />
+          <AboutUs data={aboutUsData?.data ?? aboutUs} />
         </EditableSection>
 
         <EditableSection section="services" title="Nuestros Servicios">
-          <Services data={services} />
+          <Services data={servicesData?.data ?? services} />
         </EditableSection>
 
         <WhyChooseUs />
 
         <EditableSection section="projects" title="Proyectos Recientes">
-          <Products data={projects} />
+          <Products data={projectsData?.data ?? projects} />
         </EditableSection>
 
         <EditableSection section="testimonials" title="Testimonios de Clientes">
-          <Testimonials data={testimonials} />
+          <Testimonials data={testimonialsData?.data ?? testimonials} />
         </EditableSection>
 
         <EditableSection section="cta" title="CTA / Contacto">
-          <CTASection settings={settings} />
+          <CTASection settings={settingsData?.data ?? settings} />
         </EditableSection>
         <EditableSection section="footer" title="Footer">
-          <Footer settings={settings} />
+          <Footer settings={settingsData?.data ?? settings} />
         </EditableSection>
       </div>
     </EditorProvider>

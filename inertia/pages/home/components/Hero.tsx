@@ -1,23 +1,8 @@
+import type Hero from '#models/hero'
 import { motion } from 'framer-motion'
 import { ArrowRight, CheckCircle2 } from 'lucide-react'
 
-export interface HeroData {
-  badge?: string | null
-  title?: string | null
-  description?: string | null
-  primaryButtonText?: string | null
-  primaryButtonLink?: string | null
-  secondaryButtonText?: string | null
-  image1?: string | null
-  image2?: string | null
-  image3?: string | null
-}
-
-interface HeroProps {
-  data?: HeroData
-}
-
-export default function Hero({ data }: HeroProps) {
+export default function HeroComponent({ data }: { data: Hero }) {
   // Use provided data or fall back to original hardcoded content
   const badge = data?.badge || 'Premium Security Solutions'
   const title = data?.title || 'Custom-made doors and windows with professional installation'

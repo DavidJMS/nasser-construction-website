@@ -23,8 +23,10 @@ import {
   Hash,
   Quote,
 } from 'lucide-react'
-import { router } from '@inertiajs/react'
 import { useState } from 'react'
+import { useMutation, useQuery } from '@tanstack/react-query'
+import { api, queryClient } from '~/utils/client'
+import { sileo } from 'sileo'
 
 const { Text } = Typography
 
@@ -33,7 +35,7 @@ interface Testimonial {
   author: string
   role: string
   content: string
-  avatar_url: string
+  avatarUrl: string
   rating: number
   order: number
 }
@@ -42,15 +44,55 @@ interface TestimonialsFormProps {
   testimonials: Testimonial[]
 }
 
-export function TestimonialsForm({ testimonials }: TestimonialsFormProps) {
+export function TestimonialsForm({ testimonials: ssrTestimonials }: TestimonialsFormProps) {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [editingTestimonial, setEditingTestimonial] = useState<Testimonial | null>(null)
   const [form] = Form.useForm()
 
+  const { data: testimonialsData } = useQuery(api.testimonials.index.queryOptions())
+  const testimonials = testimonialsData?.data ?? ssrTestimonials
+
+  const storeMutation = useMutation(
+    api.testimonials.store.mutationOptions({
+      onSuccess: () => {
+        sileo.success({ title: 'Testimonio creado' })
+        queryClient.invalidateQueries(api.testimonials.index.queryOptions())
+        setIsModalOpen(false)
+      },
+      onError: (err: any) => sileo.error({ title: err?.message || 'Error al crear testimonio' }),
+    })
+  )
+
+  const updateMutation = useMutation(
+    api.testimonials.update.mutationOptions({
+      onSuccess: () => {
+        sileo.success({ title: 'Testimonio actualizado' })
+        queryClient.invalidateQueries(api.testimonials.index.queryOptions())
+        setIsModalOpen(false)
+      },
+      onError: (err: any) =>
+        sileo.error({ title: err?.message || 'Error al actualizar testimonio' }),
+    })
+  )
+
+  const deleteMutation = useMutation(
+    api.testimonials.destroy.mutationOptions({
+      onSuccess: () => {
+        sileo.success({ title: 'Testimonio eliminado' })
+        queryClient.invalidateQueries(api.testimonials.index.queryOptions())
+      },
+      onError: (err: any) => sileo.error({ title: err?.message || 'Error al eliminar testimonio' }),
+    })
+  )
+
   const showModal = (testimonial?: Testimonial) => {
     if (testimonial) {
       setEditingTestimonial(testimonial)
-      form.setFieldsValue(testimonial)
+      // Map avatarUrl to avatar_url for the form if validator expects snake_case
+      form.setFieldsValue({
+        ...testimonial,
+        avatar_url: testimonial.avatarUrl,
+      })
     } else {
       setEditingTestimonial(null)
       form.resetFields()
@@ -61,19 +103,18 @@ export function TestimonialsForm({ testimonials }: TestimonialsFormProps) {
   const handleOk = () => {
     form.validateFields().then((values) => {
       if (editingTestimonial) {
-        router.patch(`/admin/testimonials/${editingTestimonial.id}`, values, {
-          onSuccess: () => setIsModalOpen(false),
+        updateMutation.mutate({
+          params: { id: editingTestimonial.id },
+          body: values,
         })
       } else {
-        router.post('/admin/testimonials', values, {
-          onSuccess: () => setIsModalOpen(false),
-        })
+        storeMutation.mutate({ body: values })
       }
     })
   }
 
   const handleDelete = (id: number) => {
-    router.delete(`/admin/testimonials/${id}`)
+    deleteMutation.mutate({ params: { id } })
   }
 
   const items = [
@@ -129,7 +170,7 @@ export function TestimonialsForm({ testimonials }: TestimonialsFormProps) {
                 <List.Item.Meta
                   avatar={
                     <Avatar
-                      src={testimonial.avatar_url}
+                      src={testimonial.avatarUrl}
                       icon={<User size={16} />}
                       className="bg-navy-100 text-navy-900 border border-navy-200"
                     />

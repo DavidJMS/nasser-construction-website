@@ -1,21 +1,6 @@
+import type AboutUs from '#models/about_us'
 import { motion } from 'framer-motion'
 import { Award, ShieldCheck, Users, Hammer, ArrowRight } from 'lucide-react'
-
-interface AboutUsData {
-  categoryTag?: string | null
-  titleMain?: string | null
-  titleHighlight?: string | null
-  titleSuffix?: string | null
-  description?: string | null
-  buttonText?: string | null
-  buttonLink?: string | null
-  image1?: string | null
-  image2?: string | null
-}
-
-interface AboutUsProps {
-  data?: AboutUsData
-}
 
 const getIcon = (name: string) => {
   switch (name.toLowerCase()) {
@@ -36,7 +21,7 @@ const getIcon = (name: string) => {
   }
 }
 
-export default function AboutUs({ data }: AboutUsProps) {
+export default function AboutUsComponent({ data }: { data: AboutUs }) {
   const categoryTag = data?.categoryTag || 'Our Story'
   const titleMain = data?.titleMain || 'Excellence in'
   const titleHighlight = data?.titleHighlight || 'Door & Window'
@@ -45,7 +30,7 @@ export default function AboutUs({ data }: AboutUsProps) {
     data?.description ||
     'Nasser Construction: Efficiency and capability in Orlando, a subcontractor specializing in door and window installation for the professional sector.'
   const buttonText = data?.buttonText || 'DISCOVER MORE'
-  const buttonLink = data?.buttonLink || '#contact'
+  const buttonLink = data?.buttonLink && data.buttonLink !== '#contact' ? data.buttonLink : '/about'
   const image1 = data?.image1 || '/images/about-house.png'
   const image2 = data?.image2 || '/images/window-install.png'
   const features = [

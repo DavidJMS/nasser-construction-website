@@ -27,12 +27,12 @@ export function EditableSection({ section, children, title }: EditableSectionPro
     >
       {/* Visual Overlay Label */}
       <AnimatePresence>
-        {(isSelected || true) && (
+        {isSelected && (
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className={`absolute top-0 left-1/2 -translate-x-1/2 -translate-y-full z-50 px-3 py-1.5 rounded-t-xl flex items-center gap-2 transition-colors ${
+            className={`absolute top-0 left-1/2 -translate-x-1/2 -translate-y-full px-3 py-1.5 rounded-t-xl flex items-center gap-2 transition-colors ${
               isSelected
                 ? 'bg-navy-600 text-white'
                 : 'bg-gray-200 text-gray-600 opacity-0 group-hover:opacity-100'

@@ -11,8 +11,10 @@ import {
   Tabs,
 } from 'antd'
 import { Edit3, Trash2, Plus, Save, Type, Hash, ListFilter, Layers } from 'lucide-react'
-import { router } from '@inertiajs/react'
 import { useState } from 'react'
+import { useMutation, useQuery } from '@tanstack/react-query'
+import { api, queryClient } from '~/utils/client'
+import { sileo } from 'sileo'
 
 const { Text } = Typography
 
@@ -28,10 +30,45 @@ interface ServicesFormProps {
   services: Service[]
 }
 
-export function ServicesForm({ services }: ServicesFormProps) {
+export function ServicesForm({ services: ssrServices }: ServicesFormProps) {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [editingService, setEditingService] = useState<Service | null>(null)
   const [form] = Form.useForm()
+
+  const { data: servicesData } = useQuery(api.services.index.queryOptions())
+  const services = servicesData?.data ?? ssrServices
+
+  const storeMutation = useMutation(
+    api.services.store.mutationOptions({
+      onSuccess: () => {
+        sileo.success({ title: 'Servicio creado' })
+        queryClient.invalidateQueries(api.services.index.queryOptions())
+        setIsModalOpen(false)
+      },
+      onError: (err: any) => sileo.error({ title: err?.message || 'Error al crear servicio' }),
+    })
+  )
+
+  const updateMutation = useMutation(
+    api.services.update.mutationOptions({
+      onSuccess: () => {
+        sileo.success({ title: 'Servicio actualizado' })
+        queryClient.invalidateQueries(api.services.index.queryOptions())
+        setIsModalOpen(false)
+      },
+      onError: (err: any) => sileo.error({ title: err?.message || 'Error al actualizar servicio' }),
+    })
+  )
+
+  const deleteMutation = useMutation(
+    api.services.destroy.mutationOptions({
+      onSuccess: () => {
+        sileo.success({ title: 'Servicio eliminado' })
+        queryClient.invalidateQueries(api.services.index.queryOptions())
+      },
+      onError: (err: any) => sileo.error({ title: err?.message || 'Error al eliminar servicio' }),
+    })
+  )
 
   const showModal = (service?: Service) => {
     if (service) {
@@ -47,19 +84,18 @@ export function ServicesForm({ services }: ServicesFormProps) {
   const handleOk = () => {
     form.validateFields().then((values) => {
       if (editingService) {
-        router.patch(`/admin/services/${editingService.id}`, values, {
-          onSuccess: () => setIsModalOpen(false),
+        updateMutation.mutate({
+          params: { id: editingService.id },
+          body: values,
         })
       } else {
-        router.post('/admin/services', values, {
-          onSuccess: () => setIsModalOpen(false),
-        })
+        storeMutation.mutate({ body: values })
       }
     })
   }
 
   const handleDelete = (id: number) => {
-    router.delete(`/admin/services/${id}`)
+    deleteMutation.mutate({ params: { id } })
   }
 
   const items = [
