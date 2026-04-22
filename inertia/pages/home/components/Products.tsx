@@ -95,7 +95,8 @@ export default function Products({ data }: { data: any[] }) {
   const normalizedProjects = Array.isArray(data)
     ? data
         .map((project: any) => ({
-          image: project?.imageUrl || project?.image || project?.image_url || '/images/door-panel.png',
+          image:
+            project?.imageUrl || project?.image || project?.image_url || '/images/door-panel.png',
           title: project?.title || '',
           category: project?.category || '',
         }))
@@ -111,7 +112,9 @@ export default function Products({ data }: { data: any[] }) {
   )
 
   const doorProjectsFinal = doorProjectsFromData.length ? doorProjectsFromData : doorProjects
-  const windowProjectsFinal = windowProjectsFromData.length ? windowProjectsFromData : windowProjects
+  const windowProjectsFinal = windowProjectsFromData.length
+    ? windowProjectsFromData
+    : windowProjects
 
   return (
     <section id="projects" className="py-24 bg-white overflow-hidden">

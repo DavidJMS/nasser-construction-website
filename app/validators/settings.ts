@@ -1,6 +1,6 @@
 import vine from '@vinejs/vine'
 
-export const updateSettings = vine.compile(
+export const updateSettings = vine.create(
   vine.object({
     settings: vine.object({
       cta_badge: vine.string().trim().nullable().optional(),
@@ -28,7 +28,7 @@ export const updateSettings = vine.compile(
   })
 )
 
-export const uploadSettingsFile = vine.compile(
+export const uploadSettingsFile = vine.create(
   vine.object({
     file: vine.file({ size: '8mb', extnames: ['jpg', 'jpeg', 'png', 'webp', 'gif'] }),
   })

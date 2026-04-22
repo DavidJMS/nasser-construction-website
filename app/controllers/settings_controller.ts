@@ -1,5 +1,5 @@
 import SiteSetting from '#models/site_setting'
-import { updateSettings, uploadSettingsFile } from '#validators/settings'
+import { updateSettings } from '#validators/settings'
 import type { HttpContext } from '@adonisjs/core/http'
 import uploadService from '#services/upload_service'
 
@@ -43,15 +43,6 @@ export default class SettingsController {
       message: 'Configuraciones recuperadas',
       errors: [],
       data: settings,
-    })
-  }
-
-  async upload({ request, response }: HttpContext) {
-    const payload = await request.validateUsing(uploadSettingsFile)
-    const url = await uploadService.upload(payload.file, 'settings')
-
-    return response.ok({
-      url,
     })
   }
 }

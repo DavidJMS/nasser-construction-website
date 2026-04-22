@@ -16,6 +16,7 @@ router.get('/about', [controllers.Home, 'about'])
 
 router
   .group(() => {
+    router.on('admin').redirectToPath('login')
     router.get('login', [controllers.Session, 'create'])
     router.post('login', [controllers.Session, 'store'])
   })
@@ -33,14 +34,16 @@ router
     router.patch('about_us', [controllers.AboutUs, 'update'])
     router.get('about_us', [controllers.AboutUs, 'show'])
 
+    router.resource('about_us_features', controllers.AboutUsFeatures)
+
+    // Services
     router.resource('services', controllers.Services)
+
     router.resource('projects', controllers.Projects)
     router.resource('testimonials', controllers.Testimonials)
 
     router.post('settings/update-all', [controllers.Settings, 'update'])
 
     router.get('settings', [controllers.Settings, 'index'])
-
-    router.post('settings/upload', [controllers.Settings, 'upload'])
   })
   .use(middleware.auth())

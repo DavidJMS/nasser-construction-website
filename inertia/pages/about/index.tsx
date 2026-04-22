@@ -109,7 +109,11 @@ export default function AboutPage({ aboutUs, settings }: AboutPageProps) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-14 items-center">
             <div className="rounded-3xl overflow-hidden border border-gray-100 shadow-sm">
-              <img src="/images/door-panel.png" alt="Capacity" className="w-full h-auto object-cover" />
+              <img
+                src="/images/door-panel.png"
+                alt="Capacity"
+                className="w-full h-auto object-cover"
+              />
             </div>
 
             <div>
@@ -139,4 +143,3 @@ export default function AboutPage({ aboutUs, settings }: AboutPageProps) {
     </div>
   )
 }
-

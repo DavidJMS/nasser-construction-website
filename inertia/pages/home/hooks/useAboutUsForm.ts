@@ -17,8 +17,12 @@ export function useAboutUsForm(aboutUs: any) {
       buttonText: aboutUs?.buttonText,
       buttonLink: aboutUs?.buttonLink,
       features: aboutUs?.features,
-      image1: aboutUs?.image1 ? [{ uid: '-1', name: 'Imagen 1', status: 'done', url: aboutUs.image1 }] : [],
-      image2: aboutUs?.image2 ? [{ uid: '-2', name: 'Imagen 2', status: 'done', url: aboutUs.image2 }] : [],
+      image1: aboutUs?.image1
+        ? [{ uid: '-1', name: 'Imagen 1', status: 'done', url: aboutUs.image1 }]
+        : [],
+      image2: aboutUs?.image2
+        ? [{ uid: '-2', name: 'Imagen 2', status: 'done', url: aboutUs.image2 }]
+        : [],
     }),
     [aboutUs]
   )

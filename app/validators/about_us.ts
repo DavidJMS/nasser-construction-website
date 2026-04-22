@@ -3,7 +3,7 @@ import vine from '@vinejs/vine'
 /**
  * Validator to validate the payload when updating the about us section
  */
-export const updateAboutUs = vine.compile(
+export const updateAboutUs = vine.create(
   vine.object({
     categoryTag: vine.string().trim().nullable().optional(),
     titleMain: vine.string().trim().nullable().optional(),

@@ -15,8 +15,8 @@ export default class extends BaseSchema {
       table.text('description').nullable()
 
       // Images
-      table.string('image1').nullable().defaultTo('/images/about-house.png')
-      table.string('image2').nullable().defaultTo('/images/window-install.png')
+      table.string('image_1').nullable().defaultTo('/images/about-house.png')
+      table.string('image_2').nullable().defaultTo('/images/window-install.png')
 
       // Button
       table.string('button_text').nullable().defaultTo('DISCOVER MORE')

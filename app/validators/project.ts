@@ -1,6 +1,6 @@
 import vine from '@vinejs/vine'
 
-export const updateProject = vine.compile(
+export const updateProject = vine.create(
   vine.object({
     title: vine.string().trim(),
     category: vine.string().trim(),

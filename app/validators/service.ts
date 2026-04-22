@@ -1,6 +1,6 @@
 import vine from '@vinejs/vine'
 
-export const serviceValidator = vine.compile(
+export const serviceValidator = vine.create(
   vine.object({
     title: vine.string().trim().minLength(3),
     description: vine.string().trim().minLength(10),

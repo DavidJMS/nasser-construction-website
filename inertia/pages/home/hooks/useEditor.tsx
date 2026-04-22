@@ -28,10 +28,13 @@ export function EditorProvider({ children }: { children: ReactNode }) {
   const [saveAction, setSaveAction] = useState<(() => void) | null>(null)
   const [isSaving, setIsSaving] = useState(false)
 
-  const registerSaveAction = useCallback((action: (() => void) | null, loading: boolean = false) => {
-    setSaveAction(() => action)
-    setIsSaving(loading)
-  }, [])
+  const registerSaveAction = useCallback(
+    (action: (() => void) | null, loading: boolean = false) => {
+      setSaveAction(() => action)
+      setIsSaving(loading)
+    },
+    []
+  )
 
   const handleSetSelectedSection = useCallback((section: EditorSection) => {
     setSelectedSection(section)

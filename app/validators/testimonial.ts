@@ -1,6 +1,6 @@
 import vine from '@vinejs/vine'
 
-export const testimonialValidator = vine.compile(
+export const testimonialValidator = vine.create(
   vine.object({
     author: vine.string().trim().minLength(2),
     role: vine.string().trim().nullable().optional(),
