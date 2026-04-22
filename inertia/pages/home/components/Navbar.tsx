@@ -83,11 +83,11 @@ export default function Navbar() {
                       : 'text-gray-600 hover:bg-gray-200'
                   }`}
                 >
-                  {isEditing ? 'VER SITIO' : 'EDITAR'}
+                  {isEditing ? 'VIEW SITE' : 'EDIT'}
                 </Button>
 
                 <div className="w-px h-4 bg-gray-300 mx-1" />
-                <Tooltip title="Cerrar Sesión">
+                <Tooltip title="Logout">
                   <Button
                     shape="round"
                     type="text"

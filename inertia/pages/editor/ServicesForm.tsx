@@ -183,7 +183,7 @@ export function ServicesForm({ services: ssrServices }: { services: Service[] })
         width={400}
         footer={[
           <Button key="back" onClick={() => setIsModalOpen(false)} className="rounded-xl">
-            Cancelar
+            Cancel
           </Button>,
           <Button
             key="submit"
@@ -192,7 +192,7 @@ export function ServicesForm({ services: ssrServices }: { services: Service[] })
             className="bg-navy-900 rounded-xl"
             icon={<Save size={14} />}
           >
-            {editingService ? 'Actualizar' : 'Crear'}
+            {editingService ? 'Update' : 'Create'}
           </Button>,
         ]}
       >

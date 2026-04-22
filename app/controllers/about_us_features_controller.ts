@@ -25,36 +25,36 @@ export default class AboutUsFeaturesController {
     })
 
     return response.created({
-      message: 'Característica creada',
+      message: 'Feature created',
       data: feature,
     })
   }
 
   async show({ params, response }: HttpContext) {
     const feature = await AboutUsFeature.find(params.id)
-    if (!feature) return response.notFound({ message: 'Característica no encontrada' })
+    if (!feature) return response.notFound({ message: 'Feature not found' })
     return response.ok({ data: feature })
   }
 
   async update({ params, request, response }: HttpContext) {
     const feature = await AboutUsFeature.find(params.id)
-    if (!feature) return response.notFound({ message: 'Característica no encontrada' })
+    if (!feature) return response.notFound({ message: 'Feature not found' })
 
     const payload = await request.validateUsing(updateAboutUsFeature)
     feature.merge(payload)
     await feature.save()
 
     return response.ok({
-      message: 'Característica actualizada',
+      message: 'Feature updated',
       data: feature,
     })
   }
 
   async destroy({ params, response }: HttpContext) {
     const feature = await AboutUsFeature.find(params.id)
-    if (!feature) return response.notFound({ message: 'Característica no encontrada' })
+    if (!feature) return response.notFound({ message: 'Feature not found' })
 
     await feature.delete()
-    return response.ok({ message: 'Característica eliminada' })
+    return response.ok({ message: 'Feature deleted' })
   }
 }

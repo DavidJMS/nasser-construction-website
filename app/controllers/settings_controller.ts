@@ -20,7 +20,7 @@ export default class SettingsController {
     }
 
     return response.ok({
-      message: 'Configuraciones actualizadas correctamente',
+      message: 'Settings updated successfully',
       errors: [],
       data: await this.getSettingsObject(),
     })
@@ -40,7 +40,7 @@ export default class SettingsController {
   async index({ response }: HttpContext) {
     const settings = await this.getSettingsObject()
     return response.ok({
-      message: 'Configuraciones recuperadas',
+      message: 'Settings retrieved',
       errors: [],
       data: settings,
     })
