@@ -52,29 +52,29 @@ export default function Home({
 
         <Navbar />
 
-        <EditableSection section="hero" title="Sección Hero">
+        <EditableSection section="hero" title="Hero Section">
           <Hero data={heroData?.data ?? hero} />
         </EditableSection>
 
-        <EditableSection section="about_us" title="Sobre Nosotros">
+        <EditableSection section="about_us" title="About Us">
           <AboutUs data={aboutUsData?.data ?? aboutUs} />
         </EditableSection>
 
-        <EditableSection section="services" title="Nuestros Servicios">
+        <EditableSection section="services" title="Our Services">
           <Services data={servicesData?.data ?? services} />
         </EditableSection>
 
         <WhyChooseUs />
 
-        <EditableSection section="projects" title="Proyectos Recientes">
+        <EditableSection section="projects" title="Recent Projects">
           <Products data={projectsData?.data ?? projects} />
         </EditableSection>
 
-        <EditableSection section="testimonials" title="Testimonios de Clientes">
+        <EditableSection section="testimonials" title="Client Testimonials">
           <Testimonials data={testimonialsData?.data ?? testimonials} />
         </EditableSection>
 
-        <EditableSection section="cta" title="CTA / Contacto">
+        <EditableSection section="cta" title="Contact">
           <CTASection settings={settingsData?.data ?? settings} />
         </EditableSection>
         <EditableSection section="footer" title="Footer">

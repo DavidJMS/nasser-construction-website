@@ -52,13 +52,13 @@ export function EditorSidebar({
         return (
           <div className="flex flex-col items-center justify-center h-full p-8 text-center text-gray-500">
             <Layout className="w-12 h-12 mb-4 opacity-20" />
-            <p className="text-sm font-medium">Selecciona una sección en la página para editarla</p>
+            <p className="text-sm font-medium">Select a section to edit</p>
           </div>
         )
       default:
         return (
           <div className="p-8 text-center text-gray-400">
-            <p>Sección en desarrollo: {selectedSection}</p>
+            <p>Section in development: {selectedSection}</p>
           </div>
         )
     }
@@ -85,7 +85,7 @@ export function EditorSidebar({
         onClose={() => setIsEditing(false)}
         open={isEditing}
         extra={
-          <Tooltip title="Terminar Edición">
+          <Tooltip title="Finish Editing">
             <Button
               type="text"
               icon={<X className="w-4 h-4" />}
@@ -106,7 +106,7 @@ export function EditorSidebar({
                 <p className="text-gray-500 text-xs">
                   {selectedSection !== 'none'
                     ? `Editando: ${selectedSection}`
-                    : 'Panel Administrativo'}
+                    : 'Admin Panel'}
                 </p>
               </div>
             </div>
@@ -119,7 +119,7 @@ export function EditorSidebar({
               icon={<X className="w-4 h-4" />}
               onClick={() => setSelectedSection('none')}
             >
-              Cancelar
+              Cancel
             </Button>
 
             <Button
@@ -129,7 +129,7 @@ export function EditorSidebar({
               disabled={!saveAction}
               onClick={() => saveAction?.()}
             >
-              Guardar
+              Save
             </Button>
           </div>
         }

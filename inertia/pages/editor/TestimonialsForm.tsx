@@ -46,33 +46,33 @@ export function TestimonialsForm({
   const storeMutation = useMutation(
     api.testimonials.store.mutationOptions({
       onSuccess: () => {
-        sileo.success({ title: 'Testimonio creado' })
+        sileo.success({ title: 'Testimonial created' })
         queryClient.invalidateQueries(api.testimonials.index.queryOptions())
         setIsModalOpen(false)
       },
-      onError: (err: any) => sileo.error({ title: err?.message || 'Error al crear testimonio' }),
+      onError: (err: any) => sileo.error({ title: err?.message || 'Error creating testimonial' }),
     })
   )
 
   const updateMutation = useMutation(
     api.testimonials.update.mutationOptions({
       onSuccess: () => {
-        sileo.success({ title: 'Testimonio actualizado' })
+        sileo.success({ title: 'Testimonial updated' })
         queryClient.invalidateQueries(api.testimonials.index.queryOptions())
         setIsModalOpen(false)
       },
       onError: (err: any) =>
-        sileo.error({ title: err?.message || 'Error al actualizar testimonio' }),
+        sileo.error({ title: err?.message || 'Error updating testimonial' }),
     })
   )
 
   const deleteMutation = useMutation(
     api.testimonials.destroy.mutationOptions({
       onSuccess: () => {
-        sileo.success({ title: 'Testimonio eliminado' })
+        sileo.success({ title: 'Testimonial deleted' })
         queryClient.invalidateQueries(api.testimonials.index.queryOptions())
       },
-      onError: (err: any) => sileo.error({ title: err?.message || 'Error al eliminar testimonio' }),
+      onError: (err: any) => sileo.error({ title: err?.message || 'Error deleting testimonial' }),
     })
   )
 
@@ -114,14 +114,14 @@ export function TestimonialsForm({
       label: (
         <Space>
           <Quote size={12} />
-          <span className="text-[10px] font-bold uppercase tracking-wider">Testimonios</span>
+          <span className="text-[10px] font-bold uppercase tracking-wider">Testimonials</span>
         </Space>
       ),
       children: (
         <div className="pt-4">
           <div className="flex justify-between items-center mb-6">
             <Text strong className="text-[10px] uppercase text-gray-400 tracking-widest">
-              Opiniones de Clientes
+              Client Reviews
             </Text>
             <Button
               type="primary"
@@ -148,10 +148,10 @@ export function TestimonialsForm({
                     onClick={() => showModal(testimonial)}
                   />,
                   <Popconfirm
-                    title="¿Deseas eliminar este testimonio?"
+                    title="Are you sure you want to delete this testimonial?"
                     onConfirm={() => handleDelete(testimonial.id)}
-                    okText="Eliminar"
-                    cancelText="Cancelar"
+                    okText="Delete"
+                    cancelText="Cancel"
                     okButtonProps={{ danger: true }}
                   >
                     <Button size="small" type="text" danger icon={<Trash2 size={14} />} />
@@ -169,7 +169,7 @@ export function TestimonialsForm({
                   title={<Text className="text-xs font-bold">{testimonial.author}</Text>}
                   description={
                     <Text type="secondary" className="text-[10px] line-clamp-1">
-                      {testimonial.role || 'Cliente'}
+                      {testimonial.role || 'Client'}
                     </Text>
                   }
                 />
@@ -190,7 +190,7 @@ export function TestimonialsForm({
           <Space className="pt-2">
             <Edit3 size={16} className="text-navy-900" />
             <span className="text-sm font-bold uppercase tracking-wider">
-              {editingTestimonial ? 'Editar Testimonio' : 'Nuevo Testimonio'}
+              {editingTestimonial ? 'Edit Testimonial' : 'New Testimonial'}
             </span>
           </Space>
         }
@@ -202,7 +202,7 @@ export function TestimonialsForm({
         width={420}
         footer={[
           <Button key="back" onClick={() => setIsModalOpen(false)} className="rounded-xl">
-            Cancelar
+            Cancel
           </Button>,
           <Button
             key="submit"
@@ -211,7 +211,7 @@ export function TestimonialsForm({
             className="bg-navy-900 rounded-xl"
             icon={<Save size={14} />}
           >
-            {editingTestimonial ? 'Actualizar' : 'Crear'}
+            {editingTestimonial ? 'Update' : 'Create'}
           </Button>,
         ]}
       >
@@ -219,33 +219,33 @@ export function TestimonialsForm({
           <div className="grid grid-cols-2 gap-4">
             <Form.Item
               name="author"
-              label="Autor"
-              rules={[{ required: true, message: 'El autor es obligatorio' }]}
+              label="Author"
+              rules={[{ required: true, message: 'Author is required' }]}
             >
               <Input
                 prefix={<User size={14} className="text-gray-400" />}
-                placeholder="Ej: Juan Pérez"
+                placeholder="Ex: John Doe"
               />
             </Form.Item>
-            <Form.Item name="role" label="Rol / Empresa">
+            <Form.Item name="role" label="Role / Company">
               <Input
                 prefix={<Briefcase size={14} className="text-gray-400" />}
-                placeholder="Ej: Cliente"
+                placeholder="Ex: Client"
               />
             </Form.Item>
           </div>
           <Form.Item
             name="content"
-            label="Testimonio"
-            rules={[{ required: true, message: 'El contenido es obligatorio' }]}
+            label="Testimonial"
+            rules={[{ required: true, message: 'Content is required' }]}
           >
-            <Input.TextArea rows={4} placeholder="Escribe el testimonio aquí..." />
+            <Input.TextArea rows={4} placeholder="Write the testimonial here..." />
           </Form.Item>
           <div className="grid grid-cols-2 gap-4">
-            <Form.Item name="rating" label="Calificación" initialValue={5}>
+            <Form.Item name="rating" label="Rating" initialValue={5}>
               <Rate className="text-sm" />
             </Form.Item>
-            <Form.Item name="order" label="Prioridad">
+            <Form.Item name="order" label="Priority">
               <InputNumber
                 prefix={<Hash size={14} className="text-gray-400" />}
                 min={0}
@@ -254,7 +254,7 @@ export function TestimonialsForm({
               />
             </Form.Item>
           </div>
-          <Form.Item name="avatar_url" label="URL de Imagen de Perfil">
+          <Form.Item name="avatar_url" label="Profile Image URL">
             <Input
               prefix={<LinkIcon size={14} className="text-gray-400" />}
               placeholder="https://..."

@@ -21,10 +21,10 @@ export function FooterForm({ settings: ssrSettings }: FooterFormProps) {
   const { mutate, isPending } = useMutation(
     api.settings.update.mutationOptions({
       onSuccess: (result: any) => {
-        sileo.success({ title: result?.message || 'Footer actualizado' })
+        sileo.success({ title: result?.message || 'Footer updated' })
         queryClient.invalidateQueries(api.settings.index.queryOptions())
       },
-      onError: (err: any) => sileo.error({ title: err?.message || 'Error al actualizar Footer' }),
+      onError: (err: any) => sileo.error({ title: err?.message || 'Error updating Footer' }),
     })
   )
 
@@ -65,19 +65,19 @@ export function FooterForm({ settings: ssrSettings }: FooterFormProps) {
       ),
       children: (
         <div className="pt-4 space-y-4">
-          <Form.Item name="footer_brand_title" label="Marca (Título)">
+          <Form.Item name="footer_brand_title" label="Brand (Title)">
             <Input prefix={<Globe size={14} className="text-gray-400" />} />
           </Form.Item>
-          <Form.Item name="footer_brand_subtitle" label="Marca (Subtítulo)">
+          <Form.Item name="footer_brand_subtitle" label="Brand (Subtitle)">
             <Input />
           </Form.Item>
-          <Form.Item name="footer_description" label="Descripción">
+          <Form.Item name="footer_description" label="Description">
             <Input.TextArea rows={3} />
           </Form.Item>
           <Form.Item name="footer_copyright" label="Copyright">
             <Input />
           </Form.Item>
-          <Form.Item name="footer_crafted" label="Texto secundario">
+          <Form.Item name="footer_crafted" label="Secondary Text">
             <Input />
           </Form.Item>
         </div>

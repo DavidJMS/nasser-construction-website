@@ -16,7 +16,7 @@ export default class TestimonialsController {
     })
 
     return response.ok({
-      message: 'Testimonio creado correctamente',
+      message: 'Testimonial created successfully',
       errors: [],
       data: testimonial,
     })
@@ -38,7 +38,7 @@ export default class TestimonialsController {
     await testimonial.save()
 
     return response.ok({
-      message: 'Testimonio actualizado correctamente',
+      message: 'Testimonial updated successfully',
       errors: [],
       data: testimonial,
     })
@@ -49,7 +49,7 @@ export default class TestimonialsController {
     await testimonial.delete()
 
     return response.ok({
-      message: 'Testimonio eliminado correctamente',
+      message: 'Testimonial deleted successfully',
       errors: [],
       data: null,
     })
@@ -58,7 +58,7 @@ export default class TestimonialsController {
   async index({ response }: HttpContext) {
     const testimonials = await Testimonial.query().orderBy('order', 'asc')
     return response.ok({
-      message: 'Lista de testimonios recuperada',
+      message: 'Testimonial list retrieved',
       errors: [],
       data: testimonials,
     })
@@ -67,7 +67,7 @@ export default class TestimonialsController {
   async show({ params, response }: HttpContext) {
     const testimonial = await Testimonial.findOrFail(params.id)
     return response.ok({
-      message: 'Datos del testimonio recuperados',
+      message: 'Testimonial data retrieved',
       errors: [],
       data: testimonial,
     })

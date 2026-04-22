@@ -29,7 +29,7 @@ export default class ProjectsController {
     }
 
     return response.ok({
-      message: 'Proyecto creado correctamente',
+      message: 'Project created successfully',
       errors: [],
       data: await project.refresh(),
     })
@@ -76,7 +76,7 @@ export default class ProjectsController {
     }
 
     return response.ok({
-      message: 'Proyecto actualizado correctamente',
+      message: 'Project updated successfully',
       errors: [],
       data: await project.refresh(),
     })
@@ -96,7 +96,7 @@ export default class ProjectsController {
 
     await project.delete()
     return response.ok({
-      message: 'Proyecto eliminado correctamente',
+      message: 'Project deleted successfully',
       errors: [],
       data: null,
     })
@@ -105,7 +105,7 @@ export default class ProjectsController {
   async index({ response }: HttpContext) {
     const projects = await Project.query().preload('images').orderBy('order', 'asc')
     return response.ok({
-      message: 'Lista de proyectos recuperada',
+      message: 'Project list retrieved',
       errors: [],
       data: projects,
     })
@@ -114,7 +114,7 @@ export default class ProjectsController {
   async show({ params, response }: HttpContext) {
     const project = await Project.query().where('id', params.id).preload('images').firstOrFail()
     return response.ok({
-      message: 'Datos del proyecto recuperados',
+      message: 'Project data retrieved',
       errors: [],
       data: project,
     })

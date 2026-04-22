@@ -144,7 +144,7 @@ export function ProjectsForm({ projects: ssrProjects }: { projects: Project[] })
           >
             <Input
               prefix={<Type size={14} className="text-gray-400" />}
-              placeholder="Ej: Condominio Las Palmas"
+              placeholder="Ex: Las Palmas Condominium"
             />
           </Form.Item>
           <Form.Item
@@ -154,7 +154,7 @@ export function ProjectsForm({ projects: ssrProjects }: { projects: Project[] })
           >
             <Input
               prefix={<TagIcon size={14} className="text-gray-400" />}
-              placeholder="Ej: Residencial"
+              placeholder="Ex: Residential"
             />
           </Form.Item>
           <Form.Item name="description" label="Description">

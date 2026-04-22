@@ -9,7 +9,7 @@ export default class AboutUsController {
     const aboutUs = await AboutUs.firstOrCreate({}, {})
 
     if (!aboutUs) {
-      return response.notFound({ message: 'No se encontró la configuración' })
+      return response.notFound({ message: 'Configuration not found' })
     }
 
     const { image1, image2, ...data } = payload
@@ -32,7 +32,7 @@ export default class AboutUsController {
     await aboutUs.save()
 
     return response.ok({
-      message: 'Sección About Us actualizada correctamente',
+      message: 'About Us section updated successfully',
       errors: [],
       data: await aboutUs.refresh(),
     })
@@ -43,7 +43,7 @@ export default class AboutUsController {
       .preload('features', (q) => q.orderBy('order', 'asc'))
       .first()
     return response.ok({
-      message: 'Datos de About Us recuperados',
+      message: 'About Us data retrieved',
       errors: [],
       data: aboutUs,
     })

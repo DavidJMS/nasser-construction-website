@@ -32,32 +32,32 @@ export function ServicesForm({ services: ssrServices }: { services: Service[] })
   const storeMutation = useMutation(
     api.services.store.mutationOptions({
       onSuccess: () => {
-        sileo.success({ title: 'Servicio creado' })
+        sileo.success({ title: 'Service created' })
         queryClient.invalidateQueries(api.services.index.queryOptions())
         setIsModalOpen(false)
       },
-      onError: (err: any) => sileo.error({ title: err?.message || 'Error al crear servicio' }),
+      onError: (err: any) => sileo.error({ title: err?.message || 'Error creating service' }),
     })
   )
 
   const updateMutation = useMutation(
     api.services.update.mutationOptions({
       onSuccess: () => {
-        sileo.success({ title: 'Servicio actualizado' })
+        sileo.success({ title: 'Service updated' })
         queryClient.invalidateQueries(api.services.index.queryOptions())
         setIsModalOpen(false)
       },
-      onError: (err: any) => sileo.error({ title: err?.message || 'Error al actualizar servicio' }),
+      onError: (err: any) => sileo.error({ title: err?.message || 'Error updating service' }),
     })
   )
 
   const deleteMutation = useMutation(
     api.services.destroy.mutationOptions({
       onSuccess: () => {
-        sileo.success({ title: 'Servicio eliminado' })
+        sileo.success({ title: 'Service deleted' })
         queryClient.invalidateQueries(api.services.index.queryOptions())
       },
-      onError: (err: any) => sileo.error({ title: err?.message || 'Error al eliminar servicio' }),
+      onError: (err: any) => sileo.error({ title: err?.message || 'Error deleting service' }),
     })
   )
 
@@ -100,17 +100,17 @@ export function ServicesForm({ services: ssrServices }: { services: Service[] })
       label: (
         <Space>
           <ListFilter size={12} />
-          <span className="text-[10px] font-bold uppercase tracking-wider">Servicios</span>
+          <span className="text-[10px] font-bold uppercase tracking-wider">Services</span>
         </Space>
       ),
       children: (
         <div className="pt-4">
           <div className="flex justify-between items-center mb-6">
             <Text className="uppercase" type="secondary">
-              Gestionar Servicios
+              Manage Services
             </Text>
             <Button type="primary" size="small" onClick={() => showModal()}>
-              Añadir
+              Add
             </Button>
           </div>
 
@@ -127,10 +127,10 @@ export function ServicesForm({ services: ssrServices }: { services: Service[] })
                     onClick={() => showModal(service)}
                   />,
                   <Popconfirm
-                    title="¿Deseas eliminar este servicio?"
+                    title="Are you sure you want to delete this service?"
                     onConfirm={() => handleDelete(service.id)}
-                    okText="Eliminar"
-                    cancelText="Cancelar"
+                    okText="Delete"
+                    cancelText="Cancel"
                     okButtonProps={{ danger: true }}
                   >
                     <Button size="small" type="text" danger icon={<Trash2 size={14} />} />
@@ -171,7 +171,7 @@ export function ServicesForm({ services: ssrServices }: { services: Service[] })
           <Space className="pt-2">
             <Edit3 size={16} className="text-navy-900" />
             <span className="text-sm font-bold uppercase tracking-wider">
-              {editingService ? 'Editar Servicio' : 'Nuevo Servicio'}
+              {editingService ? 'Edit Service' : 'New Service'}
             </span>
           </Space>
         }
@@ -199,32 +199,32 @@ export function ServicesForm({ services: ssrServices }: { services: Service[] })
         <Form form={form} layout="vertical" className="mt-6">
           <Form.Item
             name="title"
-            label="Título"
+            label="Title"
             rules={[
-              { required: true, message: 'El título es obligatorio' },
-              { min: 3, message: 'El título debe tener al menos 3 caracteres' },
+              { required: true, message: 'Title is required' },
+              { min: 3, message: 'Title must have at least 3 characters' },
             ]}
           >
             <Input
               prefix={<Type size={14} className="text-gray-400" />}
-              placeholder="Ej: Construcción Residencial"
+              placeholder="Ex: Residential Construction"
             />
           </Form.Item>
           <Form.Item
             name="description"
-            label="Descripción"
+            label="Description"
             rules={[
-              { required: true, message: 'La descripción es obligatoria' },
-              { min: 10, message: 'La descripción debe tener al menos 10 caracteres' },
+              { required: true, message: 'Description is required' },
+              { min: 10, message: 'Description must have at least 10 characters' },
             ]}
           >
-            <Input.TextArea rows={4} placeholder="Describe el servicio de forma atractiva..." />
+            <Input.TextArea rows={4} placeholder="Describe the service in an attractive way..." />
           </Form.Item>
           <div className="grid grid-cols-3 gap-4">
-            <Form.Item className="col-span-2" name="icon" label="Icono">
-              <IconSelect placeholder="Ej: HardHat" />
+            <Form.Item className="col-span-2" name="icon" label="Icon">
+              <IconSelect placeholder="Ex: HardHat" />
             </Form.Item>
-            <Form.Item name="order" label="Prioridad">
+            <Form.Item name="order" label="Priority">
               <InputNumber
                 prefix={<Hash size={14} className="text-gray-400" />}
                 min={0}

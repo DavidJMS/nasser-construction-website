@@ -18,10 +18,10 @@ export function useAboutUsForm(aboutUs: any) {
       buttonLink: aboutUs?.buttonLink,
       features: aboutUs?.features,
       image1: aboutUs?.image1
-        ? [{ uid: '-1', name: 'Imagen 1', status: 'done', url: aboutUs.image1 }]
+        ? [{ uid: '-1', name: 'Image 1', status: 'done', url: aboutUs.image1 }]
         : [],
       image2: aboutUs?.image2
-        ? [{ uid: '-2', name: 'Imagen 2', status: 'done', url: aboutUs.image2 }]
+        ? [{ uid: '-2', name: 'Image 2', status: 'done', url: aboutUs.image2 }]
         : [],
     }),
     [aboutUs]
@@ -47,11 +47,11 @@ export function useAboutUsForm(aboutUs: any) {
     router.post('/admin/about_us', formData, {
       forceFormData: true,
       onSuccess: () => {
-        sileo.success({ title: 'Sección About Us actualizada' })
+        sileo.success({ title: 'About Us section updated' })
         router.reload({ only: ['aboutUs'] })
       },
       onError: (error: any) =>
-        sileo.error({ title: error.response?.data?.message || 'Error al actualizar About Us' }),
+        sileo.error({ title: error.response?.data?.message || 'Error updating About Us' }),
       onFinish: () => setIsPending(false),
     })
   }

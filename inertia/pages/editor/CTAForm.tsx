@@ -22,10 +22,10 @@ export function CTAForm({ settings: ssrSettings }: CTAFormProps) {
   const { mutate, isPending } = useMutation(
     api.settings.update.mutationOptions({
       onSuccess: (result: any) => {
-        sileo.success({ title: result?.message || 'CTA actualizado' })
+        sileo.success({ title: result?.message || 'CTA updated' })
         queryClient.invalidateQueries(api.settings.index.queryOptions())
       },
-      onError: (err: any) => sileo.error({ title: err?.message || 'Error al actualizar CTA' }),
+      onError: (err: any) => sileo.error({ title: err?.message || 'Error updating CTA' }),
     })
   )
 
@@ -77,7 +77,7 @@ export function CTAForm({ settings: ssrSettings }: CTAFormProps) {
       label: (
         <Space>
           <EditOutlined className="text-xs" />
-          <span className="text-[10px] font-bold uppercase tracking-wider">Contenido</span>
+          <span className="text-[10px] font-bold uppercase tracking-wider">Content</span>
         </Space>
       ),
       children: (
@@ -85,16 +85,16 @@ export function CTAForm({ settings: ssrSettings }: CTAFormProps) {
           <Form.Item name="cta_badge" label="Badge">
             <Input prefix={<Sparkles size={14} className="text-gray-400" />} />
           </Form.Item>
-          <Form.Item name="cta_title" label="Título">
+          <Form.Item name="cta_title" label="Title">
             <Input.TextArea rows={2} />
           </Form.Item>
-          <Form.Item name="cta_description" label="Descripción">
+          <Form.Item name="cta_description" label="Description">
             <Input.TextArea rows={3} />
           </Form.Item>
-          <Form.Item name="cta_button_text" label="Texto del Botón">
+          <Form.Item name="cta_button_text" label="Button Text">
             <Input />
           </Form.Item>
-          <Form.Item name="cta_button_link" label="Enlace del Botón">
+          <Form.Item name="cta_button_link" label="Button Link">
             <Input prefix={<LinkIcon size={14} className="text-gray-400" />} />
           </Form.Item>
         </div>
@@ -105,7 +105,7 @@ export function CTAForm({ settings: ssrSettings }: CTAFormProps) {
       label: (
         <Space>
           <PictureOutlined className="text-xs" />
-          <span className="text-[10px] font-bold uppercase tracking-wider">Imagen</span>
+          <span className="text-[10px] font-bold uppercase tracking-wider">Image</span>
         </Space>
       ),
       children: (
@@ -130,7 +130,7 @@ export function CTAForm({ settings: ssrSettings }: CTAFormProps) {
                 <div className="flex flex-col items-center justify-center">
                   <ImageIcon className="text-gray-400" size={34} />
                   <Text type="secondary" className="mt-2 text-xs">
-                    Subir Imagen
+                    Upload Image
                   </Text>
                 </div>
               )}
@@ -139,7 +139,7 @@ export function CTAForm({ settings: ssrSettings }: CTAFormProps) {
 
           <div className="pt-1">
             <Text type="secondary" className="text-[11px]">
-              Se guarda como URL en configuración. Formatos: jpg/png/webp/gif.
+              It is saved as URL in configuration. Formats: jpg/png/webp/gif.
             </Text>
           </div>
         </div>

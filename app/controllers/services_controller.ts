@@ -7,7 +7,7 @@ export default class ServicesController {
     const payload = await request.validateUsing(serviceValidator)
     const service = await Service.create(payload)
     return response.ok({
-      message: 'Servicio creado correctamente',
+      message: 'Service created successfully',
       errors: [],
       data: service,
     })
@@ -19,7 +19,7 @@ export default class ServicesController {
     service.merge(payload)
     await service.save()
     return response.ok({
-      message: 'Servicio actualizado correctamente',
+      message: 'Service updated successfully',
       errors: [],
       data: service,
     })
@@ -29,7 +29,7 @@ export default class ServicesController {
     const service = await Service.findOrFail(params.id)
     await service.delete()
     return response.ok({
-      message: 'Servicio eliminado correctamente',
+      message: 'Service deleted successfully',
       errors: [],
       data: null,
     })
@@ -38,7 +38,7 @@ export default class ServicesController {
   async index({ response }: HttpContext) {
     const services = await Service.all()
     return response.ok({
-      message: 'Lista de servicios recuperada',
+      message: 'Service list retrieved',
       errors: [],
       data: services,
     })
@@ -47,7 +47,7 @@ export default class ServicesController {
   async show({ params, response }: HttpContext) {
     const service = await Service.findOrFail(params.id)
     return response.ok({
-      message: 'Datos del servicio recuperados',
+      message: 'Service data retrieved',
       errors: [],
       data: service,
     })

@@ -30,7 +30,7 @@ export default class HerosController {
     await hero.save()
 
     return response.ok({
-      message: 'Sección Hero actualizada correctamente',
+      message: 'Hero section updated successfully',
       errors: [],
       data: hero,
     })
@@ -39,7 +39,7 @@ export default class HerosController {
   async show({ response }: HttpContext) {
     const hero = await Hero.first()
     return response.ok({
-      message: 'Datos del Hero recuperados',
+      message: 'Hero data retrieved',
       errors: [],
       data: hero?.$original,
     })

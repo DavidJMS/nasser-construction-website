@@ -34,7 +34,7 @@ export function HeroForm({ hero }: { hero?: Hero | null }) {
         }
       },
       onError: (error: any) => {
-        sileo.error({ title: error?.message || 'Error al actualizar Hero' })
+        sileo.error({ title: error?.message || 'Error updating Hero' })
       },
     })
   )
@@ -72,18 +72,18 @@ export function HeroForm({ hero }: { hero?: Hero | null }) {
       label: (
         <Space>
           <EditOutlined className="text-xs" />
-          <span className="text-[10px] font-bold uppercase tracking-wider">Contenido</span>
+          <span className="text-[10px] font-bold uppercase tracking-wider">Content</span>
         </Space>
       ),
       children: (
         <div className="pt-4 space-y-4">
-          <Form.Item name="badge" label="Etiqueta Superior">
+          <Form.Item name="badge" label="Top Badge">
             <Input prefix={<Sparkles size={14} className="text-gray-400" />} />
           </Form.Item>
-          <Form.Item name="title" label="Título Principal">
+          <Form.Item name="title" label="Main Title">
             <Input.TextArea rows={3} />
           </Form.Item>
-          <Form.Item name="description" label="Descripción">
+          <Form.Item name="description" label="Description">
             <Input.TextArea rows={4} />
           </Form.Item>
         </div>
@@ -94,30 +94,30 @@ export function HeroForm({ hero }: { hero?: Hero | null }) {
       label: (
         <Space>
           <MousePointer2 size={12} />
-          <span className="text-[10px] font-bold uppercase tracking-wider">Botones</span>
+          <span className="text-[10px] font-bold uppercase tracking-wider">Buttons</span>
         </Space>
       ),
       children: (
         <div className="pt-4 space-y-4 flex flex-col gap-4 ">
           <div>
             <Text strong className="uppercase text-gray-400 mb-3 block">
-              Botón Principal
+              Primary Button
             </Text>
-            <Form.Item name="primaryButtonText" label="Texto" className="mb-2">
+            <Form.Item name="primaryButtonText" label="Text" className="mb-2">
               <Input prefix={<MousePointer2 size={14} className="text-gray-400" />} />
             </Form.Item>
-            <Form.Item name="primaryButtonLink" label="Enlace" className="mb-0">
+            <Form.Item name="primaryButtonLink" label="Link" className="mb-0">
               <Input prefix={<Link size={14} className="text-gray-400" />} />
             </Form.Item>
           </div>
           <div>
             <Text strong className="uppercase text-gray-400 mb-3 block">
-              Botón Secundario
+              Secondary Button
             </Text>
-            <Form.Item name="secondaryButtonText" label="Texto" className="mb-2">
+            <Form.Item name="secondaryButtonText" label="Text" className="mb-2">
               <Input prefix={<MousePointer2 size={14} className="text-gray-400" />} />
             </Form.Item>
-            <Form.Item name="secondaryButtonLink" label="Enlace" className="mb-0">
+            <Form.Item name="secondaryButtonLink" label="Link" className="mb-0">
               <Input prefix={<Link size={14} className="text-gray-400" />} />
             </Form.Item>
           </div>
@@ -129,7 +129,7 @@ export function HeroForm({ hero }: { hero?: Hero | null }) {
       label: (
         <Space>
           <PictureOutlined className="text-xs" />
-          <span className="text-[10px] font-bold uppercase tracking-wider">Multimedia</span>
+          <span className="text-[10px] font-bold uppercase tracking-wider">Media</span>
         </Space>
       ),
       children: (
@@ -151,7 +151,7 @@ export function HeroForm({ hero }: { hero?: Hero | null }) {
                   <div className="flex flex-col items-center justify-center">
                     <Image className="text-gray-400" size={34} />
                     <Text type="secondary" className="mt-2">
-                      Imagen Principal
+                      Main Image
                     </Text>
                   </div>
                 )}
@@ -176,7 +176,7 @@ export function HeroForm({ hero }: { hero?: Hero | null }) {
                   <div className="flex flex-col items-center justify-center">
                     <Image className="text-gray-400" size={34} />
                     <Text type="secondary" className="mt-2">
-                      Imagen Superpuesta
+                      Overlay Image
                     </Text>
                   </div>
                 )}
@@ -201,7 +201,7 @@ export function HeroForm({ hero }: { hero?: Hero | null }) {
                   <div className="flex flex-col items-center justify-center">
                     <Image className="text-gray-400" size={34} />
                     <Text type="secondary" className="mt-2">
-                      Imagen Decorativa
+                      Decorative Image
                     </Text>
                   </div>
                 )}

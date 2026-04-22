@@ -61,35 +61,35 @@ export function AboutUsForm({ aboutUs: ssrAboutUs }: { aboutUs: AboutUs }) {
   const storeFeatureMutation = useMutation(
     api.aboutUsFeatures.store.mutationOptions({
       onSuccess: () => {
-        sileo.success({ title: 'Característica añadida' })
+        sileo.success({ title: 'Feature added' })
         queryClient.invalidateQueries(api.aboutUs.show.queryOptions())
         setIsModalOpen(false)
       },
       onError: (err: any) =>
-        sileo.error({ title: err?.message || 'Error al añadir característica' }),
+        sileo.error({ title: err?.message || 'Error adding feature' }),
     })
   )
 
   const updateFeatureMutation = useMutation(
     api.aboutUsFeatures.update.mutationOptions({
       onSuccess: () => {
-        sileo.success({ title: 'Característica actualizada' })
+        sileo.success({ title: 'Feature updated' })
         queryClient.invalidateQueries(api.aboutUs.show.queryOptions())
         setIsModalOpen(false)
       },
       onError: (err: any) =>
-        sileo.error({ title: err?.message || 'Error al actualizar característica' }),
+        sileo.error({ title: err?.message || 'Error updating feature' }),
     })
   )
 
   const deleteFeatureMutation = useMutation(
     api.aboutUsFeatures.destroy.mutationOptions({
       onSuccess: () => {
-        sileo.success({ title: 'Característica eliminada' })
+        sileo.success({ title: 'Feature deleted' })
         queryClient.invalidateQueries(api.aboutUs.show.queryOptions())
       },
       onError: (err: any) =>
-        sileo.error({ title: err?.message || 'Error al eliminar característica' }),
+        sileo.error({ title: err?.message || 'Error deleting feature' }),
     })
   )
 
@@ -124,7 +124,7 @@ export function AboutUsForm({ aboutUs: ssrAboutUs }: { aboutUs: AboutUs }) {
   const { mutate, isPending } = useMutation(
     api.aboutUs.update.mutationOptions({
       onSuccess: (result: any) => {
-        sileo.success({ title: result?.message || 'About Us actualizado' })
+        sileo.success({ title: result?.message || 'About Us updated' })
         queryClient.invalidateQueries(api.aboutUs.show.queryOptions())
         const updated = result?.data
         if (updated) {
@@ -136,7 +136,7 @@ export function AboutUsForm({ aboutUs: ssrAboutUs }: { aboutUs: AboutUs }) {
         }
       },
       onError: (error: any) => {
-        sileo.error({ title: error?.message || 'Error al actualizar About Us' })
+        sileo.error({ title: error?.message || 'Error updating About Us' })
       },
     })
   )
@@ -171,33 +171,33 @@ export function AboutUsForm({ aboutUs: ssrAboutUs }: { aboutUs: AboutUs }) {
       label: (
         <Space>
           <EditOutlined className="text-xs" />
-          <span className="text-[10px] font-bold uppercase tracking-wider">Contenido</span>
+          <span className="text-[10px] font-bold uppercase tracking-wider">Content</span>
         </Space>
       ),
       children: (
         <div className="pt-4 space-y-4">
-          <Form.Item name="categoryTag" label="Etiqueta Superior">
+          <Form.Item name="categoryTag" label="Top Tag">
             <Input prefix={<Sparkles size={14} className="text-gray-400" />} />
           </Form.Item>
-          <Form.Item name="titleMain" label="Título Principal">
+          <Form.Item name="titleMain" label="Main Title">
             <Input
               prefix={<Layout size={14} className="text-gray-400" />}
-              placeholder="Ej: Especialistas en"
+              placeholder="Ex: Specialists in"
             />
           </Form.Item>
-          <Form.Item name="titleHighlight" label="Texto Resaltado">
+          <Form.Item name="titleHighlight" label="Highlighted Text">
             <Input
               prefix={<Layout size={14} className="text-gray-400" />}
-              placeholder="Ej: Puertas de Seguridad"
+              placeholder="Ex: Security Doors"
             />
           </Form.Item>
-          <Form.Item name="titleSuffix" label="Texto Final">
+          <Form.Item name="titleSuffix" label="Suffix Text">
             <Input
               prefix={<Layout size={14} className="text-gray-400" />}
-              placeholder="Ej: para tu hogar"
+              placeholder="Ex: for your home"
             />
           </Form.Item>
-          <Form.Item name="description" label="Descripción">
+          <Form.Item name="description" label="Description">
             <Input.TextArea rows={4} />
           </Form.Item>
         </div>
@@ -208,17 +208,17 @@ export function AboutUsForm({ aboutUs: ssrAboutUs }: { aboutUs: AboutUs }) {
       label: (
         <Space>
           <UnorderedListOutlined className="text-xs" />
-          <span className="text-[10px] font-bold uppercase tracking-wider">Características</span>
+          <span className="text-[10px] font-bold uppercase tracking-wider">Features</span>
         </Space>
       ),
       children: (
         <div className="pt-4">
           <div className="flex justify-between items-center mb-6">
             <Text className="uppercase" type="secondary">
-              Gestionar Características
+              Manage Features
             </Text>
             <Button type="primary" size="small" onClick={() => showModal()}>
-              Añadir
+              Add
             </Button>
           </div>
 
@@ -235,10 +235,10 @@ export function AboutUsForm({ aboutUs: ssrAboutUs }: { aboutUs: AboutUs }) {
                     onClick={() => showModal(feature)}
                   />,
                   <Popconfirm
-                    title="¿Deseas eliminar esta característica?"
+                    title="Are you sure you want to delete this feature?"
                     onConfirm={() => handleDeleteFeature(feature.id)}
-                    okText="Eliminar"
-                    cancelText="Cancelar"
+                    okText="Delete"
+                    cancelText="Cancel"
                     okButtonProps={{ danger: true }}
                   >
                     <Button size="small" type="text" danger icon={<Trash2 size={14} />} />
@@ -269,19 +269,19 @@ export function AboutUsForm({ aboutUs: ssrAboutUs }: { aboutUs: AboutUs }) {
       label: (
         <Space>
           <MousePointer2 size={12} />
-          <span className="text-[10px] font-bold uppercase tracking-wider">Botones</span>
+          <span className="text-[10px] font-bold uppercase tracking-wider">Buttons</span>
         </Space>
       ),
       children: (
         <div className="pt-4 space-y-4 flex flex-col gap-4">
           <div>
             <Text strong className="uppercase text-gray-400 mb-3 block">
-              Botón de Acción
+              Action Button
             </Text>
-            <Form.Item name="buttonText" label="Texto" className="mb-2">
+            <Form.Item name="buttonText" label="Text" className="mb-2">
               <Input prefix={<MousePointer2 size={14} className="text-gray-400" />} />
             </Form.Item>
-            <Form.Item name="buttonLink" label="Enlace" className="mb-0">
+            <Form.Item name="buttonLink" label="Link" className="mb-0">
               <Input prefix={<Link size={14} className="text-gray-400" />} />
             </Form.Item>
           </div>
@@ -293,7 +293,7 @@ export function AboutUsForm({ aboutUs: ssrAboutUs }: { aboutUs: AboutUs }) {
       label: (
         <Space>
           <PictureOutlined className="text-xs" />
-          <span className="text-[10px] font-bold uppercase tracking-wider">Imágenes</span>
+          <span className="text-[10px] font-bold uppercase tracking-wider">Images</span>
         </Space>
       ),
       children: (
@@ -315,7 +315,7 @@ export function AboutUsForm({ aboutUs: ssrAboutUs }: { aboutUs: AboutUs }) {
                   <div className="flex flex-col items-center justify-center">
                     <Image className="text-gray-400" size={34} />
                     <Text type="secondary" className="mt-2 text-xs">
-                      Imagen Principal
+                      Main Image
                     </Text>
                   </div>
                 )}
@@ -340,7 +340,7 @@ export function AboutUsForm({ aboutUs: ssrAboutUs }: { aboutUs: AboutUs }) {
                   <div className="flex flex-col items-center justify-center">
                     <Image className="text-gray-400" size={34} />
                     <Text type="secondary" className="mt-2 text-xs">
-                      Imagen Secundaria
+                      Secondary Image
                     </Text>
                   </div>
                 )}
@@ -365,7 +365,7 @@ export function AboutUsForm({ aboutUs: ssrAboutUs }: { aboutUs: AboutUs }) {
           <Space className="pt-2">
             <Edit3 size={16} className="text-navy-900" />
             <span className="text-sm font-bold uppercase tracking-wider">
-              {editingFeature ? 'Editar Característica' : 'Nueva Característica'}
+              {editingFeature ? 'Edit Feature' : 'New Feature'}
             </span>
           </Space>
         }
@@ -377,7 +377,7 @@ export function AboutUsForm({ aboutUs: ssrAboutUs }: { aboutUs: AboutUs }) {
         width={400}
         footer={[
           <Button key="back" onClick={() => setIsModalOpen(false)} className="rounded-xl">
-            Cancelar
+            Cancel
           </Button>,
           <Button
             key="submit"
@@ -386,29 +386,29 @@ export function AboutUsForm({ aboutUs: ssrAboutUs }: { aboutUs: AboutUs }) {
             className="bg-navy-900 rounded-xl"
             icon={<Save size={14} />}
           >
-            {editingFeature ? 'Actualizar' : 'Crear'}
+            {editingFeature ? 'Update' : 'Create'}
           </Button>,
         ]}
       >
         <Form form={featureForm} layout="vertical" className="mt-6">
           <Form.Item
             name="title"
-            label="Título"
-            rules={[{ required: true, message: 'El título es obligatorio' }]}
+            label="Title"
+            rules={[{ required: true, message: 'Title is required' }]}
           >
             <Input
               prefix={<Type size={14} className="text-gray-400" />}
-              placeholder="Ej: Compromiso de Calidad"
+              placeholder="Ex: Quality Commitment"
             />
           </Form.Item>
-          <Form.Item name="description" label="Descripción">
-            <Input.TextArea rows={4} placeholder="Describe el punto clave..." />
+          <Form.Item name="description" label="Description">
+            <Input.TextArea rows={4} placeholder="Describe the key point..." />
           </Form.Item>
           <div className="grid grid-cols-3 gap-4">
-            <Form.Item className="col-span-2" name="icon" label="Icono">
-              <IconSelect placeholder="Ej: Shield" />
+            <Form.Item className="col-span-2" name="icon" label="Icon">
+              <IconSelect placeholder="Ex: Shield" />
             </Form.Item>
-            <Form.Item name="order" label="Prioridad">
+            <Form.Item name="order" label="Priority">
               <InputNumber
                 prefix={<Hash size={14} className="text-gray-400" />}
                 min={0}
