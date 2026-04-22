@@ -1,7 +1,6 @@
 import { motion } from 'framer-motion'
 import { Zap, Home, Volume2, Maximize, ArrowRight } from 'lucide-react'
 import { icons } from 'lucide-react'
-import React from 'react'
 
 const services = [
   {

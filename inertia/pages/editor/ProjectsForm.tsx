@@ -10,13 +10,11 @@ import {
   Popconfirm,
   Tabs,
   Upload,
-  Divider,
   Avatar,
 } from 'antd'
 import {
   Edit3,
   Trash2,
-  Plus,
   Save,
   Type,
   Hash,
@@ -30,6 +28,7 @@ import { api, queryClient } from '~/utils/client'
 import { sileo } from 'sileo'
 import { useState } from 'react'
 import type Project from '#models/project'
+import { PictureOutlined } from '@ant-design/icons'
 
 const { Text } = Typography
 
@@ -37,6 +36,7 @@ export function ProjectsForm({ projects: ssrProjects }: { projects: Project[] })
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [editingProject, setEditingProject] = useState<Project | null>(null)
   const [form] = Form.useForm()
+  const imageUrl = Form.useWatch('imageUrl', form)
 
   const { data: projectsData } = useQuery(api.projects.index.queryOptions())
   const projects = projectsData?.data ?? ssrProjects
@@ -44,32 +44,32 @@ export function ProjectsForm({ projects: ssrProjects }: { projects: Project[] })
   const storeMutation = useMutation(
     api.projects.store.mutationOptions({
       onSuccess: () => {
-        sileo.success({ title: 'Proyecto creado' })
+        sileo.success({ title: 'Project created' })
         queryClient.invalidateQueries(api.projects.index.queryOptions())
         setIsModalOpen(false)
       },
-      onError: (err: any) => sileo.error({ title: err?.message || 'Error al crear proyecto' }),
+      onError: (err: any) => sileo.error({ title: err?.message || 'Error creating project' }),
     })
   )
 
   const updateMutation = useMutation(
     api.projects.update.mutationOptions({
       onSuccess: () => {
-        sileo.success({ title: 'Proyecto actualizado' })
+        sileo.success({ title: 'Project updated' })
         queryClient.invalidateQueries(api.projects.index.queryOptions())
         setIsModalOpen(false)
       },
-      onError: (err: any) => sileo.error({ title: err?.message || 'Error al actualizar proyecto' }),
+      onError: (err: any) => sileo.error({ title: err?.message || 'Error updating project' }),
     })
   )
 
   const deleteMutation = useMutation(
     api.projects.destroy.mutationOptions({
       onSuccess: () => {
-        sileo.success({ title: 'Proyecto eliminado' })
+        sileo.success({ title: 'Project deleted' })
         queryClient.invalidateQueries(api.projects.index.queryOptions())
       },
-      onError: (err: any) => sileo.error({ title: err?.message || 'Error al eliminar proyecto' }),
+      onError: (err: any) => sileo.error({ title: err?.message || 'Error deleting project' }),
     })
   )
 
@@ -132,15 +132,15 @@ export function ProjectsForm({ projects: ssrProjects }: { projects: Project[] })
       label: (
         <Space>
           <Edit3 size={12} />
-          <span className="text-[10px] font-bold uppercase tracking-wider">Información</span>
+          <span className="text-[10px] font-bold uppercase tracking-wider">Information</span>
         </Space>
       ),
       children: (
         <div className="pt-4 space-y-4">
           <Form.Item
             name="title"
-            label="Título"
-            rules={[{ required: true, message: 'El título es obligatorio' }]}
+            label="Title"
+            rules={[{ required: true, message: 'Title is required' }]}
           >
             <Input
               prefix={<Type size={14} className="text-gray-400" />}
@@ -149,30 +149,27 @@ export function ProjectsForm({ projects: ssrProjects }: { projects: Project[] })
           </Form.Item>
           <Form.Item
             name="category"
-            label="Categoría"
-            rules={[{ required: true, message: 'La categoría es obligatoria' }]}
+            label="Category"
+            rules={[{ required: true, message: 'Category is required' }]}
           >
             <Input
               prefix={<TagIcon size={14} className="text-gray-400" />}
               placeholder="Ej: Residencial"
             />
           </Form.Item>
-          <Form.Item name="description" label="Descripción">
-            <Input.TextArea rows={4} placeholder="Descripción del proyecto..." />
+          <Form.Item name="description" label="Description">
+            <Input.TextArea rows={4} placeholder="Description..." />
           </Form.Item>
-          <div className="grid grid-cols-2 gap-4">
-            <Form.Item name="link" label="Enlace">
-              <Input
-                prefix={<LinkIcon size={14} className="text-gray-400" />}
-                placeholder="URL externa"
-              />
+          <div className="grid grid-cols-3 gap-4">
+            <Form.Item className="col-span-2" name="link" label="Link">
+              <Input prefix={<LinkIcon size={14} className="text-gray-400" />} placeholder="URL" />
             </Form.Item>
-            <Form.Item name="order" label="Prioridad">
+            <Form.Item name="order" label="Priority">
               <InputNumber
                 prefix={<Hash size={14} className="text-gray-400" />}
                 min={0}
-                className="w-full"
                 placeholder="0"
+                style={{ width: '100%' }}
               />
             </Form.Item>
           </div>
@@ -184,64 +181,43 @@ export function ProjectsForm({ projects: ssrProjects }: { projects: Project[] })
       label: (
         <Space>
           <ImageIcon size={12} />
-          <span className="text-[10px] font-bold uppercase tracking-wider">Multimedia</span>
+          <span className="text-[10px] font-bold uppercase tracking-wider">Media</span>
         </Space>
       ),
       children: (
-        <div className="pt-4 space-y-6">
-          <div>
-            <Text strong className="text-[10px] uppercase text-gray-400 mb-2 block">
-              Imagen de Portada
-            </Text>
-            <Form.Item
-              name="imageUrl"
-              valuePropName="fileList"
-              getValueFromEvent={(e: any) => (Array.isArray(e) ? e : e?.fileList)}
-              className="mb-0"
+        <div>
+          <Form.Item
+            name="imageUrl"
+            valuePropName="fileList"
+            getValueFromEvent={(e: any) => (Array.isArray(e) ? e : e?.fileList)}
+          >
+            <Upload
+              listType="picture-card"
+              maxCount={1}
+              beforeUpload={() => false}
+              className="editor-upload-small"
+              multiple={false}
             >
-              <Upload
-                listType="picture-card"
-                maxCount={1}
-                beforeUpload={() => false}
-                className="editor-upload-small"
-              >
+              {(imageUrl?.length || 0) < 1 && (
                 <div className="flex flex-col items-center justify-center">
                   <ImageIcon className="text-gray-400" size={34} />
-                  <Text type="secondary" className="mt-2 text-xs">
-                    Principal
+                  <Text type="secondary" className="mt-2 ">
+                    Cover Image
                   </Text>
                 </div>
-              </Upload>
-            </Form.Item>
-          </div>
+              )}
+            </Upload>
+          </Form.Item>
 
-          <Divider className="my-4" />
-
-          <div>
-            <Text strong className="text-[10px] uppercase text-gray-400 mb-2 block">
-              Galería del Proyecto
-            </Text>
-            <Form.Item
-              name="gallery"
-              valuePropName="fileList"
-              getValueFromEvent={(e: any) => (Array.isArray(e) ? e : e?.fileList)}
-              className="mb-0"
-            >
-              <Upload
-                listType="picture-card"
-                multiple
-                beforeUpload={() => false}
-                className="editor-upload-small"
-              >
-                <div className="flex flex-col items-center justify-center">
-                  <Plus className="text-gray-400" size={24} />
-                  <Text type="secondary" className="mt-2 text-[10px]">
-                    Añadir Fotos
-                  </Text>
-                </div>
-              </Upload>
-            </Form.Item>
-          </div>
+          <Form.Item
+            name="gallery"
+            valuePropName="fileList"
+            getValueFromEvent={(e: any) => (Array.isArray(e) ? e : e?.fileList)}
+          >
+            <Upload listType="picture" multiple beforeUpload={() => false}>
+              <Button icon={<PictureOutlined />}>Add Photos</Button>
+            </Upload>
+          </Form.Item>
         </div>
       ),
     },
@@ -253,23 +229,17 @@ export function ProjectsForm({ projects: ssrProjects }: { projects: Project[] })
       label: (
         <Space>
           <Folders size={12} />
-          <span className="text-[10px] font-bold uppercase tracking-wider">Proyectos</span>
+          <span className="text-[10px] font-bold uppercase tracking-wider">Projects</span>
         </Space>
       ),
       children: (
         <div className="pt-4">
           <div className="flex justify-between items-center mb-6">
-            <Text strong className="text-[10px] uppercase text-gray-400 tracking-widest">
-              Galería de Proyectos
+            <Text type="secondary" className="uppercase">
+              Gallery of Projects
             </Text>
-            <Button
-              type="primary"
-              size="small"
-              icon={<Plus size={14} />}
-              onClick={() => showModal()}
-              className="bg-navy-900 rounded-full text-[10px] font-bold px-4 flex items-center gap-1 h-7"
-            >
-              NUEVO
+            <Button type="primary" size="small" onClick={() => showModal()}>
+              Add
             </Button>
           </div>
 
@@ -287,10 +257,10 @@ export function ProjectsForm({ projects: ssrProjects }: { projects: Project[] })
                     onClick={() => showModal(project)}
                   />,
                   <Popconfirm
-                    title="¿Deseas eliminar este proyecto?"
+                    title="Are you sure you want to delete this project?"
                     onConfirm={() => handleDelete(project.id)}
-                    okText="Eliminar"
-                    cancelText="Cancelar"
+                    okText="Delete"
+                    cancelText="Cancel"
                     okButtonProps={{ danger: true }}
                   >
                     <Button size="small" type="text" danger icon={<Trash2 size={14} />} />
@@ -330,14 +300,6 @@ export function ProjectsForm({ projects: ssrProjects }: { projects: Project[] })
       <Tabs defaultActiveKey="list" type="card" size="small" centered items={items} />
 
       <Modal
-        title={
-          <Space className="pt-2">
-            <Folders size={16} className="text-navy-900" />
-            <span className="text-sm font-bold uppercase tracking-wider">
-              {editingProject ? 'Editar Proyecto' : 'Nuevo Proyecto'}
-            </span>
-          </Space>
-        }
         open={isModalOpen}
         onOk={handleOk}
         onCancel={() => setIsModalOpen(false)}
@@ -346,7 +308,7 @@ export function ProjectsForm({ projects: ssrProjects }: { projects: Project[] })
         width={420}
         footer={[
           <Button key="back" onClick={() => setIsModalOpen(false)} className="rounded-xl">
-            Cancelar
+            Cancel
           </Button>,
           <Button
             key="submit"
@@ -355,7 +317,7 @@ export function ProjectsForm({ projects: ssrProjects }: { projects: Project[] })
             className="bg-navy-900 rounded-xl"
             icon={<Save size={14} />}
           >
-            {editingProject ? 'Actualizar' : 'Crear'}
+            {editingProject ? 'Update' : 'Create'}
           </Button>,
         ]}
       >

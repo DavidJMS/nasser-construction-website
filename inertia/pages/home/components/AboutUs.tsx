@@ -2,7 +2,6 @@ import type AboutUs from '#models/about_us'
 import { motion } from 'framer-motion'
 import { Award, ShieldCheck, Users, Hammer, ArrowRight } from 'lucide-react'
 import { icons } from 'lucide-react'
-import React from 'react'
 
 const getIcon = (name: string) => {
   if (!name) return <Award className="w-8 h-8" />
@@ -157,12 +156,12 @@ export default function AboutUsComponent({ data }: { data: AboutUs }) {
               className="flex flex-col items-center text-center p-8 bg-gray-50/50 rounded-3xl border border-transparent hover:border-gray-200 hover:bg-white hover:shadow-xl hover:shadow-gray-900/5 transition-all duration-300 group cursor-pointer"
             >
               <div className="w-16 h-16 rounded-2xl bg-white shadow-sm text-navy-900 mb-6 flex items-center justify-center transition-all group-hover:bg-navy-900 group-hover:text-white group-hover:scale-110 group-hover:-rotate-3">
-                {getIcon(feature.icon)}
+                {getIcon(feature.icon ?? '')}
               </div>
               <h4 className="text-xl font-bold text-gray-900 mb-3 leading-tight">
                 {feature.title}
               </h4>
-              <p className="text-xs text-gray-500 font-medium leading-relaxed max-w-[180px] uppercase tracking-wider">
+              <p className="text-xs text-gray-500 font-medium leading-relaxed max-w-45 uppercase tracking-wider">
                 {feature.description}
               </p>
             </motion.div>
