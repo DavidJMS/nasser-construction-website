@@ -2,31 +2,124 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 import { toUploadFileList } from '~/utils/upload'
 import { sileo } from 'sileo'
 import { useEditor } from '~/pages/home/hooks/useEditor'
-import { useEffect } from 'react'
-import { Typography, Input, Tabs, Form, Upload, Space, Button } from 'antd'
+import React, { useEffect, useState } from 'react'
+import {
+  Typography,
+  Input,
+  Tabs,
+  Form,
+  Upload,
+  Space,
+  Button,
+  List,
+  Modal,
+  Popconfirm,
+  InputNumber,
+} from 'antd'
 import { api, queryClient } from '~/utils/client'
 import { EditOutlined, PictureOutlined, UnorderedListOutlined } from '@ant-design/icons'
-import { Hash, Image, Layout, Link, MousePointer2, Plus, Sparkles, Trash2 } from 'lucide-react'
+import {
+  Hash,
+  Image,
+  Layout,
+  Link,
+  MousePointer2,
+  Sparkles,
+  Trash2,
+  Save,
+  Type,
+  Layers,
+  Edit3,
+} from 'lucide-react'
+import { icons } from 'lucide-react'
+import { IconSelect } from '~/components/IconSelect'
+import type AboutUsFeature from '#models/about_us_feature'
+import type AboutUs from '#models/about_us'
 
 const { Text } = Typography
-
-interface AboutUsFormProps {
-  aboutUs: any
-}
 
 const normFile = (e: any) => {
   if (Array.isArray(e)) return e
   return e?.fileList
 }
 
-export function AboutUsForm({ aboutUs: ssrAboutUs }: AboutUsFormProps) {
+export function AboutUsForm({ aboutUs: ssrAboutUs }: { aboutUs: AboutUs }) {
   const [form] = Form.useForm()
+  const [featureForm] = Form.useForm()
   const { registerSaveAction } = useEditor()
   const image1 = Form.useWatch('image1', form)
   const image2 = Form.useWatch('image2', form)
 
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [editingFeature, setEditingFeature] = useState<AboutUsFeature | null>(null)
+
   const { data: aboutUsData } = useQuery(api.aboutUs.show.queryOptions())
   const aboutUs = aboutUsData?.data ?? ssrAboutUs
+  const features = aboutUs?.features || []
+
+  // Feature Mutations
+  const storeFeatureMutation = useMutation(
+    api.aboutUsFeatures.store.mutationOptions({
+      onSuccess: () => {
+        sileo.success({ title: 'Característica añadida' })
+        queryClient.invalidateQueries(api.aboutUs.show.queryOptions())
+        setIsModalOpen(false)
+      },
+      onError: (err: any) =>
+        sileo.error({ title: err?.message || 'Error al añadir característica' }),
+    })
+  )
+
+  const updateFeatureMutation = useMutation(
+    api.aboutUsFeatures.update.mutationOptions({
+      onSuccess: () => {
+        sileo.success({ title: 'Característica actualizada' })
+        queryClient.invalidateQueries(api.aboutUs.show.queryOptions())
+        setIsModalOpen(false)
+      },
+      onError: (err: any) =>
+        sileo.error({ title: err?.message || 'Error al actualizar característica' }),
+    })
+  )
+
+  const deleteFeatureMutation = useMutation(
+    api.aboutUsFeatures.destroy.mutationOptions({
+      onSuccess: () => {
+        sileo.success({ title: 'Característica eliminada' })
+        queryClient.invalidateQueries(api.aboutUs.show.queryOptions())
+      },
+      onError: (err: any) =>
+        sileo.error({ title: err?.message || 'Error al eliminar característica' }),
+    })
+  )
+
+  const showModal = (feature?: AboutUsFeature) => {
+    if (feature) {
+      setEditingFeature(feature)
+      featureForm.setFieldsValue(feature)
+    } else {
+      setEditingFeature(null)
+      featureForm.resetFields()
+    }
+    setIsModalOpen(true)
+  }
+
+  const handleModalOk = () => {
+    featureForm.validateFields().then((values) => {
+      if (editingFeature) {
+        updateFeatureMutation.mutate({
+          params: { id: editingFeature.id },
+          body: values,
+        })
+      } else {
+        storeFeatureMutation.mutate({ body: values })
+      }
+    })
+  }
+
+  const handleDeleteFeature = (id: number) => {
+    deleteFeatureMutation.mutate({ params: { id } })
+  }
 
   const { mutate, isPending } = useMutation(
     api.aboutUs.update.mutationOptions({
@@ -120,81 +213,54 @@ export function AboutUsForm({ aboutUs: ssrAboutUs }: AboutUsFormProps) {
       ),
       children: (
         <div className="pt-4">
-          <Form.List name="features">
-            {(fields, { add, remove }) => (
-              <>
-                <div className="flex justify-between items-center mb-4">
-                  <Text strong className="text-[10px] uppercase text-gray-400 tracking-widest">
-                    Lista de Características
-                  </Text>
+          <div className="flex justify-between items-center mb-6">
+            <Text className="uppercase" type="secondary">
+              Gestionar Características
+            </Text>
+            <Button type="primary" size="small" onClick={() => showModal()}>
+              Añadir
+            </Button>
+          </div>
+
+          <List
+            dataSource={features}
+            rowKey="id"
+            renderItem={(feature: AboutUsFeature) => (
+              <List.Item
+                actions={[
                   <Button
-                    type="primary"
                     size="small"
-                    icon={<Plus size={14} />}
-                    onClick={() => add()}
-                    className="bg-navy-900 rounded-full text-[10px] font-bold px-4 flex items-center gap-1 h-7"
+                    type="text"
+                    icon={<Edit3 size={14} className="text-navy-600" />}
+                    onClick={() => showModal(feature)}
+                  />,
+                  <Popconfirm
+                    title="¿Deseas eliminar esta característica?"
+                    onConfirm={() => handleDeleteFeature(feature.id)}
+                    okText="Eliminar"
+                    cancelText="Cancelar"
+                    okButtonProps={{ danger: true }}
                   >
-                    AÑADIR
-                  </Button>
-                </div>
-                <div className="space-y-4">
-                  {fields.map(({ key, name, ...restField }) => (
-                    <div
-                      key={key}
-                      className="p-4 bg-gray-50 border border-gray-100 rounded-2xl relative group"
-                    >
-                      <Button
-                        type="text"
-                        danger
-                        icon={<Trash2 size={14} />}
-                        onClick={() => remove(name)}
-                        className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
-                        size="small"
-                      />
-                      <Form.Item
-                        {...restField}
-                        name={[name, 'title']}
-                        label="Título"
-                        rules={[{ required: true, message: 'Título requerido' }]}
-                        className="mb-2"
-                      >
-                        <Input size="small" />
-                      </Form.Item>
-                      <Form.Item
-                        {...restField}
-                        name={[name, 'description']}
-                        label="Descripción"
-                        className="mb-2"
-                      >
-                        <Input.TextArea rows={2} size="small" />
-                      </Form.Item>
-                      <div className="grid grid-cols-2 gap-4">
-                        <Form.Item
-                          {...restField}
-                          name={[name, 'icon']}
-                          label="Icono"
-                          className="mb-0"
-                        >
-                          <Input size="small" placeholder="Ej: Shield, Zap..." />
-                        </Form.Item>
-                        <Form.Item
-                          {...restField}
-                          name={[name, 'order']}
-                          label="Orden"
-                          className="mb-0"
-                        >
-                          <Input size="small" prefix={<Hash size={12} />} />
-                        </Form.Item>
-                      </div>
-                      <Form.Item {...restField} name={[name, 'id']} hidden>
-                        <Input />
-                      </Form.Item>
+                    <Button size="small" type="text" danger icon={<Trash2 size={14} />} />
+                  </Popconfirm>,
+                ]}
+              >
+                <List.Item.Meta
+                  avatar={
+                    <div className="w-10 h-10 bg-white shadow-sm border border-gray-100 rounded-xl flex items-center justify-center text-navy-900 group-hover:bg-navy-900 group-hover:text-white transition-all">
+                      {feature.icon && (icons as any)[feature.icon] ? (
+                        React.createElement((icons as any)[feature.icon], { size: 20 })
+                      ) : (
+                        <Layers size={20} />
+                      )}
                     </div>
-                  ))}
-                </div>
-              </>
+                  }
+                  title={feature.title}
+                  description={feature.description}
+                />
+              </List.Item>
             )}
-          </Form.List>
+          />
         </div>
       ),
     },
@@ -293,6 +359,66 @@ export function AboutUsForm({ aboutUs: ssrAboutUs }: AboutUsFormProps) {
           <Tabs defaultActiveKey="content" type="card" size="small" centered items={items} />
         </div>
       </Form>
+
+      <Modal
+        title={
+          <Space className="pt-2">
+            <Edit3 size={16} className="text-navy-900" />
+            <span className="text-sm font-bold uppercase tracking-wider">
+              {editingFeature ? 'Editar Característica' : 'Nueva Característica'}
+            </span>
+          </Space>
+        }
+        open={isModalOpen}
+        onOk={handleModalOk}
+        onCancel={() => setIsModalOpen(false)}
+        destroyOnHidden
+        centered
+        width={400}
+        footer={[
+          <Button key="back" onClick={() => setIsModalOpen(false)} className="rounded-xl">
+            Cancelar
+          </Button>,
+          <Button
+            key="submit"
+            type="primary"
+            onClick={handleModalOk}
+            className="bg-navy-900 rounded-xl"
+            icon={<Save size={14} />}
+          >
+            {editingFeature ? 'Actualizar' : 'Crear'}
+          </Button>,
+        ]}
+      >
+        <Form form={featureForm} layout="vertical" className="mt-6">
+          <Form.Item
+            name="title"
+            label="Título"
+            rules={[{ required: true, message: 'El título es obligatorio' }]}
+          >
+            <Input
+              prefix={<Type size={14} className="text-gray-400" />}
+              placeholder="Ej: Compromiso de Calidad"
+            />
+          </Form.Item>
+          <Form.Item name="description" label="Descripción">
+            <Input.TextArea rows={4} placeholder="Describe el punto clave..." />
+          </Form.Item>
+          <div className="grid grid-cols-3 gap-4">
+            <Form.Item className="col-span-2" name="icon" label="Icono">
+              <IconSelect placeholder="Ej: Shield" />
+            </Form.Item>
+            <Form.Item name="order" label="Prioridad">
+              <InputNumber
+                prefix={<Hash size={14} className="text-gray-400" />}
+                min={0}
+                style={{ width: '100%' }}
+                placeholder="0"
+              />
+            </Form.Item>
+          </div>
+        </Form>
+      </Modal>
     </div>
   )
 }

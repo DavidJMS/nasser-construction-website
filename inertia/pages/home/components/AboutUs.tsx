@@ -1,8 +1,17 @@
 import type AboutUs from '#models/about_us'
 import { motion } from 'framer-motion'
 import { Award, ShieldCheck, Users, Hammer, ArrowRight } from 'lucide-react'
+import { icons } from 'lucide-react'
+import React from 'react'
 
 const getIcon = (name: string) => {
+  if (!name) return <Award className="w-8 h-8" />
+
+  const IconComponent = (icons as any)[name]
+  if (IconComponent) {
+    return <IconComponent className="w-8 h-8" />
+  }
+
   switch (name.toLowerCase()) {
     case 'award':
     case 'experience':
@@ -33,32 +42,35 @@ export default function AboutUsComponent({ data }: { data: AboutUs }) {
   const buttonLink = data?.buttonLink && data.buttonLink !== '#contact' ? data.buttonLink : '/about'
   const image1 = data?.image1 || '/images/about-house.png'
   const image2 = data?.image2 || '/images/window-install.png'
-  const features = [
-    {
-      id: 1,
-      title: 'Experience',
-      description: '+20 Years of experience in the industry',
-      icon: 'award',
-    },
-    {
-      id: 2,
-      title: 'Quality',
-      description: 'Products of the highest quality',
-      icon: 'shieldcheck',
-    },
-    {
-      id: 3,
-      title: 'Certified Installation',
-      description: 'Team of highly trained installers',
-      icon: 'hammer',
-    },
-    {
-      id: 4,
-      title: 'Customer care',
-      description: 'We provide exceptional service',
-      icon: 'users',
-    },
-  ]
+  const features =
+    data?.features && data.features.length > 0
+      ? data.features
+      : [
+          {
+            id: 1,
+            title: 'Experience',
+            description: '+20 Years of experience in the industry',
+            icon: 'Award',
+          },
+          {
+            id: 2,
+            title: 'Quality',
+            description: 'Products of the highest quality',
+            icon: 'ShieldCheck',
+          },
+          {
+            id: 3,
+            title: 'Certified Installation',
+            description: 'Team of highly trained installers',
+            icon: 'Hammer',
+          },
+          {
+            id: 4,
+            title: 'Customer care',
+            description: 'We provide exceptional service',
+            icon: 'Users',
+          },
+        ]
 
   return (
     <section id="about" className="py-24 bg-white overflow-hidden">

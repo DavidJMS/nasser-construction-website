@@ -10,27 +10,18 @@ import {
   Popconfirm,
   Tabs,
 } from 'antd'
-import { Edit3, Trash2, Plus, Save, Type, Hash, ListFilter, Layers } from 'lucide-react'
-import { useState } from 'react'
+import { Edit3, Trash2, Save, Type, Hash, ListFilter, Layers } from 'lucide-react'
+import { icons } from 'lucide-react'
+import React, { useState } from 'react'
+import { IconSelect } from '~/components/IconSelect'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { api, queryClient } from '~/utils/client'
 import { sileo } from 'sileo'
+import type Service from '#models/service'
 
 const { Text } = Typography
 
-interface Service {
-  id: number
-  title: string
-  description: string
-  icon: string
-  order: number
-}
-
-interface ServicesFormProps {
-  services: Service[]
-}
-
-export function ServicesForm({ services: ssrServices }: ServicesFormProps) {
+export function ServicesForm({ services: ssrServices }: { services: Service[] }) {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [editingService, setEditingService] = useState<Service | null>(null)
   const [form] = Form.useForm()
@@ -83,13 +74,18 @@ export function ServicesForm({ services: ssrServices }: ServicesFormProps) {
 
   const handleOk = () => {
     form.validateFields().then((values) => {
+      const body = {
+        ...values,
+        icon: values.icon ? values.icon : null,
+        order: values.order ?? undefined,
+      }
       if (editingService) {
         updateMutation.mutate({
           params: { id: editingService.id },
-          body: values,
+          body,
         })
       } else {
-        storeMutation.mutate({ body: values })
+        storeMutation.mutate({ body })
       }
     })
   }
@@ -110,17 +106,11 @@ export function ServicesForm({ services: ssrServices }: ServicesFormProps) {
       children: (
         <div className="pt-4">
           <div className="flex justify-between items-center mb-6">
-            <Text strong className="text-[10px] uppercase text-gray-400 tracking-widest">
+            <Text className="uppercase" type="secondary">
               Gestionar Servicios
             </Text>
-            <Button
-              type="primary"
-              size="small"
-              icon={<Plus size={14} />}
-              onClick={() => showModal()}
-              className="bg-navy-900 rounded-full text-[10px] font-bold px-4 flex items-center gap-1 h-7"
-            >
-              NUEVO
+            <Button type="primary" size="small" onClick={() => showModal()}>
+              Añadir
             </Button>
           </div>
 
@@ -129,7 +119,6 @@ export function ServicesForm({ services: ssrServices }: ServicesFormProps) {
             rowKey="id"
             renderItem={(service) => (
               <List.Item
-                className="px-4 py-3 bg-gray-50/50 border border-gray-100 rounded-2xl mb-3 hover:bg-white hover:border-gray-200 transition-all group"
                 actions={[
                   <Button
                     size="small"
@@ -151,7 +140,11 @@ export function ServicesForm({ services: ssrServices }: ServicesFormProps) {
                 <List.Item.Meta
                   avatar={
                     <div className="w-10 h-10 bg-white shadow-sm border border-gray-100 rounded-xl flex items-center justify-center text-navy-900 group-hover:bg-navy-900 group-hover:text-white transition-all">
-                      <Layers size={20} />
+                      {service.icon && (icons as any)[service.icon] ? (
+                        React.createElement((icons as any)[service.icon], { size: 20 })
+                      ) : (
+                        <Layers size={20} />
+                      )}
                     </div>
                   }
                   title={<Text className="text-xs font-bold">{service.title}</Text>}
@@ -185,7 +178,7 @@ export function ServicesForm({ services: ssrServices }: ServicesFormProps) {
         open={isModalOpen}
         onOk={handleOk}
         onCancel={() => setIsModalOpen(false)}
-        destroyOnClose
+        destroyOnHidden
         centered
         width={400}
         footer={[
@@ -207,7 +200,10 @@ export function ServicesForm({ services: ssrServices }: ServicesFormProps) {
           <Form.Item
             name="title"
             label="Título"
-            rules={[{ required: true, message: 'El título es obligatorio' }]}
+            rules={[
+              { required: true, message: 'El título es obligatorio' },
+              { min: 3, message: 'El título debe tener al menos 3 caracteres' },
+            ]}
           >
             <Input
               prefix={<Type size={14} className="text-gray-400" />}
@@ -217,23 +213,23 @@ export function ServicesForm({ services: ssrServices }: ServicesFormProps) {
           <Form.Item
             name="description"
             label="Descripción"
-            rules={[{ required: true, message: 'La descripción es obligatoria' }]}
+            rules={[
+              { required: true, message: 'La descripción es obligatoria' },
+              { min: 10, message: 'La descripción debe tener al menos 10 caracteres' },
+            ]}
           >
             <Input.TextArea rows={4} placeholder="Describe el servicio de forma atractiva..." />
           </Form.Item>
-          <div className="grid grid-cols-2 gap-4">
-            <Form.Item name="icon" label="Icono">
-              <Input
-                prefix={<Layers size={14} className="text-gray-400" />}
-                placeholder="Ej: hard-hat"
-              />
+          <div className="grid grid-cols-3 gap-4">
+            <Form.Item className="col-span-2" name="icon" label="Icono">
+              <IconSelect placeholder="Ej: HardHat" />
             </Form.Item>
             <Form.Item name="order" label="Prioridad">
               <InputNumber
                 prefix={<Hash size={14} className="text-gray-400" />}
                 min={0}
-                className="w-full"
                 placeholder="0"
+                style={{ width: '100%' }}
               />
             </Form.Item>
           </div>

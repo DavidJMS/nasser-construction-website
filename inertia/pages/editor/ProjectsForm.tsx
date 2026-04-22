@@ -29,30 +29,11 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 import { api, queryClient } from '~/utils/client'
 import { sileo } from 'sileo'
 import { useState } from 'react'
+import type Project from '#models/project'
 
 const { Text } = Typography
 
-interface ProjectImage {
-  id: number
-  url: string
-}
-
-interface Project {
-  id: number
-  title: string
-  category: string
-  description: string
-  link: string
-  order: number
-  imageUrl: string
-  images: ProjectImage[]
-}
-
-interface ProjectsFormProps {
-  projects: Project[]
-}
-
-export function ProjectsForm({ projects: ssrProjects }: ProjectsFormProps) {
+export function ProjectsForm({ projects: ssrProjects }: { projects: Project[] }) {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [editingProject, setEditingProject] = useState<Project | null>(null)
   const [form] = Form.useForm()
@@ -360,7 +341,7 @@ export function ProjectsForm({ projects: ssrProjects }: ProjectsFormProps) {
         open={isModalOpen}
         onOk={handleOk}
         onCancel={() => setIsModalOpen(false)}
-        destroyOnClose
+        destroyOnHidden
         centered
         width={420}
         footer={[

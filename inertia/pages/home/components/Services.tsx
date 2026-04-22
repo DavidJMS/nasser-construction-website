@@ -1,5 +1,7 @@
 import { motion } from 'framer-motion'
 import { Zap, Home, Volume2, Maximize, ArrowRight } from 'lucide-react'
+import { icons } from 'lucide-react'
+import React from 'react'
 
 const services = [
   {
@@ -26,14 +28,17 @@ const services = [
 ]
 
 export default function Services({ data }: { data: any[] }) {
-  const iconPool = [Zap, Home, Volume2, Maximize]
   const servicesFromData = Array.isArray(data)
     ? data
-        .map((service: any, index: number) => ({
-          Icon: iconPool[index % iconPool.length],
-          title: service?.title || '',
-          description: service?.description || '',
-        }))
+        .map((service: any) => {
+          const Icon = service.icon ? (icons as any)[service.icon] : null
+          return {
+            Icon,
+            fallbackIcon: <Zap className="w-5 h-5" />,
+            title: service?.title || '',
+            description: service?.description || '',
+          }
+        })
         .filter((service) => service.title)
     : []
 
@@ -72,7 +77,13 @@ export default function Services({ data }: { data: any[] }) {
               <div className="absolute top-0 right-0 w-32 h-32 bg-gray-100 rounded-full blur-3xl -mr-16 -mt-16 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
               <div className="w-12 h-12 bg-navy-900 text-white rounded-2xl flex items-center justify-center mb-8 shrink-0 transition-transform duration-500 group-hover:scale-110 group-hover:bg-gray-800 shadow-lg shadow-navy-900/10">
-                {'Icon' in service ? <service.Icon className="w-5 h-5" /> : service.icon}
+                {service.Icon ? (
+                  <service.Icon className="w-5 h-5" />
+                ) : service.fallbackIcon ? (
+                  service.fallbackIcon
+                ) : (
+                  service.icon
+                )}
               </div>
 
               <h3 className="text-xl font-bold text-navy-900 mb-4 leading-tight group-hover:text-gray-800 transition-colors">

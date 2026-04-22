@@ -27,24 +27,15 @@ import { useState } from 'react'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { api, queryClient } from '~/utils/client'
 import { sileo } from 'sileo'
+import type Testimonial from '#models/testimonial'
 
 const { Text } = Typography
 
-interface Testimonial {
-  id: number
-  author: string
-  role: string
-  content: string
-  avatarUrl: string
-  rating: number
-  order: number
-}
-
-interface TestimonialsFormProps {
+export function TestimonialsForm({
+  testimonials: ssrTestimonials,
+}: {
   testimonials: Testimonial[]
-}
-
-export function TestimonialsForm({ testimonials: ssrTestimonials }: TestimonialsFormProps) {
+}) {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [editingTestimonial, setEditingTestimonial] = useState<Testimonial | null>(null)
   const [form] = Form.useForm()
@@ -206,7 +197,7 @@ export function TestimonialsForm({ testimonials: ssrTestimonials }: Testimonials
         open={isModalOpen}
         onOk={handleOk}
         onCancel={() => setIsModalOpen(false)}
-        destroyOnClose
+        destroyOnHidden
         centered
         width={420}
         footer={[
