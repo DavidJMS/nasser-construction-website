@@ -1,4 +1,5 @@
 import { Heart } from 'lucide-react'
+import { useEditor } from '../hooks/useEditor'
 
 const footerLinks = {
   company: [
@@ -22,25 +23,33 @@ const footerLinks = {
 }
 
 interface FooterProps {
-  settings?: Record<string, any>
+  footer?: Record<string, any> | null
 }
 
-export default function Footer({ settings }: FooterProps) {
-  const brandTitle = settings?.footer_brand_title || 'NASSER'
-  const brandSubtitle = settings?.footer_brand_subtitle || 'Doors & Windows'
+export default function Footer({ footer }: FooterProps) {
+  const { isEditing } = useEditor()
+
+  const brandTitle = footer?.brandTitle || 'NASSER'
+  const brandSubtitle = footer?.brandSubtitle || 'Doors & Windows'
   const description =
-    settings?.footer_description ||
+    footer?.description ||
     'Premium custom-made doors and windows with professional installation. Serving homeowners and builders with excellence since 2005.'
-  const copyright =
-    settings?.footer_copyright || '© 2026 Nasser Doors & Windows. All rights reserved.'
-  const crafted = settings?.footer_crafted || 'Crafted with {heart} in Orlando'
+  const copyright = footer?.copyright || '© 2026 Nasser Doors & Windows. All rights reserved.'
+  const crafted = footer?.crafted || 'Crafted with {heart} in Orlando'
 
   const socialLinks = [
-    { key: 'facebook', href: settings?.footer_social_facebook || '#' },
-    { key: 'x', href: settings?.footer_social_x || '#' },
-    { key: 'instagram', href: settings?.footer_social_instagram || '#' },
-    { key: 'linkedin', href: settings?.footer_social_linkedin || '#' },
+    { key: 'facebook', href: footer?.socialFacebook || '#' },
+    { key: 'x', href: footer?.socialX || '#' },
+    { key: 'instagram', href: footer?.socialInstagram || '#' },
+    { key: 'linkedin', href: footer?.socialLinkedin || '#' },
   ]
+
+  const handleLinkClick = (e: React.MouseEvent) => {
+    if (isEditing) {
+      e.preventDefault()
+      e.stopPropagation()
+    }
+  }
 
   return (
     <footer className="bg-navy-950 text-white pt-24 pb-12 overflow-hidden relative">
@@ -103,6 +112,7 @@ export default function Footer({ settings }: FooterProps) {
                 <a
                   key={idx}
                   href={social.href}
+                  onClick={(e) => handleLinkClick(e)}
                   className="w-11 h-11 bg-white/5 hover:bg-gray-800 text-white flex items-center justify-center rounded-2xl transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-gray-900/40"
                 >
                   {social.icon}
@@ -123,6 +133,7 @@ export default function Footer({ settings }: FooterProps) {
                     <li key={link.label}>
                       <a
                         href={link.href}
+                        onClick={(e) => handleLinkClick(e)}
                         className="text-gray-400 hover:text-gray-200 text-sm transition-colors flex items-center gap-2 group"
                       >
                         <span className="w-0 h-px bg-gray-400 transition-all group-hover:w-3" />
@@ -141,6 +152,7 @@ export default function Footer({ settings }: FooterProps) {
                     <li key={link.label}>
                       <a
                         href={link.href}
+                        onClick={(e) => handleLinkClick(e)}
                         className="text-gray-400 hover:text-gray-200 text-sm transition-colors flex items-center gap-2 group"
                       >
                         <span className="w-0 h-px bg-gray-400 transition-all group-hover:w-3" />
@@ -159,6 +171,7 @@ export default function Footer({ settings }: FooterProps) {
                     <li key={link.label}>
                       <a
                         href={link.href}
+                        onClick={(e) => handleLinkClick(e)}
                         className="text-gray-400 hover:text-gray-200 text-sm transition-colors flex items-center gap-2 group"
                       >
                         <span className="w-0 h-px bg-gray-400 transition-all group-hover:w-3" />
