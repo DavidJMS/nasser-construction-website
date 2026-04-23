@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query'
 import { Head, usePage } from '@inertiajs/react'
 import { api } from '~/utils/client'
 import { ArrowUpRight } from 'lucide-react'
-import PublicLayout from '~/components/PublicLayout'
+import PublicLayout from '~/layouts/public_layout'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Pagination } from 'swiper/modules'
 

@@ -38,14 +38,8 @@ export default class CtaController {
     })
   }
 
-  async update({ params, request, response }: HttpContext) {
-    let cta = await Cta.find(params.id)
-    if (!cta) {
-      cta = await Cta.query().first()
-    }
-    if (!cta) {
-      return response.notFound({ message: 'CTA not found', errors: [] })
-    }
+  async update({ request, response }: HttpContext) {
+    const cta = await Cta.firstOrCreate({}, {})
 
     const payload = await request.validateUsing(ctaValidator)
 
