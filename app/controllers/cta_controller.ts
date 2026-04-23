@@ -26,16 +26,16 @@ export default class CtaController {
     const payload = await request.validateUsing(ctaValidator)
 
     let imageUrl: string | null = null
-    if (payload.image_url) {
-      imageUrl = await uploadService.upload(payload.image_url, 'ctas')
+    if (payload.imageUrl) {
+      imageUrl = await uploadService.upload(payload.imageUrl, 'ctas')
     }
 
     const cta = await Cta.create({
       badge: payload.badge,
       title: payload.title,
       description: payload.description,
-      buttonText: payload.button_text,
-      buttonLink: payload.button_link,
+      buttonText: payload.buttonText,
+      buttonLink: payload.buttonLink,
       imageUrl,
       order: payload.order ?? 0,
     })
@@ -59,19 +59,19 @@ export default class CtaController {
     const payload = await request.validateUsing(ctaValidator)
 
     let imageUrl = cta.imageUrl
-    if (payload.image_url) {
+    if (payload.imageUrl) {
       if (cta.imageUrl) {
         await uploadService.delete(cta.imageUrl)
       }
-      imageUrl = await uploadService.upload(payload.image_url, 'ctas')
+      imageUrl = await uploadService.upload(payload.imageUrl, 'ctas')
     }
 
     cta.merge({
       badge: payload.badge,
       title: payload.title,
       description: payload.description,
-      buttonText: payload.button_text,
-      buttonLink: payload.button_link,
+      buttonText: payload.buttonText,
+      buttonLink: payload.buttonLink,
       imageUrl,
       order: payload.order ?? cta.order,
     })
