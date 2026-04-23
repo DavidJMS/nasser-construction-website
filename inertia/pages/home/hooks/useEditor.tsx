@@ -62,7 +62,21 @@ export function EditorProvider({ children }: { children: ReactNode }) {
 export function useEditor() {
   const context = useContext(EditorContext)
   if (context === undefined) {
-    throw new Error('useEditor must be used within an EditorProvider')
+    // Return a safe fallback for public pages that use components like Navbar and Footer
+    return {
+      isEditing: false,
+      setIsEditing: () => {
+        // If they try to edit from a public page, redirect them to the home editor
+        if (typeof window !== 'undefined') {
+          window.location.href = '/'
+        }
+      },
+      selectedSection: 'none' as EditorSection,
+      setSelectedSection: () => {},
+      saveAction: null,
+      isSaving: false,
+      registerSaveAction: () => {},
+    }
   }
   return context
 }

@@ -8,20 +8,7 @@ import { BaseModel, column } from '@adonisjs/lucid/orm'
 import { DateTime } from 'luxon'
 
 export class AboutUsSchema extends BaseModel {
-  static $columns = [
-    'buttonLink',
-    'buttonText',
-    'categoryTag',
-    'createdAt',
-    'description',
-    'id',
-    'image1',
-    'image2',
-    'titleHighlight',
-    'titleMain',
-    'titleSuffix',
-    'updatedAt',
-  ] as const
+  static $columns = ['buttonLink', 'buttonText', 'categoryTag', 'createdAt', 'description', 'id', 'image1', 'image2', 'titleHighlight', 'titleMain', 'titleSuffix', 'updatedAt'] as const
   $columns = AboutUsSchema.$columns
   @column()
   declare buttonLink: string | null
@@ -50,16 +37,7 @@ export class AboutUsSchema extends BaseModel {
 }
 
 export class AboutUsFeatureSchema extends BaseModel {
-  static $columns = [
-    'aboutUsId',
-    'createdAt',
-    'description',
-    'icon',
-    'id',
-    'order',
-    'title',
-    'updatedAt',
-  ] as const
+  static $columns = ['aboutUsId', 'createdAt', 'description', 'icon', 'id', 'order', 'title', 'updatedAt'] as const
   $columns = AboutUsFeatureSchema.$columns
   @column()
   declare aboutUsId: number | null
@@ -79,23 +57,33 @@ export class AboutUsFeatureSchema extends BaseModel {
   declare updatedAt: DateTime | null
 }
 
+export class CtaSchema extends BaseModel {
+  static $columns = ['badge', 'buttonLink', 'buttonText', 'createdAt', 'description', 'id', 'imageUrl', 'order', 'title', 'updatedAt'] as const
+  $columns = CtaSchema.$columns
+  @column()
+  declare badge: string | null
+  @column()
+  declare buttonLink: string | null
+  @column()
+  declare buttonText: string | null
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime | null
+  @column()
+  declare description: string | null
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare imageUrl: string | null
+  @column()
+  declare order: number | null
+  @column()
+  declare title: string | null
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+}
+
 export class HeroSchema extends BaseModel {
-  static $columns = [
-    'badge',
-    'createdAt',
-    'description',
-    'id',
-    'image1',
-    'image2',
-    'image3',
-    'primaryButtonLink',
-    'primaryButtonText',
-    'secondaryButtonLink',
-    'secondaryButtonText',
-    'statsText',
-    'title',
-    'updatedAt',
-  ] as const
+  static $columns = ['badge', 'createdAt', 'description', 'id', 'image1', 'image2', 'image3', 'primaryButtonLink', 'primaryButtonText', 'secondaryButtonLink', 'secondaryButtonText', 'statsText', 'title', 'updatedAt'] as const
   $columns = HeroSchema.$columns
   @column()
   declare badge: string | null
@@ -145,17 +133,7 @@ export class ProjectImageSchema extends BaseModel {
 }
 
 export class ProjectSchema extends BaseModel {
-  static $columns = [
-    'category',
-    'createdAt',
-    'description',
-    'id',
-    'imageUrl',
-    'link',
-    'order',
-    'title',
-    'updatedAt',
-  ] as const
+  static $columns = ['category', 'createdAt', 'description', 'id', 'imageUrl', 'order', 'title', 'updatedAt'] as const
   $columns = ProjectSchema.$columns
   @column()
   declare category: string | null
@@ -168,8 +146,6 @@ export class ProjectSchema extends BaseModel {
   @column()
   declare imageUrl: string | null
   @column()
-  declare link: string | null
-  @column()
   declare order: number | null
   @column()
   declare title: string
@@ -178,16 +154,7 @@ export class ProjectSchema extends BaseModel {
 }
 
 export class ServiceSchema extends BaseModel {
-  static $columns = [
-    'createdAt',
-    'description',
-    'icon',
-    'id',
-    'imageUrl',
-    'order',
-    'title',
-    'updatedAt',
-  ] as const
+  static $columns = ['createdAt', 'description', 'icon', 'id', 'imageUrl', 'order', 'title', 'updatedAt'] as const
   $columns = ServiceSchema.$columns
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime | null
@@ -225,17 +192,7 @@ export class SiteSettingSchema extends BaseModel {
 }
 
 export class TestimonialSchema extends BaseModel {
-  static $columns = [
-    'author',
-    'avatarUrl',
-    'content',
-    'createdAt',
-    'id',
-    'order',
-    'rating',
-    'role',
-    'updatedAt',
-  ] as const
+  static $columns = ['author', 'avatarUrl', 'content', 'createdAt', 'id', 'order', 'rating', 'role', 'updatedAt'] as const
   $columns = TestimonialSchema.$columns
   @column()
   declare author: string
@@ -258,15 +215,7 @@ export class TestimonialSchema extends BaseModel {
 }
 
 export class UserSchema extends BaseModel {
-  static $columns = [
-    'avatarUrl',
-    'createdAt',
-    'email',
-    'fullName',
-    'id',
-    'password',
-    'updatedAt',
-  ] as const
+  static $columns = ['avatarUrl', 'createdAt', 'email', 'fullName', 'id', 'password', 'updatedAt'] as const
   $columns = UserSchema.$columns
   @column()
   declare avatarUrl: string | null

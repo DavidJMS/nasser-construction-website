@@ -74,4 +74,26 @@ export default class HomeController {
       settings,
     })
   }
+
+  async project({ inertia, response }: HttpContext) {
+    try {
+      const settingsRows = await SiteSetting.query()
+        .where('key', 'like', 'footer_%')
+        .orWhere('key', 'like', 'cta_%')
+        .orWhere('key', 'like', 'site_%')
+        .orWhere('key', 'like', 'contact_%')
+
+      const settings = settingsRows.reduce(
+        (acc, row) => {
+          acc[row.key] = row.value
+          return acc
+        },
+        {} as Record<string, any>
+      )
+
+      return inertia.render('projects/show', { settings })
+    } catch {
+      return response.notFound()
+    }
+  }
 }

@@ -11,23 +11,15 @@ import {
   Avatar,
   Tabs,
   InputNumber,
+  Upload,
 } from 'antd'
-import {
-  Edit3,
-  Trash2,
-  Plus,
-  Save,
-  User,
-  Briefcase,
-  Link as LinkIcon,
-  Hash,
-  Quote,
-} from 'lucide-react'
+import { Edit3, Trash2, Save, User, Briefcase, Hash, Quote, Image as ImageIcon } from 'lucide-react'
 import { useState } from 'react'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { api, queryClient } from '~/utils/client'
 import { sileo } from 'sileo'
 import type Testimonial from '#models/testimonial'
+import { toUploadFileList } from '~/utils/upload'
 
 const { Text } = Typography
 
@@ -61,8 +53,7 @@ export function TestimonialsForm({
         queryClient.invalidateQueries(api.testimonials.index.queryOptions())
         setIsModalOpen(false)
       },
-      onError: (err: any) =>
-        sileo.error({ title: err?.message || 'Error updating testimonial' }),
+      onError: (err: any) => sileo.error({ title: err?.message || 'Error updating testimonial' }),
     })
   )
 
@@ -79,10 +70,9 @@ export function TestimonialsForm({
   const showModal = (testimonial?: Testimonial) => {
     if (testimonial) {
       setEditingTestimonial(testimonial)
-      // Map avatarUrl to avatar_url for the form if validator expects snake_case
       form.setFieldsValue({
         ...testimonial,
-        avatar_url: testimonial.avatarUrl,
+        avatar_url: toUploadFileList(testimonial.avatarUrl),
       })
     } else {
       setEditingTestimonial(null)
@@ -93,20 +83,116 @@ export function TestimonialsForm({
 
   const handleOk = () => {
     form.validateFields().then((values) => {
+      const body: any = { ...values }
+
+      if (values.avatar_url?.[0]?.originFileObj) {
+        body.avatar_url = values.avatar_url[0].originFileObj
+      } else {
+        delete body.avatar_url
+      }
+
       if (editingTestimonial) {
         updateMutation.mutate({
           params: { id: editingTestimonial.id },
-          body: values,
+          body,
         })
       } else {
-        storeMutation.mutate({ body: values })
+        storeMutation.mutate({ body })
       }
     })
   }
 
+  const fileList = Form.useWatch('avatar_url', form) || []
+
   const handleDelete = (id: number) => {
     deleteMutation.mutate({ params: { id } })
   }
+
+  const modalItems = [
+    {
+      key: 'info',
+      label: (
+        <Space>
+          <Edit3 size={12} />
+          <span className="text-[10px] font-bold uppercase tracking-wider">Information</span>
+        </Space>
+      ),
+      children: (
+        <div className="pt-4 space-y-4">
+          <Form.Item
+            name="author"
+            label="Author"
+            rules={[{ required: true, message: 'Author is required' }]}
+          >
+            <Input
+              prefix={<User size={14} className="text-gray-400" />}
+              placeholder="Ex: John Doe"
+            />
+          </Form.Item>
+          <Form.Item name="role" label="Role / Company">
+            <Input
+              prefix={<Briefcase size={14} className="text-gray-400" />}
+              placeholder="Ex: Client"
+            />
+          </Form.Item>
+          <Form.Item
+            name="content"
+            label="Testimonial"
+            rules={[{ required: true, message: 'Content is required' }]}
+          >
+            <Input.TextArea rows={4} placeholder="Write the testimonial here..." />
+          </Form.Item>
+        </div>
+      ),
+    },
+    {
+      key: 'media',
+      label: (
+        <Space>
+          <ImageIcon size={12} />
+          <span className="text-[10px] font-bold uppercase tracking-wider">Media</span>
+        </Space>
+      ),
+      children: (
+        <div>
+          <Form.Item
+            name="avatar_url"
+            valuePropName="fileList"
+            getValueFromEvent={(e: any) => (Array.isArray(e) ? e : e?.fileList)}
+          >
+            <Upload
+              listType="picture-card"
+              maxCount={1}
+              beforeUpload={() => false}
+              className="editor-upload-small"
+            >
+              {fileList.length < 1 && (
+                <div className="flex flex-col items-center justify-center">
+                  <User className="text-gray-400" size={34} />
+                  <Text type="secondary" className="mt-2">
+                    Profile Image
+                  </Text>
+                </div>
+              )}
+            </Upload>
+          </Form.Item>
+          <div className="grid grid-cols-2 gap-4 mt-4">
+            <Form.Item name="rating" label="Rating" initialValue={5}>
+              <Rate className="text-sm" />
+            </Form.Item>
+            <Form.Item name="order" label="Priority">
+              <InputNumber
+                prefix={<Hash size={14} className="text-gray-400" />}
+                min={0}
+                style={{ width: '100%' }}
+                placeholder="0"
+              />
+            </Form.Item>
+          </div>
+        </div>
+      ),
+    },
+  ]
 
   const items = [
     {
@@ -120,17 +206,11 @@ export function TestimonialsForm({
       children: (
         <div className="pt-4">
           <div className="flex justify-between items-center mb-6">
-            <Text strong className="text-[10px] uppercase text-gray-400 tracking-widest">
+            <Text type="secondary" className="uppercase">
               Client Reviews
             </Text>
-            <Button
-              type="primary"
-              size="small"
-              icon={<Plus size={14} />}
-              onClick={() => showModal()}
-              className="bg-navy-900 rounded-full text-[10px] font-bold px-4 flex items-center gap-1 h-7"
-            >
-              NUEVO
+            <Button type="primary" size="small" onClick={() => showModal()}>
+              Add
             </Button>
           </div>
 
@@ -139,7 +219,6 @@ export function TestimonialsForm({
             rowKey="id"
             renderItem={(testimonial) => (
               <List.Item
-                className="px-4 py-3 bg-gray-50/50 border border-gray-100 rounded-2xl mb-3 hover:bg-white hover:border-gray-200 transition-all group"
                 actions={[
                   <Button
                     size="small"
@@ -186,14 +265,6 @@ export function TestimonialsForm({
       <Tabs defaultActiveKey="list" type="card" size="small" centered items={items} />
 
       <Modal
-        title={
-          <Space className="pt-2">
-            <Edit3 size={16} className="text-navy-900" />
-            <span className="text-sm font-bold uppercase tracking-wider">
-              {editingTestimonial ? 'Edit Testimonial' : 'New Testimonial'}
-            </span>
-          </Space>
-        }
         open={isModalOpen}
         onOk={handleOk}
         onCancel={() => setIsModalOpen(false)}
@@ -215,51 +286,8 @@ export function TestimonialsForm({
           </Button>,
         ]}
       >
-        <Form form={form} layout="vertical" className="mt-6">
-          <div className="grid grid-cols-2 gap-4">
-            <Form.Item
-              name="author"
-              label="Author"
-              rules={[{ required: true, message: 'Author is required' }]}
-            >
-              <Input
-                prefix={<User size={14} className="text-gray-400" />}
-                placeholder="Ex: John Doe"
-              />
-            </Form.Item>
-            <Form.Item name="role" label="Role / Company">
-              <Input
-                prefix={<Briefcase size={14} className="text-gray-400" />}
-                placeholder="Ex: Client"
-              />
-            </Form.Item>
-          </div>
-          <Form.Item
-            name="content"
-            label="Testimonial"
-            rules={[{ required: true, message: 'Content is required' }]}
-          >
-            <Input.TextArea rows={4} placeholder="Write the testimonial here..." />
-          </Form.Item>
-          <div className="grid grid-cols-2 gap-4">
-            <Form.Item name="rating" label="Rating" initialValue={5}>
-              <Rate className="text-sm" />
-            </Form.Item>
-            <Form.Item name="order" label="Priority">
-              <InputNumber
-                prefix={<Hash size={14} className="text-gray-400" />}
-                min={0}
-                className="w-full"
-                placeholder="0"
-              />
-            </Form.Item>
-          </div>
-          <Form.Item name="avatar_url" label="Profile Image URL">
-            <Input
-              prefix={<LinkIcon size={14} className="text-gray-400" />}
-              placeholder="https://..."
-            />
-          </Form.Item>
+        <Form form={form} layout="vertical" className="mt-2">
+          <Tabs defaultActiveKey="info" size="small" items={modalItems} />
         </Form>
       </Modal>
     </div>

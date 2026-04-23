@@ -54,7 +54,7 @@ export default function Testimonials({ data }: { data: any[] }) {
           text: testimonial?.content || '',
           author: testimonial?.author || '',
           role: testimonial?.role || '',
-          avatar_url: testimonial?.avatar_url || '',
+          avatar_url: testimonial?.avatarUrl || testimonial?.avatar_url || '',
         }))
         .filter((review) => review.text && review.author)
     : []
@@ -152,11 +152,12 @@ export default function Testimonials({ data }: { data: any[] }) {
                       <img
                         src={review.avatar_url || `https://i.pravatar.cc/150?u=${review.author}`}
                         alt={review.author}
+                        className="w-full h-full object-cover"
                       />
                     </div>
                     <div>
                       <div className="text-[15px] font-bold text-navy-900">{review.author}</div>
-                      <div className="text-[11px] font-medium text-gray-400 uppercase tracking-widest">
+                      <div className="text-[11px] mt-1 font-medium text-gray-400 uppercase tracking-widest">
                         {review.role}
                       </div>
                     </div>
@@ -194,6 +195,7 @@ export default function Testimonials({ data }: { data: any[] }) {
                       <img
                         src={review.avatar_url || `https://i.pravatar.cc/150?u=${review.author}`}
                         alt={review.author}
+                        className="w-full h-full object-cover"
                       />
                     </div>
                     <div>

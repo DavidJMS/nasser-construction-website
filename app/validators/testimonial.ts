@@ -7,6 +7,9 @@ export const testimonialValidator = vine.create(
     content: vine.string().trim().minLength(10),
     rating: vine.number().min(1).max(5).optional(),
     order: vine.number().optional(),
-    avatar_url: vine.string().trim().nullable().optional(),
+    avatar_url: vine
+      .file({ size: '5mb', extnames: ['jpg', 'png', 'jpeg', 'webp'] })
+      .optional()
+      .nullable(),
   })
 )

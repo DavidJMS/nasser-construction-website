@@ -6,21 +6,19 @@ import {
   Modal,
   Form,
   Input,
-  InputNumber,
   Popconfirm,
   Tabs,
   Upload,
   Avatar,
+  Select,
 } from 'antd'
 import {
   Edit3,
   Trash2,
   Save,
   Type,
-  Hash,
   Folders,
   Tag as TagIcon,
-  Link as LinkIcon,
   Image as ImageIcon,
 } from 'lucide-react'
 import { useMutation, useQuery } from '@tanstack/react-query'
@@ -98,7 +96,6 @@ export function ProjectsForm({ projects: ssrProjects }: { projects: Project[] })
         title: values.title,
         category: values.category,
         description: values.description || '',
-        link: values.link || '',
         order: Number(values.order || 0),
         imageUrl: values.imageUrl?.[0]?.originFileObj,
       }
@@ -152,27 +149,17 @@ export function ProjectsForm({ projects: ssrProjects }: { projects: Project[] })
             label="Category"
             rules={[{ required: true, message: 'Category is required' }]}
           >
-            <Input
-              prefix={<TagIcon size={14} className="text-gray-400" />}
-              placeholder="Ex: Residential"
+            <Select
+              placeholder="Select category"
+              options={[
+                { value: 'Doors', label: 'Doors' },
+                { value: 'Windows', label: 'Windows' },
+              ]}
             />
           </Form.Item>
           <Form.Item name="description" label="Description">
             <Input.TextArea rows={4} placeholder="Description..." />
           </Form.Item>
-          <div className="grid grid-cols-3 gap-4">
-            <Form.Item className="col-span-2" name="link" label="Link">
-              <Input prefix={<LinkIcon size={14} className="text-gray-400" />} placeholder="URL" />
-            </Form.Item>
-            <Form.Item name="order" label="Priority">
-              <InputNumber
-                prefix={<Hash size={14} className="text-gray-400" />}
-                min={0}
-                placeholder="0"
-                style={{ width: '100%' }}
-              />
-            </Form.Item>
-          </div>
         </div>
       ),
     },
@@ -248,7 +235,6 @@ export function ProjectsForm({ projects: ssrProjects }: { projects: Project[] })
             rowKey="id"
             renderItem={(project) => (
               <List.Item
-                className="px-4 py-3 bg-gray-50/50 border border-gray-100 rounded-2xl mb-3 hover:bg-white hover:border-gray-200 transition-all group"
                 actions={[
                   <Button
                     size="small"

@@ -35,6 +35,7 @@ export default function Home({
   const { data: servicesData } = useQuery(api.services.index.queryOptions())
   const { data: testimonialsData } = useQuery(api.testimonials.index.queryOptions())
   const { data: settingsData } = useQuery(api.settings.index.queryOptions())
+  const { data: ctasData } = useQuery(api.cta.index.queryOptions())
 
   return (
     <EditorProvider>
@@ -48,6 +49,7 @@ export default function Home({
           projects={projectsData?.data ?? projects}
           testimonials={testimonialsData?.data ?? testimonials}
           settings={settingsData?.data ?? settings}
+          ctas={ctasData?.data ?? []}
         />
 
         <Navbar />

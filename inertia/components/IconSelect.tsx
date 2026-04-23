@@ -8,11 +8,7 @@ interface IconSelectProps {
   placeholder?: string
 }
 
-export function IconSelect({
-  value,
-  onChange,
-  placeholder = 'Select icon',
-}: IconSelectProps) {
+export function IconSelect({ value, onChange, placeholder = 'Select icon' }: IconSelectProps) {
   const options = useMemo(() => {
     return Object.keys(icons).map((name) => {
       const Icon = (icons as any)[name]

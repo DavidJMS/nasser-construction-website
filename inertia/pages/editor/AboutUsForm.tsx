@@ -65,8 +65,7 @@ export function AboutUsForm({ aboutUs: ssrAboutUs }: { aboutUs: AboutUs }) {
         queryClient.invalidateQueries(api.aboutUs.show.queryOptions())
         setIsModalOpen(false)
       },
-      onError: (err: any) =>
-        sileo.error({ title: err?.message || 'Error adding feature' }),
+      onError: (err: any) => sileo.error({ title: err?.message || 'Error adding feature' }),
     })
   )
 
@@ -77,8 +76,7 @@ export function AboutUsForm({ aboutUs: ssrAboutUs }: { aboutUs: AboutUs }) {
         queryClient.invalidateQueries(api.aboutUs.show.queryOptions())
         setIsModalOpen(false)
       },
-      onError: (err: any) =>
-        sileo.error({ title: err?.message || 'Error updating feature' }),
+      onError: (err: any) => sileo.error({ title: err?.message || 'Error updating feature' }),
     })
   )
 
@@ -88,8 +86,7 @@ export function AboutUsForm({ aboutUs: ssrAboutUs }: { aboutUs: AboutUs }) {
         sileo.success({ title: 'Feature deleted' })
         queryClient.invalidateQueries(api.aboutUs.show.queryOptions())
       },
-      onError: (err: any) =>
-        sileo.error({ title: err?.message || 'Error deleting feature' }),
+      onError: (err: any) => sileo.error({ title: err?.message || 'Error deleting feature' }),
     })
   )
 

@@ -13,6 +13,7 @@ import router from '@adonisjs/core/services/router'
 
 router.get('/', [controllers.Home, 'index'])
 router.get('/about', [controllers.Home, 'about'])
+router.get('/project/:id', [controllers.Home, 'project'])
 
 router
   .group(() => {
@@ -41,6 +42,9 @@ router
 
     router.resource('projects', controllers.Projects)
     router.resource('testimonials', controllers.Testimonials)
+
+    // CTA
+    router.resource('cta', controllers.Cta)
 
     router.post('settings/update-all', [controllers.Settings, 'update'])
 

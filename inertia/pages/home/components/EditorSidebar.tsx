@@ -17,6 +17,7 @@ interface EditorSidebarProps {
   projects?: any
   testimonials?: any
   settings?: Record<string, any>
+  ctas?: any[]
 }
 
 export function EditorSidebar({
@@ -26,6 +27,7 @@ export function EditorSidebar({
   projects,
   testimonials,
   settings,
+  ctas,
 }: EditorSidebarProps) {
   const { isEditing, setIsEditing, selectedSection, setSelectedSection, saveAction, isSaving } =
     useEditor()
@@ -45,7 +47,7 @@ export function EditorSidebar({
       case 'testimonials':
         return <TestimonialsForm testimonials={testimonials} />
       case 'cta':
-        return <CTAForm settings={settings} />
+        return <CTAForm cta={ctas?.[0] as any} />
       case 'footer':
         return <FooterForm settings={settings} />
       case 'none':
@@ -104,9 +106,7 @@ export function EditorSidebar({
                   Editor Nasser
                 </h3>
                 <p className="text-gray-500 text-xs">
-                  {selectedSection !== 'none'
-                    ? `Editando: ${selectedSection}`
-                    : 'Admin Panel'}
+                  {selectedSection !== 'none' ? `Editando: ${selectedSection}` : 'Admin Panel'}
                 </p>
               </div>
             </div>
