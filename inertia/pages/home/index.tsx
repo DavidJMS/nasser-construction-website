@@ -1,5 +1,4 @@
 import { AnimatePresence } from 'framer-motion'
-import { HomeProps } from './types'
 import { useHomeLoading } from './hooks/useHomeLoading'
 import { EditorProvider } from './hooks/useEditor'
 import { EditorSidebar } from './components/EditorSidebar'
@@ -25,8 +24,10 @@ export default function Home({
   projects,
   testimonials,
   aboutUs,
-  settings,
-}: HomeProps) {
+  footer,
+  cta,
+  whyChoose,
+}: any) {
   const { loading } = useHomeLoading()
 
   const { data: heroData } = useQuery(api.heros.show.queryOptions())
@@ -34,8 +35,9 @@ export default function Home({
   const { data: projectsData } = useQuery(api.projects.index.queryOptions())
   const { data: servicesData } = useQuery(api.services.index.queryOptions())
   const { data: testimonialsData } = useQuery(api.testimonials.index.queryOptions())
-  const { data: settingsData } = useQuery(api.settings.index.queryOptions())
-  const { data: ctasData } = useQuery(api.cta.index.queryOptions())
+  const { data: ctasData } = useQuery(api.cta.show.queryOptions())
+  const { data: footerData } = useQuery(api.footers.show.queryOptions())
+  const { data: whyChooseData } = useQuery(api.whyChooses.index.queryOptions())
 
   return (
     <EditorProvider>
@@ -48,8 +50,9 @@ export default function Home({
           services={servicesData?.data ?? services}
           projects={projectsData?.data ?? projects}
           testimonials={testimonialsData?.data ?? testimonials}
-          settings={settingsData?.data ?? settings}
-          ctas={ctasData?.data ?? []}
+          cta={ctasData?.data ?? cta}
+          footerData={footerData?.data ?? footer}
+          whyChooseData={whyChooseData?.data ?? whyChoose}
         />
 
         <Navbar />
@@ -66,8 +69,9 @@ export default function Home({
           <Services data={servicesData?.data ?? services} />
         </EditableSection>
 
-        <WhyChooseUs />
-
+        <EditableSection section="why_choose_us" title="Why Choose Us">
+          <WhyChooseUs features={whyChooseData?.data ?? whyChoose} />
+        </EditableSection>
         <EditableSection section="projects" title="Recent Projects">
           <Products data={projectsData?.data ?? projects} />
         </EditableSection>
@@ -77,10 +81,10 @@ export default function Home({
         </EditableSection>
 
         <EditableSection section="cta" title="Contact">
-          <CTASection settings={settingsData?.data ?? settings} />
+          <CTASection cta={ctasData?.data ?? []} />
         </EditableSection>
         <EditableSection section="footer" title="Footer">
-          <Footer settings={settingsData?.data ?? settings} />
+          <Footer footer={footerData?.data ?? footer} />
         </EditableSection>
       </div>
     </EditorProvider>

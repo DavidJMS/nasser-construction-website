@@ -4,15 +4,6 @@ import type { HttpContext } from '@adonisjs/core/http'
 import uploadService from '#services/upload_service'
 
 export default class CtaController {
-  async index({ response }: HttpContext) {
-    const ctas = await Cta.query().orderBy('order', 'asc')
-    return response.ok({
-      message: 'CTA list retrieved',
-      errors: [],
-      data: ctas,
-    })
-  }
-
   async show({ response }: HttpContext) {
     const cta = await Cta.query().first()
     return response.ok({

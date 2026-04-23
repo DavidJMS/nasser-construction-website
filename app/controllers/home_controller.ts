@@ -3,8 +3,10 @@ import Project from '#models/project'
 import Service from '#models/service'
 import Testimonial from '#models/testimonial'
 import AboutUs from '#models/about_us'
-import SiteSetting from '#models/site_setting'
+import Footer from '#models/footer'
+import Cta from '#models/cta'
 import type { HttpContext } from '@adonisjs/core/http'
+import WhyChoose from '#models/why_choose'
 
 export default class HomeController {
   async index({ inertia }: HttpContext) {
@@ -29,19 +31,9 @@ export default class HomeController {
     const projects = await Project.query().preload('images').orderBy('order', 'asc')
     const testimonials = await Testimonial.query().orderBy('order', 'asc')
     const aboutUs = await AboutUs.query().first()
-    const settingsRows = await SiteSetting.query()
-      .where('key', 'like', 'footer_%')
-      .orWhere('key', 'like', 'cta_%')
-      .orWhere('key', 'like', 'site_%')
-      .orWhere('key', 'like', 'contact_%')
-
-    const settings = settingsRows.reduce(
-      (acc, row) => {
-        acc[row.key] = row.value
-        return acc
-      },
-      {} as Record<string, any>
-    )
+    const footer = await Footer.query().first()
+    const cta = await Cta.query().first()
+    const whyChoose = await WhyChoose.query().orderBy('order', 'asc')
 
     return inertia.render('home/index', {
       hero: hero?.serialize() || {},
@@ -49,49 +41,33 @@ export default class HomeController {
       projects: projects.map((project) => project.serialize()),
       testimonials: testimonials.map((testimonial) => testimonial.serialize()),
       aboutUs: aboutUs?.serialize() || {},
-      settings,
+      footer: footer?.serialize() || null,
+      cta: cta?.serialize() || {},
+      whyChoose: whyChoose.map((f) => f.serialize()),
     })
   }
 
   async about({ inertia }: HttpContext) {
     const aboutUs = await AboutUs.query().first()
-    const settingsRows = await SiteSetting.query()
-      .where('key', 'like', 'footer_%')
-      .orWhere('key', 'like', 'cta_%')
-      .orWhere('key', 'like', 'site_%')
-      .orWhere('key', 'like', 'contact_%')
-
-    const settings = settingsRows.reduce(
-      (acc, row) => {
-        acc[row.key] = row.value
-        return acc
-      },
-      {} as Record<string, any>
-    )
+    const footer = await Footer.query().first()
+    const ctas = await Cta.query().orderBy('order', 'asc')
 
     return inertia.render('about/index', {
       aboutUs,
-      settings,
+      footer: footer?.serialize() || null,
+      ctas: ctas.map((cta) => cta.serialize()),
     })
   }
 
   async project({ inertia, response }: HttpContext) {
     try {
-      const settingsRows = await SiteSetting.query()
-        .where('key', 'like', 'footer_%')
-        .orWhere('key', 'like', 'cta_%')
-        .orWhere('key', 'like', 'site_%')
-        .orWhere('key', 'like', 'contact_%')
+      const footer = await Footer.query().first()
+      const ctas = await Cta.query().orderBy('order', 'asc')
 
-      const settings = settingsRows.reduce(
-        (acc, row) => {
-          acc[row.key] = row.value
-          return acc
-        },
-        {} as Record<string, any>
-      )
-
-      return inertia.render('projects/show', { settings })
+      return inertia.render('projects/show', {
+        footer: footer?.serialize() || null,
+        ctas: ctas.map((cta) => cta.serialize()),
+      })
     } catch {
       return response.notFound()
     }
