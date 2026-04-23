@@ -46,6 +46,13 @@ router
     // CTA
     router.resource('cta', controllers.Cta)
 
+    // Footer
+    router.patch('footer', [controllers.Footers, 'update'])
+    router.get('footer', [controllers.Footers, 'show'])
+
+    // Why Choose Us
+    router.resource('why_chooses', controllers.WhyChooses)
+
     router.post('settings/update-all', [controllers.Settings, 'update'])
 
     router.get('settings', [controllers.Settings, 'index'])
