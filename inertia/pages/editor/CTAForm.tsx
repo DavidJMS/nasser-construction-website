@@ -18,7 +18,7 @@ export function CTAForm({ cta }: { cta?: Cta | null }) {
 
   const handleSuccess = (result: any, defaultMessage: string) => {
     sileo.success({ title: result?.message || defaultMessage })
-    queryClient.invalidateQueries(api.cta.index.queryOptions())
+    queryClient.invalidateQueries(api.cta.show.queryOptions())
     const data = result?.data
     if (data) {
       form.setFieldsValue({
@@ -32,21 +32,12 @@ export function CTAForm({ cta }: { cta?: Cta | null }) {
     sileo.error({ title: error?.message || defaultMessage })
   }
 
-  const { mutate: updateCta, isPending: isUpdating } = useMutation(
+  const { mutate: updateCta, isPending } = useMutation(
     api.cta.update.mutationOptions({
       onSuccess: (result) => handleSuccess(result, 'CTA updated successfully'),
       onError: (error) => handleError(error, 'Error updating CTA'),
     })
   )
-
-  const { mutate: storeCta, isPending: isStoring } = useMutation(
-    api.cta.store.mutationOptions({
-      onSuccess: (result) => handleSuccess(result, 'CTA created successfully'),
-      onError: (error) => handleError(error, 'Error creating CTA'),
-    })
-  )
-
-  const isPending = isUpdating || isStoring
 
   useEffect(() => {
     registerSaveAction(() => form.submit(), isPending)
@@ -69,14 +60,7 @@ export function CTAForm({ cta }: { cta?: Cta | null }) {
       order: values.order ?? 0,
     }
 
-    if (cta?.id) {
-      updateCta({
-        params: { id: cta.id },
-        body,
-      })
-    } else {
-      storeCta({ body })
-    }
+    updateCta({ body })
   }
 
   const items = [

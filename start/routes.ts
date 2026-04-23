@@ -44,7 +44,8 @@ router
     router.resource('testimonials', controllers.Testimonials)
 
     // CTA
-    router.resource('cta', controllers.Cta)
+    router.patch('cta', [controllers.Cta, 'update'])
+    router.get('cta', [controllers.Cta, 'show'])
 
     // Footer
     router.patch('footer', [controllers.Footers, 'update'])

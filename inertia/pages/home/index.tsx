@@ -81,7 +81,7 @@ export default function Home({
         </EditableSection>
 
         <EditableSection section="cta" title="Contact">
-          <CTASection cta={ctasData?.data ?? []} />
+          <CTASection cta={ctasData?.data ?? cta} />
         </EditableSection>
         <EditableSection section="footer" title="Footer">
           <Footer footer={footerData?.data ?? footer} />
