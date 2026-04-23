@@ -11,8 +11,9 @@ tmp
 public/assets
 public/uploads
 
-# Secrets
-.env
+# Secrets — exclude production/local overrides but allow .env for build-time
+# Tuyau registry generation (COPY .env in the build stage only).
+# .env itself is NOT copied into the production image stage.
 .env.local
 .env.production.local
 .env.development.local

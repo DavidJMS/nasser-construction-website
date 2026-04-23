@@ -5,7 +5,7 @@ FROM oven/bun:1.2-debian AS bun-stage
 
 # Pinned to Node 24 to match the engines field in package.json.
 # For stricter reproducibility, pin to patch + digest, e.g.
-# `node:24.5.0-bookworm-slim@sha256:<digest>`.
+# `node:24-bookworm-slim@sha256:<digest>`.
 FROM node:24-bookworm-slim AS base
 COPY --from=bun-stage /usr/local/bin/bun /usr/local/bin/bun
 
@@ -25,37 +25,16 @@ FROM deps AS build
 WORKDIR /app
 COPY . .
 
-# Dummy env vars so AdonisJS can boot during Tuyau registry generation.
-# They never reach the production stage.
-ENV NODE_ENV=development \
-    PORT=3333 \
-    HOST=localhost \
-    LOG_LEVEL=error \
-    APP_KEY=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa \
-    APP_URL=http://localhost:3333 \
-    SESSION_DRIVER=cookie \
-    DB_HOST=localhost \
-    DB_PORT=5432 \
-    DB_USER=root \
-    DB_PASSWORD=root \
-    DB_DATABASE=app
+# Copy .env so AdonisJS can boot during Tuyau registry generation.
+# This file is only used in the build stage and never reaches the production image.
+COPY .env .env
 
-# Create minimal placeholder registry stubs so the first build does not fail
-# on the missing file. They are replaced by node ace tuyau:registry below.
-RUN sh docker/create_registry_placeholder.sh
+# Generate the Tuyau registry by briefly starting the dev server.
+# The server is killed as soon as the registry file is generated.
+RUN node ace serve & PID=$!; \
+    while [ ! -f .adonisjs/client/registry/index.ts ]; do sleep 1; done; \
+    kill $PID
 
-# First build: generates AdonisJS indexes (.adonisjs/server/*).
-# The frontend bundle uses the placeholder registry here — intentional.
-RUN node ace build
-
-# With indexes in place the app can boot; generate the real Tuyau registry.
-RUN node ace tuyau:registry
-
-# Clean artifacts from the first build so the second build starts fresh and
-# cannot leak bundles produced with the placeholder registry.
-RUN rm -rf build public/assets
-
-# Second build: recompile the frontend with the real registry.
 RUN node ace build
 
 # ----------------------------
@@ -77,7 +56,8 @@ RUN chmod +x docker-entrypoint.sh
 
 # Ensure the uploads directory exists with node ownership before the volume is
 # mounted; otherwise Docker creates it as root and the app cannot write to it.
-RUN mkdir -p public/uploads && chown -R node:node public
+# NOTE: Drive is configured to use storage/uploads (see config/drive.ts).
+RUN mkdir -p storage/uploads && chown -R node:node storage
 
 USER node
 
@@ -88,4 +68,5 @@ HEALTHCHECK --interval=30s --timeout=5s --start-period=30s --retries=3 \
     CMD node -e "fetch('http://localhost:3333/').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"
 
 # exec form: node becomes PID 1 and receives signals correctly.
+# The entrypoint script runs: migration → seed → server.
 ENTRYPOINT ["./docker-entrypoint.sh"]
