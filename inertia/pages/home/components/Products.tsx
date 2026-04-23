@@ -5,6 +5,7 @@ import { ArrowUpRight, Layout, LayoutGrid, ChevronLeft, ChevronRight } from 'luc
 import { Link } from '@inertiajs/react'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Navigation, Pagination } from 'swiper/modules'
+import { useEditor } from '../hooks/useEditor'
 
 import 'swiper/css'
 import 'swiper/css/navigation'
@@ -29,43 +30,54 @@ const windowProjects: Product[] = [
 ]
 
 const ProjectCard: FC<{ project: Product; index: number }> = ({ project, index }) => {
+  const { isEditing } = useEditor()
+
+  const handleClick = (e: React.MouseEvent) => {
+    if (isEditing) {
+      e.preventDefault()
+      e.stopPropagation()
+    }
+  }
+
   return (
-    <Link href={`/project/${project.id}`}>
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.5, delay: index * 0.1 }}
-        className="group relative aspect-4/5 bg-gray-100 rounded-3xl overflow-hidden cursor-pointer shadow-sm hover:shadow-2xl transition-all duration-500"
-      >
-        <img
-          src={project.image}
-          alt={project.title}
-          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000"
-        />
+    <div onClick={handleClick}>
+      <Link href={`/project/${project.id}`}>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: index * 0.1 }}
+          className="group relative aspect-4/5 bg-gray-100 rounded-3xl overflow-hidden cursor-pointer shadow-sm hover:shadow-2xl transition-all duration-500"
+        >
+          <img
+            src={project.image}
+            alt={project.title}
+            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000"
+          />
 
-        <div className="absolute inset-0 bg-linear-to-t from-navy-900/80 via-navy-900/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-500" />
+          <div className="absolute inset-0 bg-linear-to-t from-navy-900/80 via-navy-900/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-500" />
 
-        <div className="absolute top-6 right-6 translate-x-4 -translate-y-4 opacity-0 group-hover:translate-x-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
-          <div className="w-12 h-12 bg-gray-800 text-white rounded-2xl flex items-center justify-center shadow-xl">
-            <ArrowUpRight className="w-6 h-6" />
-          </div>
-        </div>
-
-        <div className="absolute bottom-8 left-8 right-8">
-          <motion.div
-            className="bg-white/10 backdrop-blur-md border border-white/20 p-6 rounded-2xl shadow-2xl"
-            whileHover={{ backgroundColor: 'rgba(255, 255, 255, 0.15)' }}
-          >
-            <h4 className="text-lg font-bold text-white leading-tight">{project.title}</h4>
-            <div className="mt-3 flex items-center gap-2 text-gray-300 text-xs font-bold uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-              View Project Details
-              <ArrowUpRight className="w-3 h-3" />
+          <div className="absolute top-6 right-6 translate-x-4 -translate-y-4 opacity-0 group-hover:translate-x-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
+            <div className="w-12 h-12 bg-gray-800 text-white rounded-2xl flex items-center justify-center shadow-xl">
+              <ArrowUpRight className="w-6 h-6" />
             </div>
-          </motion.div>
-        </div>
-      </motion.div>
-    </Link>
+          </div>
+
+          <div className="absolute bottom-8 left-8 right-8">
+            <motion.div
+              className="bg-white/10 backdrop-blur-md border border-white/20 p-6 rounded-2xl shadow-2xl"
+              whileHover={{ backgroundColor: 'rgba(255, 255, 255, 0.15)' }}
+            >
+              <h4 className="text-lg font-bold text-white leading-tight">{project.title}</h4>
+              <div className="mt-3 flex items-center gap-2 text-gray-300 text-xs font-bold uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                View Project Details
+                <ArrowUpRight className="w-3 h-3" />
+              </div>
+            </motion.div>
+          </div>
+        </motion.div>
+      </Link>
+    </div>
   )
 }
 

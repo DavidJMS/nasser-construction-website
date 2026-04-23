@@ -7,11 +7,9 @@ import { Button, Tooltip } from 'antd'
 
 const navLinks = [
   { label: 'HOME', href: '#home' },
-  { label: 'SERVICES', href: '#services' },
-  { label: 'WINDOWS', href: '#products' },
-  { label: 'DOORS', href: '#products' },
   { label: 'ABOUT US', href: '#about' },
-  { label: 'PROJECTS', href: '#products' },
+  { label: 'SERVICES', href: '#services' },
+  { label: 'PROJECTS', href: '#projects' },
 ]
 
 export default function Navbar() {
@@ -32,6 +30,13 @@ export default function Navbar() {
     router.post('/logout')
   }
 
+  const handleLinkClick = (e: React.MouseEvent) => {
+    if (isEditing) {
+      e.preventDefault()
+      e.stopPropagation()
+    }
+  }
+
   return (
     <nav
       id="navbar"
@@ -44,7 +49,11 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-12">
           {/* Logo */}
-          <a href={`${anchorBase}#home`} className="flex items-center gap-1 shrink-0 group">
+          <a
+            href={`${anchorBase}#home`}
+            onClick={handleLinkClick}
+            className="flex items-center gap-1 shrink-0 group"
+          >
             <img
               src="/images/logo.png"
               alt="Logo"
@@ -58,6 +67,7 @@ export default function Navbar() {
               <a
                 key={link.label}
                 href={link.href}
+                onClick={handleLinkClick}
                 className="text-[12px] font-bold text-gray-800 hover:text-navy-900 tracking-wider transition-all duration-300 relative group"
               >
                 {link.label}
@@ -103,7 +113,8 @@ export default function Navbar() {
             <div className="hidden lg:flex items-center">
               <a
                 href={`${anchorBase}#contact`}
-                className="px-6 py-2 bg-navy-900 hover:bg-navy-800 text-white text-[12px] font-bold tracking-widest rounded-full transition-all duration-300 shadow-md hover:shadow-navy-900/20 active:scale-95 cursor-pointer"
+                onClick={handleLinkClick}
+                className="block  text-center px-5 py-1 bg-navy-900 text-white text-sm font-bold rounded-full shadow-lg cursor-pointer"
               >
                 CONTACT US
               </a>
@@ -140,7 +151,14 @@ export default function Navbar() {
                   transition={{ delay: idx * 0.05 }}
                   key={link.label}
                   href={link.href}
-                  onClick={() => setMobileOpen(false)}
+                  onClick={(e) => {
+                    if (isEditing) {
+                      e.preventDefault()
+                      e.stopPropagation()
+                    } else {
+                      setMobileOpen(false)
+                    }
+                  }}
                   className="block text-sm font-bold text-gray-800 hover:text-navy-900 transition-colors"
                 >
                   {link.label}

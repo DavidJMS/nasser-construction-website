@@ -5,10 +5,11 @@ import { CheckCircle2 } from 'lucide-react'
 
 interface AboutPageProps {
   aboutUs?: any
-  settings?: Record<string, any>
+  footer?: any
+  ctas?: any[]
 }
 
-export default function AboutPage({ aboutUs, settings }: AboutPageProps) {
+export default function AboutPage({ aboutUs, footer, ctas }: AboutPageProps) {
   const image1 = aboutUs?.image1 || '/images/about-house.png'
   const title = 'About Us'
 
@@ -139,7 +140,7 @@ export default function AboutPage({ aboutUs, settings }: AboutPageProps) {
         </div>
       </section>
 
-      <Footer settings={settings} />
+      <Footer footer={footer} />
     </div>
   )
 }

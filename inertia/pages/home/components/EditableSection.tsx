@@ -4,7 +4,7 @@ import { Edit2, Layout } from 'lucide-react'
 import { useEditor } from '../hooks/useEditor'
 
 interface EditableSectionProps {
-  section: 'hero' | 'about_us' | 'services' | 'projects' | 'testimonials' | 'cta' | 'footer'
+  section: 'hero' | 'about_us' | 'services' | 'why_choose_us' | 'projects' | 'testimonials' | 'cta' | 'footer'
   children: ReactNode
   title?: string
 }

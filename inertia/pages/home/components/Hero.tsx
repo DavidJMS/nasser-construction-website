@@ -1,9 +1,11 @@
 import type Hero from '#models/hero'
 import { motion } from 'framer-motion'
 import { ArrowRight, CheckCircle2 } from 'lucide-react'
+import { useEditor } from '../hooks/useEditor'
 
 export default function HeroComponent({ data }: { data: Hero }) {
-  // Use provided data or fall back to original hardcoded content
+  const { isEditing } = useEditor()
+
   const badge = data?.badge || 'Premium Security Solutions'
   const title = data?.title || 'Custom-made doors and windows with professional installation'
   const description =
@@ -15,6 +17,13 @@ export default function HeroComponent({ data }: { data: Hero }) {
   const image1 = data?.image1 || '/images/about-house.png'
   const image2 = data?.image2 || '/images/hero-bg.png'
   const image3 = data?.image3 || '/images/window-product.png'
+
+  const handleLinkClick = (e: React.MouseEvent) => {
+    if (isEditing) {
+      e.preventDefault()
+      e.stopPropagation()
+    }
+  }
 
   return (
     <section id="home" className="relative bg-white pt-24 pb-16 lg:pt-32 lg:pb-24 overflow-hidden">
@@ -59,6 +68,7 @@ export default function HeroComponent({ data }: { data: Hero }) {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 href={primaryButtonLink}
+                onClick={handleLinkClick}
                 className="px-8 py-4 bg-navy-900 hover:bg-navy-800 text-white text-xs font-bold tracking-[0.15em] uppercase rounded-full shadow-xl shadow-navy-900/10 transition-all flex items-center gap-2 group cursor-pointer"
               >
                 {primaryButtonText}

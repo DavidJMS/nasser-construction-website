@@ -1,19 +1,30 @@
+import { WhatsAppOutlined } from '@ant-design/icons'
 import { motion } from 'framer-motion'
-import { Send, Sparkles } from 'lucide-react'
+import { Sparkles } from 'lucide-react'
+import { useEditor } from '../hooks/useEditor'
 
 interface CTASectionProps {
-  settings?: Record<string, any>
+  cta?: Record<string, any> | null
 }
 
-export default function CTASection({ settings }: CTASectionProps) {
-  const badge = settings?.cta_badge || 'Expert Installations'
-  const title = settings?.cta_title || 'Installation experts at your service.'
+export default function CTASection({ cta }: CTASectionProps) {
+  const { isEditing } = useEditor()
+
+  const badge = cta?.badge || 'Expert Installations'
+  const title = cta?.title || 'Installation experts at your service.'
   const description =
-    settings?.cta_description ||
+    cta?.description ||
     'Get a quote tailored to your needs and secure the investment of a lifetime.'
-  const buttonText = settings?.cta_button_text || 'Get a Quote'
-  const buttonLink = settings?.cta_button_link || '#contact'
-  const image = settings?.cta_image || '/images/cta-doors-fan.png'
+  const buttonText = cta?.buttonText || 'Get a Quote'
+  const buttonLink = cta?.buttonLink || '#contact'
+  const image = cta?.imageUrl || '/images/cta-doors-fan.png'
+
+  const handleLinkClick = (e: React.MouseEvent) => {
+    if (isEditing) {
+      e.preventDefault()
+      e.stopPropagation()
+    }
+  }
 
   return (
     <section id="contact" className="py-24 px-4 sm:px-6 lg:px-8 bg-white overflow-hidden">
@@ -67,10 +78,11 @@ export default function CTASection({ settings }: CTASectionProps) {
                   whileHover={{ scale: 1.05, boxShadow: '0 20px 40px rgba(0,0,0,0.1)' }}
                   whileTap={{ scale: 0.95 }}
                   href={buttonLink}
+                  onClick={handleLinkClick}
                   className="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-10 py-5 bg-white text-navy-900 text-[13px] font-bold uppercase tracking-[0.2em] hover:bg-gray-100 transition-all rounded-2xl shadow-xl"
                 >
                   {buttonText}
-                  <Send className="w-4 h-4" />
+                  <WhatsAppOutlined className="text-lg" />
                 </motion.a>
               </div>
             </div>
@@ -87,7 +99,7 @@ export default function CTASection({ settings }: CTASectionProps) {
                 <img
                   src={image}
                   alt="Modern doors showcase"
-                  className="w-[120%] h-auto object-contain drop-shadow-[0_30px_60px_rgba(0,0,0,0.5)]"
+                  className="w-[120%] max-h-[600px] h-auto object-contain drop-shadow-[0_30px_60px_rgba(0,0,0,0.5)]"
                 />
               </motion.div>
             </div>

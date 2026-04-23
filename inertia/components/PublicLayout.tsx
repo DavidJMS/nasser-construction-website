@@ -5,16 +5,17 @@ import Footer from '../pages/home/components/Footer'
 
 interface PublicLayoutProps {
   children: ReactNode
-  settings?: Record<string, any>
+  footer?: any
+  ctas?: any[]
 }
 
-export default function PublicLayout({ children, settings }: PublicLayoutProps) {
+export default function PublicLayout({ children, footer, ctas }: PublicLayoutProps) {
   return (
     <div className="relative bg-white">
       <Navbar />
       <main className="min-h-screen">{children}</main>
-      <CTASection settings={settings} />
-      <Footer settings={settings} />
+      <CTASection cta={ctas?.[0] ?? null} />
+      <Footer footer={footer} />
     </div>
   )
 }

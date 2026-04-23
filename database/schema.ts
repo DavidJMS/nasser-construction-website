@@ -82,6 +82,35 @@ export class CtaSchema extends BaseModel {
   declare updatedAt: DateTime | null
 }
 
+export class FooterSchema extends BaseModel {
+  static $columns = ['brandSubtitle', 'brandTitle', 'copyright', 'crafted', 'createdAt', 'description', 'id', 'socialFacebook', 'socialInstagram', 'socialLinkedin', 'socialX', 'updatedAt'] as const
+  $columns = FooterSchema.$columns
+  @column()
+  declare brandSubtitle: string | null
+  @column()
+  declare brandTitle: string | null
+  @column()
+  declare copyright: string | null
+  @column()
+  declare crafted: string | null
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime | null
+  @column()
+  declare description: string | null
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare socialFacebook: string | null
+  @column()
+  declare socialInstagram: string | null
+  @column()
+  declare socialLinkedin: string | null
+  @column()
+  declare socialX: string | null
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+}
+
 export class HeroSchema extends BaseModel {
   static $columns = ['badge', 'createdAt', 'description', 'id', 'image1', 'image2', 'image3', 'primaryButtonLink', 'primaryButtonText', 'secondaryButtonLink', 'secondaryButtonText', 'statsText', 'title', 'updatedAt'] as const
   $columns = HeroSchema.$columns
@@ -229,6 +258,25 @@ export class UserSchema extends BaseModel {
   declare id: number
   @column({ serializeAs: null })
   declare password: string
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+}
+
+export class WhyChooseSchema extends BaseModel {
+  static $columns = ['createdAt', 'description', 'icon', 'id', 'order', 'title', 'updatedAt'] as const
+  $columns = WhyChooseSchema.$columns
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime | null
+  @column()
+  declare description: string | null
+  @column()
+  declare icon: string | null
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare order: number | null
+  @column()
+  declare title: string | null
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime | null
 }

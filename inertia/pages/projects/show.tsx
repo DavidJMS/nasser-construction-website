@@ -11,10 +11,11 @@ import 'swiper/css'
 import 'swiper/css/pagination'
 
 interface PageProps {
-  settings: Record<string, any>
+  footer: any
+  ctas: any[]
 }
 
-export default function ProjectDetail({ settings }: PageProps) {
+export default function ProjectDetail({ footer, ctas }: PageProps) {
   const { url } = usePage()
   const projectId = Number(url.split('/').at(-1))
 
@@ -38,7 +39,7 @@ export default function ProjectDetail({ settings }: PageProps) {
   }, [project?.id, project?.imageUrl])
 
   return (
-    <PublicLayout settings={settings}>
+    <PublicLayout footer={footer} ctas={ctas}>
       <Head title={project?.title || 'Project Details'} />
 
       {project ? (
