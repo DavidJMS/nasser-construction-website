@@ -7,17 +7,26 @@ import { ProjectsForm } from '../../editor/ProjectsForm'
 import { TestimonialsForm } from '../../editor/TestimonialsForm'
 import { CTAForm } from '../../editor/CTAForm'
 import { FooterForm } from '../../editor/FooterForm'
+import { WhyChooseUsForm } from '../../editor/WhyChooseUsForm'
 import { Button, Tooltip, ConfigProvider, Drawer } from 'antd'
 import type Hero from '#models/hero'
+import type WhyChoose from '#models/why_choose'
+import type Cta from '#models/cta'
+import type Testimonial from '#models/testimonial'
+import type AboutUs from '#models/about_us'
+import type Service from '#models/service'
+import type Project from '#models/project'
+import type Footer from '#models/footer'
 
 interface EditorSidebarProps {
   heroData?: Hero
-  aboutUsData?: any
-  services?: any
-  projects?: any
-  testimonials?: any
-  settings?: Record<string, any>
-  ctas?: any[]
+  aboutUsData?: AboutUs
+  services?: Service[]
+  projects?: Project[]
+  testimonials?: Testimonial[]
+  cta?: Cta
+  footerData?: Footer
+  whyChooseData?: WhyChoose[]
 }
 
 export function EditorSidebar({
@@ -26,8 +35,9 @@ export function EditorSidebar({
   services,
   projects,
   testimonials,
-  settings,
-  ctas,
+  cta,
+  footerData,
+  whyChooseData,
 }: EditorSidebarProps) {
   const { isEditing, setIsEditing, selectedSection, setSelectedSection, saveAction, isSaving } =
     useEditor()
@@ -39,17 +49,17 @@ export function EditorSidebar({
       case 'hero':
         return <HeroForm hero={heroData as any} />
       case 'about_us':
-        return <AboutUsForm aboutUs={aboutUsData} />
+        return <AboutUsForm aboutUs={aboutUsData as any} />
       case 'services':
-        return <ServicesForm services={services} />
+        return <ServicesForm services={services as any} />
       case 'projects':
-        return <ProjectsForm projects={projects} />
+        return <ProjectsForm projects={projects as any} />
       case 'testimonials':
-        return <TestimonialsForm testimonials={testimonials} />
+        return <TestimonialsForm testimonials={testimonials as any} />
       case 'cta':
-        return <CTAForm cta={ctas?.[0] as any} />
+        return <CTAForm cta={cta as any} />
       case 'footer':
-        return <FooterForm settings={settings} />
+        return <FooterForm footer={footerData as any} />
       case 'none':
         return (
           <div className="flex flex-col items-center justify-center h-full p-8 text-center text-gray-500">
@@ -57,12 +67,8 @@ export function EditorSidebar({
             <p className="text-sm font-medium">Select a section to edit</p>
           </div>
         )
-      default:
-        return (
-          <div className="p-8 text-center text-gray-400">
-            <p>Section in development: {selectedSection}</p>
-          </div>
-        )
+      case 'why_choose_us':
+        return <WhyChooseUsForm features={whyChooseData as any} />
     }
   }
 

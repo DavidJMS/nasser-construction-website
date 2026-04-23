@@ -8,6 +8,7 @@ type EditorSection =
   | 'testimonials'
   | 'cta'
   | 'footer'
+  | 'why_choose_us'
   | 'none'
 
 interface EditorContextType {
