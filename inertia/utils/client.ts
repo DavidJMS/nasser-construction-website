@@ -10,6 +10,9 @@ import { createTuyauReactQueryClient } from '@tuyau/react-query'
 export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
+      // meta: {
+      //   multipart: true,
+      // },
       staleTime: 1000 * 60 * 5, // 5 minutes
     },
   },
@@ -28,6 +31,6 @@ export const client = createTuyau({
  * The React Query integration client for Tuyau.
  * Provides type-safe hooks like queryOptions() and mutationOptions().
  */
-export const api = createTuyauReactQueryClient({ 
+export const api = createTuyauReactQueryClient({
   client,
 })

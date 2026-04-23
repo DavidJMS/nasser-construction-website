@@ -1,4 +1,3 @@
 import { SiteSettingSchema } from '#database/schema'
 
-export default class SiteSetting extends SiteSettingSchema {
-}
+export default class SiteSetting extends SiteSettingSchema {}

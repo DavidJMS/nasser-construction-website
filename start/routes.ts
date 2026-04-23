@@ -12,9 +12,12 @@ import { controllers } from '#generated/controllers'
 import router from '@adonisjs/core/services/router'
 
 router.get('/', [controllers.Home, 'index'])
+router.get('/about', [controllers.Home, 'about'])
+router.get('/project/:id', [controllers.Home, 'project'])
 
 router
   .group(() => {
+    router.on('admin').redirectToPath('login')
     router.get('login', [controllers.Session, 'create'])
     router.post('login', [controllers.Session, 'store'])
   })
@@ -24,27 +27,35 @@ router
   .group(() => {
     router.post('logout', [controllers.Session, 'destroy'])
 
-    // Admin
-    router.get('admin', [controllers.admin.Dashboard, 'index'])
-
     // Hero
-    router.get('admin/hero', [controllers.admin.Heros, 'create']).as('admin_hero.create')
-    router.patch('admin/hero', [controllers.admin.Heros, 'update']).as('admin_hero.update')
-    router.get('admin/hero/data', [controllers.admin.Heros, 'show']).as('admin_hero.show')
+    router.patch('hero', [controllers.Heros, 'update'])
+    router.get('hero', [controllers.Heros, 'show'])
 
     // About Us
-    router.get('admin/about_us', [controllers.admin.AboutUs, 'create']).as('admin_about_us.create')
-    router
-      .patch('admin/about_us', [controllers.admin.AboutUs, 'update'])
-      .as('admin_about_us.update')
+    router.patch('about_us', [controllers.AboutUs, 'update'])
+    router.get('about_us', [controllers.AboutUs, 'show'])
 
-    router.resource('admin/services', controllers.admin.Services)
-    router.resource('admin/projects', controllers.admin.Projects)
-    router.resource('admin/testimonials', controllers.admin.Testimonials)
+    router.resource('about_us_features', controllers.AboutUsFeatures)
 
-    router.get('admin/settings', [controllers.admin.Settings, 'index'])
-    router
-      .post('admin/settings/update-all', [controllers.admin.Settings, 'update'])
-      .as('admin.settings.update')
+    // Services
+    router.resource('services', controllers.Services)
+
+    router.resource('projects', controllers.Projects)
+    router.resource('testimonials', controllers.Testimonials)
+
+    // CTA
+    router.patch('cta', [controllers.Cta, 'update'])
+    router.get('cta', [controllers.Cta, 'show'])
+
+    // Footer
+    router.patch('footer', [controllers.Footers, 'update'])
+    router.get('footer', [controllers.Footers, 'show'])
+
+    // Why Choose Us
+    router.resource('why_chooses', controllers.WhyChooses)
+
+    router.post('settings/update-all', [controllers.Settings, 'update'])
+
+    router.get('settings', [controllers.Settings, 'index'])
   })
   .use(middleware.auth())

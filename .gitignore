@@ -5,6 +5,7 @@ tmp/*
 !tmp/.gitkeep
 .adonisjs
 public/uploads/*
+storage/*
 
 # Secrets
 .env

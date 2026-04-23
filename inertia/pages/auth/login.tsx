@@ -6,13 +6,13 @@ import { api } from '~/utils/client'
 import { router } from '@inertiajs/react'
 import { sileo } from 'sileo'
 
-const { Title, Text } = Typography
+const { Text } = Typography
 
 export default function Login() {
   const { mutate: login, isPending } = useMutation(
     api.session.store.mutationOptions({
       onSuccess: () => {
-        router.visit('/admin')
+        router.visit('/')
       },
       onError: (error: any) => {
         sileo.error({ title: error.response?.data?.message })
@@ -28,7 +28,7 @@ export default function Login() {
 
   return (
     <>
-      <Head title="Acceso Administrativo" />
+      <Head title="Admin Access" />
       <div
         style={{
           height: '100vh',
@@ -69,7 +69,7 @@ export default function Login() {
           <Flex vertical gap={20} align="center" style={{ marginBottom: 40 }}>
             <Image height={40} width={120} src="/images/logo.png" alt="Logo" />
             <Text type="secondary" style={{ fontSize: 16, color: '#fff' }}>
-              Bienvenido al panel administrativo
+              Welcome to the admin panel
             </Text>
           </Flex>
 
@@ -79,7 +79,7 @@ export default function Login() {
               rules={[
                 {
                   required: true,
-                  message: 'Por favor ingrese su correo electrónico',
+                  message: 'Please enter your email address',
                   type: 'email',
                 },
               ]}
@@ -100,7 +100,7 @@ export default function Login() {
               rules={[
                 {
                   required: true,
-                  message: 'Por favor ingrese su contraseña',
+                  message: 'Please enter your password',
                 },
               ]}
             >
@@ -123,13 +123,13 @@ export default function Login() {
                 loading={isPending}
                 icon={<LoginOutlined />}
               >
-                Iniciar Sesión
+                Login
               </Button>
             </Form.Item>
 
             <div style={{ textAlign: 'center' }}>
               <Text type="secondary" style={{ fontSize: 13, color: '#fff' }}>
-                © 2026 Todos los derechos reservados.
+                © 2026 Nasser Construction. All rights reserved.
               </Text>
             </div>
           </Form>

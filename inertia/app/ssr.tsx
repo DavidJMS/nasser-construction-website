@@ -1,6 +1,5 @@
 import { queryClient } from '~/utils/client'
 import Layout from '~/layouts/default'
-import AdminLayout from '~/layouts/admin'
 import ReactDOMServer from 'react-dom/server'
 import { createInertiaApp } from '@inertiajs/react'
 import { QueryClientProvider } from '@tanstack/react-query'
@@ -16,7 +15,7 @@ export default function render(page: any) {
       return ReactDOMServer.renderToString(
         <StyleProvider cache={cache} hashPriority="high">
           <QueryClientProvider client={queryClient}>
-            <Toaster position="top-right" />
+            <Toaster position="top-center" />
             {element}
           </QueryClientProvider>
         </StyleProvider>
@@ -28,11 +27,7 @@ export default function render(page: any) {
         import.meta.glob('../pages/**/*.tsx', { eager: true })
       ).then((module: any) => {
         if (module.default.layout === undefined) {
-          if (name.startsWith('admin/')) {
-            module.default.layout = (page: any) => <AdminLayout>{page}</AdminLayout>
-          } else {
-            module.default.layout = (page: any) => <Layout>{page}</Layout>
-          }
+          module.default.layout = (page: any) => <Layout>{page}</Layout>
         }
         return module
       })
@@ -41,7 +36,7 @@ export default function render(page: any) {
       return (
         <QueryClientProvider client={queryClient}>
           <StyleProvider cache={cache} hashPriority="high">
-            <Toaster position="top-right" />
+            <Toaster position="top-center" />
             <App {...props} />
           </StyleProvider>
         </QueryClientProvider>

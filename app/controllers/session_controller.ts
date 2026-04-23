@@ -14,7 +14,7 @@ export default class SessionController {
 
     if (!user || !(await hash.verify(user.password, password))) {
       return response.unauthorized({
-        message: 'Inicio de sesión no exitoso',
+        message: 'Login unsuccessful',
         errors: [],
         data: null,
       })
@@ -23,7 +23,7 @@ export default class SessionController {
     await auth.use().login(user)
 
     return response.ok({
-      message: 'Inicio de sesión exitoso',
+      message: 'Login successful',
       errors: [],
       data: {
         user,
@@ -33,6 +33,6 @@ export default class SessionController {
 
   async destroy({ auth, response }: HttpContext) {
     await auth.use().logout()
-    return response.redirect('/admin')
+    return response.redirect('/')
   }
 }
