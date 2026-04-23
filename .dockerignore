@@ -1,0 +1,47 @@
+# Dependencies: must be installed inside the Linux container, never copied
+# from the host. Copying node_modules from Windows would overwrite native
+# modules (better-sqlite3, sqlite3, libsql, @libsql/sqlite3) with
+# incompatible binaries and break the build.
+node_modules
+
+# Build artifacts and generated files
+build
+tmp
+.adonisjs
+public/assets
+public/uploads
+
+# Secrets
+.env
+.env.local
+.env.production.local
+.env.development.local
+
+# Git metadata — not needed inside the image and bloats context
+.git
+.gitignore
+.gitattributes
+
+# Editor and OS
+.vscode
+.idea
+.fleet
+.DS_Store
+Thumbs.db
+
+# CI / local tooling
+.github
+.claude
+.husky
+*.log
+npm-debug.log
+yarn-error.log
+
+# Docs and meta files that do not belong in the runtime image
+README.md
+*.md
+
+# Docker files themselves (avoid recursive copy into the context)
+Dockerfile
+docker-compose.yml
+.dockerignore
