@@ -8,21 +8,24 @@ import { api, queryClient } from '~/utils/client'
 import { sileo } from 'sileo'
 
 interface FooterFormProps {
-  settings?: Record<string, any>
+  footer?: Record<string, any> | null
 }
 
-export function FooterForm({ settings: ssrSettings }: FooterFormProps) {
+export function FooterForm({ footer: ssrFooter }: FooterFormProps) {
   const { registerSaveAction } = useEditor()
   const [form] = Form.useForm()
 
-  const { data: settingsData } = useQuery(api.settings.index.queryOptions())
-  const settings = settingsData?.data ?? ssrSettings
+  const { data: footerData } = useQuery(api.footers.show.queryOptions())
+  const footer = footerData?.data ?? ssrFooter
 
   const { mutate, isPending } = useMutation(
-    api.settings.update.mutationOptions({
+    api.footers.update.mutationOptions({
       onSuccess: (result: any) => {
         sileo.success({ title: result?.message || 'Footer updated' })
-        queryClient.invalidateQueries(api.settings.index.queryOptions())
+        queryClient.invalidateQueries(api.footers.show.queryOptions())
+        if (result?.data) {
+          form.setFieldsValue(result.data)
+        }
       },
       onError: (err: any) => sileo.error({ title: err?.message || 'Error updating Footer' }),
     })
@@ -34,23 +37,13 @@ export function FooterForm({ settings: ssrSettings }: FooterFormProps) {
   }, [form, isPending, registerSaveAction])
 
   useEffect(() => {
-    if (!settings) return
-    form.setFieldsValue({
-      footer_brand_title: settings?.footer_brand_title,
-      footer_brand_subtitle: settings?.footer_brand_subtitle,
-      footer_description: settings?.footer_description,
-      footer_copyright: settings?.footer_copyright,
-      footer_crafted: settings?.footer_crafted,
-      footer_social_facebook: settings?.footer_social_facebook,
-      footer_social_x: settings?.footer_social_x,
-      footer_social_instagram: settings?.footer_social_instagram,
-      footer_social_linkedin: settings?.footer_social_linkedin,
-    })
-  }, [settings, form])
+    if (!footer) return
+    form.setFieldsValue(footer)
+  }, [footer, form])
 
   const onFinish = (values: any) => {
     mutate({
-      body: { settings: values },
+      body: values,
     })
   }
 
@@ -65,19 +58,19 @@ export function FooterForm({ settings: ssrSettings }: FooterFormProps) {
       ),
       children: (
         <div className="pt-4 space-y-4">
-          <Form.Item name="footer_brand_title" label="Brand (Title)">
+          <Form.Item name="brandTitle" label="Brand (Title)">
             <Input prefix={<Globe size={14} className="text-gray-400" />} />
           </Form.Item>
-          <Form.Item name="footer_brand_subtitle" label="Brand (Subtitle)">
+          <Form.Item name="brandSubtitle" label="Brand (Subtitle)">
             <Input />
           </Form.Item>
-          <Form.Item name="footer_description" label="Description">
+          <Form.Item name="description" label="Description">
             <Input.TextArea rows={3} />
           </Form.Item>
-          <Form.Item name="footer_copyright" label="Copyright">
+          <Form.Item name="copyright" label="Copyright">
             <Input />
           </Form.Item>
-          <Form.Item name="footer_crafted" label="Secondary Text">
+          <Form.Item name="crafted" label="Secondary Text">
             <Input />
           </Form.Item>
         </div>
@@ -93,16 +86,16 @@ export function FooterForm({ settings: ssrSettings }: FooterFormProps) {
       ),
       children: (
         <div className="pt-4 space-y-4">
-          <Form.Item name="footer_social_facebook" label="Facebook URL">
+          <Form.Item name="socialFacebook" label="Facebook URL">
             <Input prefix={<LinkIcon size={14} className="text-gray-400" />} />
           </Form.Item>
-          <Form.Item name="footer_social_x" label="X (Twitter) URL">
+          <Form.Item name="socialX" label="X (Twitter) URL">
             <Input prefix={<LinkIcon size={14} className="text-gray-400" />} />
           </Form.Item>
-          <Form.Item name="footer_social_instagram" label="Instagram URL">
+          <Form.Item name="socialInstagram" label="Instagram URL">
             <Input prefix={<LinkIcon size={14} className="text-gray-400" />} />
           </Form.Item>
-          <Form.Item name="footer_social_linkedin" label="LinkedIn URL">
+          <Form.Item name="socialLinkedin" label="LinkedIn URL">
             <Input prefix={<LinkIcon size={14} className="text-gray-400" />} />
           </Form.Item>
         </div>
