@@ -30,9 +30,19 @@ COPY . .
 COPY .env .env
 
 # Generate the Tuyau registry by briefly starting the dev server.
-# The server is killed as soon as the registry file is generated.
-RUN node ace serve & PID=$!; \
-    while [ ! -f .adonisjs/client/registry/index.ts ]; do sleep 1; done; \
+# NODE_ENV must be overridden to "development" here: app_provider only calls
+# emitRoutes() when !inProduction, which triggers the routesScanned IPC
+# message that generateRegistry() hooks onto. With NODE_ENV=production the
+# IPC message is never sent and the loop below hangs forever.
+RUN NODE_ENV=development node ace serve & PID=$!; \
+    TIMEOUT=90; ELAPSED=0; \
+    while [ ! -f .adonisjs/client/registry/index.ts ]; do \
+      sleep 1; ELAPSED=$((ELAPSED+1)); \
+      if [ "$ELAPSED" -ge "$TIMEOUT" ]; then \
+        echo "ERROR: Tuyau registry not generated after ${TIMEOUT}s" >&2; \
+        kill $PID 2>/dev/null; exit 1; \
+      fi; \
+    done; \
     kill $PID
 
 RUN node ace build
