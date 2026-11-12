@@ -13,6 +13,8 @@ import router from '@adonisjs/core/services/router'
 
 router.get('/', [controllers.Home, 'index'])
 router.get('/about', [controllers.Home, 'about'])
+router.get('/privacy', [controllers.Home, 'privacy'])
+router.get('/support', [controllers.Home, 'support'])
 router.get('/project/:id', [controllers.Home, 'project'])
 
 router
