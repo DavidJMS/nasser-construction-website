@@ -59,6 +59,22 @@ export default class HomeController {
     })
   }
 
+  async privacy({ inertia }: HttpContext) {
+    const footer = await Footer.query().first()
+
+    return inertia.render('privacy/index', {
+      footer: footer?.serialize() || null,
+    })
+  }
+
+  async support({ inertia }: HttpContext) {
+    const footer = await Footer.query().first()
+
+    return inertia.render('support/index', {
+      footer: footer?.serialize() || null,
+    })
+  }
+
   async project({ inertia, response }: HttpContext) {
     try {
       const footer = await Footer.query().first()
